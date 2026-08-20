@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T02:52:14.097Z",
+  "harvestId": "harvest-1787107893306-92ee562e",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+    "packageName": "video-generator",
+    "packageVersion": "0.0.1",
+    "dependencies": [
+      "@base-ui/react",
+      "@fontsource-variable/geist",
+      "@hookform/resolvers",
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "@shadcn/react",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@types/crypto-js",
+      "@types/culori",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "culori",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "shadcn",
+      "sonner",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "tw-animate-css",
+      "use-debounce",
+      "zod",
+      "zustand"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "prettier",
+      "prettier-plugin-tailwindcss",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "lint",
+      "format",
+      "typecheck",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/config/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/storage/indexeddb-adapter.ts"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 263,
+        "sampleDirectories": [
+          ".opencode",
+          ".opencode/commands",
+          ".opencode/plugins",
+          ".opencode/skills",
+          ".opencode/skills/graphify",
+          ".opencode/skills/graphify/references",
+          "public",
+          "src",
+          "src/assets",
+          "src/components",
+          "src/components/common",
+          "src/components/ui",
+          "src/config",
+          "src/config/constant",
+          "src/editor"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 1510,
+      "linkCount": 2595
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "async saveMediaAsset({ projectId, mediaAsset }: { projectId: string; mediaAsset: MediaAsset }): Promise<void> {\n  const { mediaMetadataAdapter, mediaAssetsAdapter } = this.getProjectMediaAdapters({ projectId });\n  const metadata: MediaAssetData = {\n    id: mediaAsset.id,\n    name: mediaAsset.name,\n    type: mediaAsset.type,\n    size: mediaAsset.file.size,\n    width: mediaAsset.width,\n    height: mediaAsset.height,\n    thumbnailUrl: mediaAsset.thumbnailUrl,\n  };\n\n  try {\n    await mediaAssetsAdapter.set({ key: mediaAsset.id, value: mediaAsset.file });\n    await mediaMetadataAdapter.set({ key: mediaAsset.id, value: metadata });\n  } catch (error) {\n    try {\n      await mediaAssetsAdapter.remove(mediaAsset.id); // Compensating rollback: clean up orphaned binary\n    } catch {\n      // Preserve original error\n    }\n    if (this.isQuotaExceededError({ error })) {\n      throw new StorageQuotaExceededError({ requiredBytes: mediaAsset.file.size });\n    }\n    throw error;\n  }\n}",
+          "description": "Storage Service Orchestration dengan Compensating Rollback & Quota Guard",
+          "language": "typescript"
+        },
+        {
+          "code": "export class IndexedDBAdapter<T> implements StorageAdapter<T> {\n  private dbName: string;\n  private storeName: string;\n  private version: number;\n\n  private async getDB(): Promise<IDBDatabase> {\n    return new Promise((resolve, reject) => {\n      const request = indexedDB.open(this.dbName, this.version);\n      request.onerror = () => reject(request.error);\n      request.onsuccess = () => resolve(request.result);\n      request.onupgradeneeded = (event) => {\n        const db = (event.target as IDBOpenDBRequest).result;\n        if (!db.objectStoreNames.contains(this.storeName)) {\n          db.createObjectStore(this.storeName, { keyPath: \"id\" });\n        }\n      };\n    });\n  }\n\n  async set({ key, value }: { key: string; value: T }): Promise<void> {\n    const db = await this.getDB();\n    const transaction = db.transaction([this.storeName], \"readwrite\");\n    const store = transaction.objectStore(this.storeName);\n    return new Promise((resolve, reject) => {\n      const request = store.put({ id: key, ...value });\n      request.onerror = () => reject(request.error);\n      request.onsuccess = () => resolve();\n    });\n  }\n}",
+          "description": "Generic IndexedDB Adapter Implementation",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/services/storage/\n├── types.ts (StorageAdapter interface & domain schemas)\n├── indexeddb-adapter.ts (IndexedDB generic adapter)\n├── opfs-adapter.ts (OPFS binary storage adapter)\n├── quota.ts (Storage quota error detection & wrapper)\n└── services.ts (StorageService orchestrator with compensation logic)",
+      "confidence": 0.95,
+      "considerations": [
+        "Browser compatibility: OPFS memerlukan browser modern (Chromium 86+, Safari 15.2+, Firefox 111+).",
+        "Pembersihan object URL via URL.revokeObjectURL saat unmount untuk mencegah memory leaks.",
+        "Kapasitas penyimpanan lokal dibatasi kuota browser, sehingga penanganan StorageQuotaExceededError mutlak diperlukan."
+      ],
+      "keyImplementationPoints": [
+        "Definisi kontrak generic StorageAdapter<T> untuk operasi CRUD storage terstandarisasi.",
+        "Penyimpanan biner langsung ke Origin Private File System (OPFS) untuk performa I/O tinggi dan menghindari konsumsi RAM berlebih.",
+        "Penyimpanan skema metadata relasional/dokumen ke IndexedDB dengan isolasi transaksi readonly dan readwrite.",
+        "Pola compensating transaction: jika penulisan metadata gagal, file biner di OPFS segera dihapus (rollback).",
+        "Deteksi StorageQuotaExceededError untuk memberitahu batas kapasitas browser secara elegan."
+      ],
+      "overview": "Pattern ini mengintegrasikan IndexedDB untuk data metadata terstruktur (proyek, scenes, tracks) dan Origin Private File System (OPFS) untuk aset biner berukuran besar (video, gambar, audio) dengan antarmuka StorageAdapter yang seragam. Dilengkapi dengan mekanisme rollback kompensasi dan deteksi storage quota.",
+      "purpose": "Mengoptimalkan persistensi lokal aplikasi frontend multimedia tanpa membebani memori browser atau batasan kuota IndexedDB standar.",
+      "relatedKnowledge": [
+        "IndexedDB API",
+        "Origin Private File System (OPFS)",
+        "Compensating Transactions",
+        "Storage Quota API"
+      ],
+      "summary": "Pemisahan persistensi metadata dan binary file pada browser menggunakan IndexedDB dan Origin Private File System (OPFS) dengan proteksi transaksi kompensasi dan kuota.",
+      "tags": [
+        "frontend",
+        "storage",
+        "indexeddb",
+        "opfs",
+        "offline-first",
+        "architecture"
+      ],
+      "title": "Hybrid Client-Side Storage Adapter Pattern (IndexedDB + OPFS)"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export interface ApiError {\n  code: number;\n  message: string;\n  errors?: Record<string, string>;\n  result: null;\n}\n\nexport const formatErrorMessage = (error: unknown): string[] => {\n  const axiosError = error as AxiosError<ApiError>;\n  const apiError = axiosError.response?.data;\n\n  if (!apiError) {\n    return [axiosError.message || \"An error occurred\"];\n  }\n\n  // Jika terdapat error validasi field-specific\n  if (apiError.errors && Object.keys(apiError.errors).length > 0) {\n    return Object.values(apiError.errors);\n  }\n\n  // Jika terdapat pesan umum\n  if (apiError.message) {\n    const formattedMessage = apiError.message.charAt(0).toUpperCase() + apiError.message.slice(1);\n    return [formattedMessage];\n  }\n\n  return [\"An error occurred\"];\n};\n\nexport const showErrorToast = (error: AxiosError<ApiError>) => {\n  const errors = formatErrorMessage(error);\n  const errorList = errors.map(err => `• ${err}`).join('\\n');\n\n  toast.error(\"Error\", {\n    description: errorList,\n    style: { whiteSpace: 'pre-line' }\n  });\n};",
+          "description": "Error Normalization & Multi-Line Toast Notification",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/\n└── error-utils.ts (formatErrorMessage, showErrorToast & ApiError interface)",
+      "confidence": 0.9,
+      "considerations": [
+        "Format respons backend harus mematuhi kontrak ApiError agar parsing error fields berjalan akurat.",
+        "Perlu fallback aman untuk skenario non-Axios error (Network error, CORS, 502 Bad Gateway HTML)."
+      ],
+      "keyImplementationPoints": [
+        "Interface ApiError yang terdefinisi jelas mencakup status code, pesan global, dan map validation error.",
+        "Fungsi ekstraksi bertingkat: field-level error -> error message umum -> fallback generic error.",
+        "Penyajian toast notifikasi multi-line menggunakan Sonner dengan styling whiteSpace: pre-line."
+      ],
+      "overview": "Pattern penanganan error terpusat yang menormalisasi AxiosError dari API backend menjadi pesan terstruktur dan menampilkannya sebagai toast notifikasi multi-line yang ramah pengguna.",
+      "purpose": "Menyediakan penanganan error terpusat (single source of truth) untuk request API dan validasi form di frontend tanpa duplikasi kode.",
+      "relatedKnowledge": [
+        "Axios Error Handling",
+        "Sonner Toast Notification",
+        "Zod Validation Schema"
+      ],
+      "summary": "Normalisasi hierarkis respons error Axios / backend ke dalam format list toast yang ramah pengguna.",
+      "tags": [
+        "frontend",
+        "error-handling",
+        "axios",
+        "sonner",
+        "toast",
+        "ux"
+      ],
+      "title": "Unified API Error Normalization and Toast Notification Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const useEditorStore = create<EditorState>((set, get) => ({\n  project: null,\n  isLoading: true,\n  error: null,\n  selectedElementIds: [],\n  mediaUrls: {},\n  isPlaying: false,\n\n  updateScene: (patch) => {\n    const { project } = get();\n    if (!project) return;\n    const updated: TProject = {\n      ...project,\n      scenes: { ...project.scenes, ...patch, updatedAt: new Date() },\n    };\n    set({ project: updated });\n    storageService.saveProject({ project: updated });\n  },\n\n  deleteSelectedElements: () => {\n    const { project, selectedElementIds } = get();\n    if (!project || selectedElementIds.length === 0) return;\n    const selectedSet = new Set(selectedElementIds);\n    const elements = project.scenes.tracks.elements.filter(\n      (el) => !selectedSet.has(el.id),\n    );\n    const updated: TProject = {\n      ...project,\n      scenes: {\n        ...project.scenes,\n        tracks: { ...project.scenes.tracks, elements },\n        updatedAt: new Date(),\n      },\n    };\n    set({ project: updated, selectedElementIds: [] });\n    storageService.saveProject({ project: updated });\n  },\n}));",
+          "description": "Zustand Feature Store dengan Auto-Persistence Side-Effects",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/pages/Editor/\n├── components/ (Presentational React components: timeline, ruler, tracks)\n├── controller/ (Pure math/business logic: seek, zoom, resize, snap)\n├── hooks/ (Event bindings, gesture listeners, canvas observers)\n├── store/ (Feature-level Zustand stores)\n├── types/ (Domain data structures & interfaces)\n└── utils/ (Creation & audio management helpers)",
+      "confidence": 0.92,
+      "considerations": [
+        "Operasi penyimpanan otomatis (auto-save) pada store sebaiknya di-throttle/debounce pada perubahan intensitas tinggi (seperti dragging timeline).",
+        "Pertahankan immutable state updates di dalam Zustand untuk mencegah bug re-rendering."
+      ],
+      "keyImplementationPoints": [
+        "Separation of Concerns: Komputasi matematis dipisahkan ke modul controller murni tanpa dependensi JSX/React.",
+        "Kustomisasi Hooks untuk isolasi event listener DOM, mouse drag, dan keyboard shortcuts.",
+        "Zustand State Store mengelola global feature state dan menyinkronkan perubahan ke service storage secara terintegrasi."
+      ],
+      "overview": "Pola pemisahan fungsionalitas fitur kanvas/editor yang kompleks ke dalam modul terpisah: Controller (pure business & math logic), Hooks (event binding & lifecycle), Store (state management), dan Components (presentasional).",
+      "purpose": "Mencegah pembentukan god component pada UI interaktif yang padat logika dan kalkulasi matematis (seperti video editor / canvas timeline).",
+      "relatedKnowledge": [
+        "Zustand State Management",
+        "Feature-Sliced Design",
+        "Separation of Concerns"
+      ],
+      "summary": "Pemisahan logika interaksi kompleks kanvas/timeline ke dalam Controller (pure logic), Hooks (event binding), dan Store (Zustand state).",
+      "tags": [
+        "frontend",
+        "architecture",
+        "modularity",
+        "zustand",
+        "react",
+        "feature-sliced"
+      ],
+      "title": "Controller-Hook-Store Feature Slicing Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import type { LoginFormData } from \"@/pages/Login/types/request\";\nimport type { LoginResponse } from \"@/pages/Login/types/response\";\n\nexport const AuthServices = {\n  login: async (_data: LoginFormData): Promise<LoginResponse> => {\n    return {\n      code: 200,\n      message: \"OK\",\n      result: {\n        token: \"dummy-token-xxx\",\n        user: {\n          id: \"1\",\n          name: \"John Doe\",\n          username: \"johndoe\",\n          email: \"john@example.com\",\n        },\n      },\n    };\n    // Implementasi produksi:\n    // const response = await api.post<LoginResponse>(\"/auth/login\", _data);\n    // return response.data;\n  },\n};",
+          "description": "Contract-Driven Service Layer Authentication",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── services/\n│   └── auth.ts (Auth service boundary)\n└── pages/Login/types/\n    ├── request.ts (LoginFormData DTO)\n    └── response.ts (LoginResponse DTO)",
+      "confidence": 0.82,
+      "considerations": [
+        "Status Knowledge Candidate (< 0.90) karena implementasi saat ini masih berupa dummy stubbing dan belum memiliki lifecycle auto-refresh token / interceptor lengkap.",
+        "Perlu integrasi dengan secure storage / HTTP-only cookies untuk token auth di tahap produksi."
+      ],
+      "keyImplementationPoints": [
+        "Pemisahan DTO Request dan Response yang didefinisikan secara eksplisit menggunakan TypeScript types.",
+        "Enkapsulasi pemanggilan auth pada modul service mandiri terpisah dari UI komponen login.",
+        "Kemudahan peralihan dari mock stubbing ke real endpoint tanpa merombak logika presentasi."
+      ],
+      "overview": "Pola abstraksi service autentikasi yang menggunakan kontrak data DTO (request & response) terpisah, memungkinkan pengembangan antarmuka secara decoupling terhadap backend.",
+      "purpose": "Mengisolasi logika autentikasi dan kontrak data dari komponen UI untuk memudahkan testing, mocking, dan integrasi backend.",
+      "relatedKnowledge": [
+        "JWT Authentication",
+        "Axios Interceptors",
+        "API DTO Contracts"
+      ],
+      "summary": "Isolasi service layer autentikasi berbasis TypeScript contracts untuk mempermudah mocking dan integrasi backend.",
+      "tags": [
+        "frontend",
+        "authentication",
+        "contracts",
+        "typescript",
+        "service-layer"
+      ],
+      "title": "Contract-Driven Service Layer Authentication"
+    }
+  ]
+}

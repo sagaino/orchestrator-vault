@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-18T08:13:07.522Z",
+  "runId": "task-015-20260818T081037Z-4cd0a269",
+  "task": {
+    "id": "TASK-015",
+    "title": "Refactor AddProjectModal: Pisahkan State Logic ke Custom Hook",
+    "path": "02-Projects/orchestrator-dashboard/tasks/TASK-015.md",
+    "project": "orchestrator-dashboard",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "src/components/project/AddProjectModal.tsx",
+      "src/hooks/useAddProjectModal.ts"
+    ],
+    "requiresChanges": true
+  },
+  "project": {
+    "id": "orchestrator-dashboard",
+    "repository": "/Users/sagaino/ciniru/orchestrator-dashboard",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json",
+    "nodes": 953,
+    "links": 1888,
+    "builtAtCommit": "41b5b22f16430d493859b860ec9547549f81149b"
+  },
+  "verification": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "0d5c646f-2f60-44f1-b754-de119c8efc7d",
+    "status": "SUCCESS",
+    "response": "Refaktor pemisahan *state & logic* dari [AddProjectModal.tsx](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/components/project/AddProjectModal.tsx) ke custom hook [useAddProjectModal.ts](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/useAddProjectModal.ts) telah selesai diimplementasikan.\n\n### Ringkasan Perubahan\n\n1. **Custom Hook Extraction** ([`useAddProjectModal`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/useAddProjectModal.ts#L15-L194)):\n   - Seluruh state form (tab aktif `existing`/`new`, path repositori lokal, project ID, target directory, blueprint template).\n   - Feedback & status message (`errorMessage`, `successMessage`).\n   - Orkestrasi mutasi onboarding ([`useOnboardExistingProject`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/use-orchestrator.ts#L279-L289) dan [`useOnboardNewProject`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/use-orchestrator.ts#L291-L301)).\n   - Event handlers (`handleClose`, `handleTabChange`, `handleExistingSubmit`, `handleNewSubmit`, `resetForm`).\n\n2. **Presentational View Layer** ([`AddProjectModal`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/components/project/AddProjectModal.tsx#L28-L331)):\n   - Bertindak murni sebagai UI view component yang mengonsumsi state dan handler dari [`useAddProjectModal`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/useAddProjectModal.ts#L15-L194).\n   - Mempertahankan integritas antarmuka (UI/UX), styling, dan props signature [`AddProjectModalProps`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/components/project/AddProjectModal.tsx#L22-L26).\n\n---\n\n### File Berubah\n- [`src/hooks/useAddProjectModal.ts`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/hooks/useAddProjectModal.ts) *(New File)*\n- [`src/components/project/AddProjectModal.tsx`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/orchestrator-dashboard/task-015-20260818t081037z-4cd0a269/src/components/project/AddProjectModal.tsx) *(Refactored)*\n\n---\n\n### Saran Verifikasi\n- `typecheck` (`tsc -b`)\n- `lint` (`eslint .`)\n- `build` (`tsc -b && vite build`)\n\n---\n\n### Retrospective Knowledge\n- **Klasifikasi**: `PROJECT_ONLY`\n- **Alasan**: Pola pemisahan UI presentational dan state logic telah tercatat secara global di [state-logic-separation.md](file:///Users/sagaino/Documents/Obsidian%20Vault/01-Knowledge/concepts/architecture/state-logic-separation.md). Perubahan ini merupakan penerapan spesifik komponen modal pada project `orchestrator-dashboard`.\n",
+    "duration_seconds": 68.310608,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 124935,
+      "output_tokens": 20674,
+      "thinking_tokens": 11838,
+      "cache_read_tokens": 786887,
+      "total_tokens": 145609
+    }
+  },
+  "telemetry": {
+    "schemaVersion": 1,
+    "records": [
+      {
+        "schemaVersion": 1,
+        "recordId": "6ff9a96cbe9dc7334eca208e",
+        "source": "explicit",
+        "stage": "TASK_INTAKE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "9ee64713-5496-4672-b28b-1a313b785408",
+        "durationSeconds": 10.301,
+        "usage": {
+          "inputTokens": 40081,
+          "outputTokens": 1447,
+          "thinkingTokens": 996,
+          "cacheReadTokens": 44878,
+          "totalTokens": 41528,
+          "contextTokens": 84959
+        },
+        "measured": true,
+        "recordedAt": "2026-08-18T08:10:34.744Z",
+        "metadata": {
+          "intakeId": "intake-1787040617049-fe5708b2",
+          "projectId": "orchestrator-dashboard"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "a9defe21edd17a6721be9097",
+        "source": "explicit",
+        "stage": "IMPLEMENTATION",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash-high",
+        "effort": "high",
+        "status": "SUCCESS",
+        "conversationId": "0d5c646f-2f60-44f1-b754-de119c8efc7d",
+        "durationSeconds": 68.311,
+        "usage": {
+          "inputTokens": 124935,
+          "outputTokens": 20674,
+          "thinkingTokens": 11838,
+          "cacheReadTokens": 786887,
+          "totalTokens": 145609,
+          "contextTokens": 911822
+        },
+        "measured": true,
+        "recordedAt": "2026-08-18T08:12:01.665Z",
+        "metadata": {
+          "runId": "task-015-20260818T081037Z-4cd0a269",
+          "taskId": "TASK-015",
+          "projectId": "orchestrator-dashboard"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "3192297e4aed19e25f6bc6c4",
+        "source": "explicit",
+        "stage": "RETROSPECTIVE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "2cffaab2-516a-4838-8b9b-6f1a1c1f320d",
+        "durationSeconds": 12.398,
+        "usage": {
+          "inputTokens": 38733,
+          "outputTokens": 1316,
+          "thinkingTokens": 746,
+          "cacheReadTokens": 93768,
+          "totalTokens": 40049,
+          "contextTokens": 132501
+        },
+        "measured": true,
+        "recordedAt": "2026-08-18T08:12:32.583Z",
+        "metadata": {
+          "runId": "task-015-20260818T081037Z-4cd0a269",
+          "taskId": "TASK-015",
+          "projectId": "orchestrator-dashboard"
+        }
+      }
+    ],
+    "summary": {
+      "calls": 3,
+      "measuredCalls": 3,
+      "unmeasuredCalls": 0,
+      "durationSeconds": 91.01,
+      "usage": {
+        "inputTokens": 203749,
+        "outputTokens": 23437,
+        "thinkingTokens": 13580,
+        "cacheReadTokens": 925533,
+        "totalTokens": 227186,
+        "contextTokens": 1129282
+      },
+      "usageCoveragePercent": 100,
+      "byStage": {
+        "TASK_INTAKE": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 10.301,
+          "usage": {
+            "inputTokens": 40081,
+            "outputTokens": 1447,
+            "thinkingTokens": 996,
+            "cacheReadTokens": 44878,
+            "totalTokens": 41528,
+            "contextTokens": 84959
+          }
+        },
+        "IMPLEMENTATION": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 68.311,
+          "usage": {
+            "inputTokens": 124935,
+            "outputTokens": 20674,
+            "thinkingTokens": 11838,
+            "cacheReadTokens": 786887,
+            "totalTokens": 145609,
+            "contextTokens": 911822
+          }
+        },
+        "RETROSPECTIVE": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 12.398,
+          "usage": {
+            "inputTokens": 38733,
+            "outputTokens": 1316,
+            "thinkingTokens": 746,
+            "cacheReadTokens": 93768,
+            "totalTokens": 40049,
+            "contextTokens": 132501
+          }
+        }
+      }
+    },
+    "budget": {
+      "mode": "WARNING_ONLY",
+      "thresholdTokens": 250000,
+      "enabled": true,
+      "exceeded": false,
+      "warnings": [],
+      "guardrail": "Telemetry tidak menghentikan task atau mengubah approval state."
+    },
+    "updatedAt": "2026-08-18T08:12:32.587Z"
+  },
+  "proposal": {
+    "classification": "PROJECT_ONLY",
+    "confidence": 0.95,
+    "title": "Refactor AddProjectModal State Logic ke Custom Hook",
+    "type": "pattern",
+    "targetPath": null,
+    "summary": "Refaktor AddProjectModal dengan mengekstraksi seluruh state internal, form handler, dan mutasi API onboarding ke custom hook useAddProjectModal.ts, menjadikan AddProjectModal.tsx murni sebagai presentational view.",
+    "rationale": "Refaktor ini menerapkan prinsip State & Logic Separation yang telah tercatat dalam [[01-Knowledge/concepts/architecture/state-logic-separation.md]]. Implementasi useAddProjectModal.ts bersifat spesifik untuk alur onboarding project pada orchestrator-dashboard dan tidak mengubah atau menambah pola global baru.",
+    "considerations": [
+      "Pemisahan state logic form dan mutation handler ke custom hook useAddProjectModal mengikuti panduan arsitektur frontend yang sudah ada di Wiki.",
+      "Tidak ada pola arsitektural baru atau utilitas global baru yang perlu diekstraksi ke 01-Knowledge/."
+    ],
+    "relatedKnowledge": [
+      "[[01-Knowledge/concepts/architecture/state-logic-separation.md]]",
+      "[[01-Knowledge/patterns/frontend/react-ui-rules.md]]"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-18T08:13:07.521Z",
+    "approvedBy": "user",
+    "classification": "PROJECT_ONLY",
+    "destination": "PROJECT",
+    "targetPath": null,
+    "routing": {
+      "classification": "PROJECT_ONLY",
+      "destination": "PROJECT",
+      "targetPath": null,
+      "automatic": true,
+      "reason": "Knowledge hanya berlaku untuk project.",
+      "checks": {
+        "classification": "PROJECT_ONLY"
+      }
+    }
+  }
+}

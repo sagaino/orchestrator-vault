@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:02:48.222Z",
+  "harvestId": "harvest-1787108504660-b577a5b1",
+  "type": "codebase-harvest",
+  "domain": "backend",
+  "repositoryPath": "/Users/sagaino/ciniru/image-search/base-be-golang",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/image-search/base-be-golang",
+    "packageName": "base-be-golang",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/pkg/middleware/session.go",
+          "iam_module/pkg/security/authenticate.go",
+          "pkg/middleware/session-user.go"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/pkg/middleware",
+          "iam_module/pkg/middleware/dto.go",
+          "iam_module/pkg/middleware/session.go",
+          "internal/constant/errors.go",
+          "pkg/localerror",
+          "pkg/localerror/util.go",
+          "pkg/mapper/errors.go",
+          "pkg/middleware",
+          "pkg/middleware/cors.go",
+          "pkg/middleware/custom-translation-validator.go"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/internal/adapter/repository",
+          "iam_module/internal/adapter/repository/user_repo.go",
+          "pkg/db",
+          "pkg/db/db-custome.go",
+          "pkg/db/dbtransaction.go",
+          "pkg/db/default.go",
+          "pkg/db/dto.go",
+          "pkg/db/generic_repository.go"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 161,
+        "sampleDirectories": [
+          "cmd",
+          "cmd/api",
+          "iam_module",
+          "iam_module/internal",
+          "iam_module/internal/adapter",
+          "iam_module/internal/adapter/repository",
+          "iam_module/internal/core",
+          "iam_module/internal/core/constant",
+          "iam_module/internal/core/domain",
+          "iam_module/internal/core/usecase",
+          "iam_module/internal/core/usecase/registration",
+          "iam_module/internal/core/usecase/usermanagement",
+          "iam_module/pkg",
+          "iam_module/pkg/middleware",
+          "iam_module/pkg/security"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "type GenericRepository[T schema.Tabler] struct {\n\tdb    *gorm.DB\n\tmodel T\n}\n\nfunc (repo GenericRepository[T]) FindOneByIDSelection(\n\tctx context.Context,\n\tentity interface{},\n\tid interface{},\n) error {\n\tselection, err := repo.extractSelection(entity)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn repo.db.WithContext(ctx).\n\t\tTable(repo.model.TableName()).\n\t\tSelect(selection).\n\t\tFirst(entity, \"id = ?\", id).Error\n}",
+          "description": "Generic Repository implementation with dynamic reflection-based column selection in GORM",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/generic_repository.go defines GenericRepository[T schema.Tabler], AST expression helpers (Search, Equal, InArray, ExpressionDateRange), and reflection struct extractors.",
+      "confidence": 0.95,
+      "considerations": [
+        "Requires struct tags with `gorm:\"column:...\"` for dynamic column projections",
+        "All repository methods receive context.Context for cancellation propagation"
+      ],
+      "keyImplementationPoints": [
+        "Go generics constraint on schema.Tabler interface",
+        "Parameterized AST clause expressions to prevent SQL injection",
+        "Dynamic reflection projection via extractSelection"
+      ],
+      "overview": "Generic repository pattern for GORM leveraging Go 1.18+ type parameters to provide type-safe CRUD, dynamic expression building, and reflection-based selective field loading.",
+      "purpose": "Eliminate boilerplate CRUD queries while keeping strict type safety and SQL injection protection.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/golang-multi-repo-transaction-coordinator.md",
+        "01-Knowledge/patterns/backend/golang-structured-domain-error-i18n.md"
+      ],
+      "summary": "Type-safe generic repository abstraction with dynamic GORM expression builders and reflection-driven column projections.",
+      "tags": [
+        "backend",
+        "golang",
+        "gorm",
+        "generic",
+        "repository",
+        "database",
+        "orm"
+      ],
+      "title": "Go GORM Generic Repository & Dynamic Expression Builder Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type BaseRepository interface {\n\tSetupConnection(db *gorm.DB)\n}\n\ntype DBTransaction struct {\n\tdb    *gorm.DB\n\trepos []BaseRepository\n}\n\nfunc (main *DBTransaction) Begin() {\n\ttx := main.db.Begin()\n\tfor _, rp := range main.repos {\n\t\trp.SetupConnection(tx)\n\t}\n\tmain.db = tx\n}\n\nfunc (main *DBTransaction) End(err error) error {\n\tif err != nil {\n\t\tif errTrx := main.db.Rollback().Error; errTrx != nil {\n\t\t\treturn errTrx\n\t\t}\n\t\treturn nil\n\t}\n\treturn main.db.Commit().Error\n}",
+          "description": "Multi-repository unit-of-work transaction coordinator in Go GORM",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/dbTransaction.go provides DBTransaction struct and BaseRepository interface.",
+      "confidence": 0.92,
+      "considerations": [
+        "Repositories must implement BaseRepository.SetupConnection to swap the GORM instance",
+        "Ensure defer trx.End(err) is used to avoid hanging database transactions"
+      ],
+      "keyImplementationPoints": [
+        "Decoupled transaction management from business usecase layer",
+        "Transparent DB session switching across multiple repositories",
+        "Automatic atomic rollback or commit via End(err)"
+      ],
+      "overview": "Declarative unit-of-work transaction manager that coordinates multiple repositories within an atomic GORM transaction.",
+      "purpose": "Provide atomic ACID multi-repository transactions without exposing raw database connection objects to service logic.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/golang-gorm-generic-repository.md"
+      ],
+      "summary": "Declarative Multi-Repository Unit-of-Work Transaction Coordinator managing GORM transactions across distinct repositories.",
+      "tags": [
+        "backend",
+        "golang",
+        "database",
+        "transaction",
+        "gorm",
+        "unit-of-work"
+      ],
+      "title": "Declarative Multi-Repository Unit-of-Work Transaction Coordinator"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type InvalidDataError struct {\n\tMsg             string\n\tDataToTemplated map[string]string\n}\nfunc (e InvalidDataError) Error() string { return e.Msg }\n\nfunc (m Mapper) NewResponse(c *gin.Context, res *payload.Response, err error) {\n\tuserData := m.GetAuthDataFromContext(c)\n\tif err != nil {\n\t\tif ok, invErr := m.IsInvalidDataError(err); ok {\n\t\t\tc.JSON(http.StatusBadRequest, payload.DefaultErrorInvalidDataWithMessage(m.localizer.GetLocalized(userData.Lang, err.Error())))\n\t\t\treturn\n\t\t}\n\t\tc.JSON(http.StatusInternalServerError, payload.DefaultErrorResponseWithMessage(m.localizer.GetLocalized(userData.Lang, \"InternalError\"), err))\n\t\treturn\n\t}\n\tc.JSON(http.StatusOK, res)\n}",
+          "description": "Domain error hierarchy with Gin HTTP translation and localization mapping",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/localerror/util.go defines domain errors and pkg/mapper/errors.go maps errors to localized JSON responses.",
+      "confidence": 0.94,
+      "considerations": [
+        "Domain errors should never expose database driver errors directly to clients",
+        "Internal server errors must be logged and replaced with a generic localized message"
+      ],
+      "keyImplementationPoints": [
+        "Pure domain error types (InvalidDataError, AccessControlError)",
+        "I18n localized message lookup using user context language",
+        "Decoupled HTTP status and payload formatting via Mapper"
+      ],
+      "overview": "Hierarchical domain error architecture separating business errors from transport layer responses with multi-language i18n support.",
+      "purpose": "Provide clean error boundaries and uniform localized error responses for frontend consumers.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/golang-modular-jwt-redis-session.md"
+      ],
+      "summary": "Structured Domain Error Hierarchy & I18n Response Mapping Pattern separating domain errors from HTTP transport with localization.",
+      "tags": [
+        "backend",
+        "golang",
+        "error-handling",
+        "i18n",
+        "gin",
+        "middleware"
+      ],
+      "title": "Structured Domain Error Hierarchy & I18n Response Mapping Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "func (receiver Auth) Authorize(roles ...string) gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\tvar authData = payload.UserData{}\n\t\tif authDataStr, ok := c.Get(\"authData\"); ok {\n\t\t\tauthData = authDataStr.(payload.UserData)\n\t\t}\n\t\tif slices.Contains(roles, authData.RoleName) {\n\t\t\tc.Next()\n\t\t\treturn\n\t\t}\n\t\tc.JSON(http.StatusUnauthorized, payload.DefaultBadRequestResponse())\n\t\tc.Abort()\n\t}\n}",
+          "description": "Modular JWT auth middleware with RBAC and Redis session tracking",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "iam_module/pkg/middleware/session.go and iam_module/pkg/security/authenticate.go provide authentication and authorization.",
+      "confidence": 0.91,
+      "considerations": [
+        "HMAC signing method verification prevents algorithm confusion attacks",
+        "User activity updates should be handled efficiently to avoid slowing down requests"
+      ],
+      "keyImplementationPoints": [
+        "Stateless JWT token validation with algorithm checks",
+        "Stateful Redis session validation for revocable tokens",
+        "RBAC role-based authorization slice checks"
+      ],
+      "overview": "Pluggable IAM authentication and authorization middleware combining stateless JWT, stateful Redis session validation, and RBAC.",
+      "purpose": "Deliver modular, secure authentication and authorization with seamless role checks and activity tracking.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/golang-structured-domain-error-i18n.md"
+      ],
+      "summary": "Modular JWT Auth Middleware with Redis Stateful Session & Activity Tracking in Go Clean Architecture.",
+      "tags": [
+        "backend",
+        "golang",
+        "auth",
+        "jwt",
+        "redis",
+        "session",
+        "middleware",
+        "rbac"
+      ],
+      "title": "Modular JWT Auth Middleware with Redis Stateful Session & Activity Tracking"
+    }
+  ]
+}

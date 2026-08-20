@@ -1,0 +1,791 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T08:38:09.286Z",
+  "harvestId": "harvest-1787128418632-596cfbe7",
+  "type": "codebase-harvest",
+  "domain": "backend",
+  "repositoryPath": "/Users/sagaino/ciniru/image-search/base-be-golang",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/image-search/base-be-golang",
+    "packageName": "base-be-golang",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/pkg/middleware/session.go",
+          "iam_module/pkg/security/authenticate.go",
+          "pkg/middleware/session-user.go"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/pkg/middleware",
+          "iam_module/pkg/middleware/dto.go",
+          "iam_module/pkg/middleware/session.go",
+          "internal/constant/errors.go",
+          "pkg/localerror",
+          "pkg/localerror/util.go",
+          "pkg/mapper/errors.go",
+          "pkg/middleware",
+          "pkg/middleware/cors.go",
+          "pkg/middleware/custom-translation-validator.go"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "iam_module/internal/adapter/repository",
+          "iam_module/internal/adapter/repository/user_repo.go",
+          "pkg/db",
+          "pkg/db/db-custome.go",
+          "pkg/db/dbtransaction.go",
+          "pkg/db/default.go",
+          "pkg/db/dto.go",
+          "pkg/db/generic_repository.go"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 161,
+        "sampleDirectories": [
+          "cmd",
+          "cmd/api",
+          "iam_module",
+          "iam_module/internal",
+          "iam_module/internal/adapter",
+          "iam_module/internal/adapter/repository",
+          "iam_module/internal/core",
+          "iam_module/internal/core/constant",
+          "iam_module/internal/core/domain",
+          "iam_module/internal/core/usecase",
+          "iam_module/internal/core/usecase/registration",
+          "iam_module/internal/core/usecase/usermanagement",
+          "iam_module/pkg",
+          "iam_module/pkg/middleware",
+          "iam_module/pkg/security"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// cmd/api/api.go\npackage main\n\nimport (\n\t\"base-be-golang/internal/adapter/controller\"\n\t\"base-be-golang/internal/core/domain\"\n\t\"base-be-golang/shared/api\"\n\t\"base-be-golang/shared/base\"\n\t\"flag\"\n\t\"log\"\n\t\"os\"\n\t\"strconv\"\n\n\t\"github.com/joho/godotenv\"\n\tiamctrl \"github.com/rdhmuhammad/base-be-golang/iam-module/shared/adapter/controller\"\n\t\"gorm.io/gorm\"\n)\n\nfunc main() {\n\tvar envFile string\n\tflag.StringVar(&envFile, \"env\", \".env.stag\", \"Provide env file path\")\n\tflag.Parse()\n\tif err := godotenv.Load(envFile); err != nil {\n\t\tlog.Println(err)\n\t\tpanic(err)\n\t}\n\n\tstart := api.Default()\n\n\t// IAM Module Toggle Registration\n\tif t, _ := strconv.ParseBool(os.Getenv(\"IAM_MODULE_OFF\")); !t {\n\t\tstart.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\t\t\treturn iamctrl.NewAuthController(dbConn, port, ctrl)\n\t\t})\n\t\tstart.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\t\t\treturn iamctrl.NewUserManagementController(dbConn, port, ctrl)\n\t\t})\n\t}\n\n\t// Business Modules Registration\n\tstart.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\t\treturn controller.NewProductController(dbConn, port, ctrl)\n\t})\n\n\tstart.DB().AutoMigrate(&domain.Product{}, &domain.Account{})\n\n\tif err := start.Start(); err != nil {\n\t\tpanic(err)\n\t}\n}",
+          "description": "Composition Root bootstrap in cmd/api registering controllers conditionally with dependency factory",
+          "language": "go"
+        },
+        {
+          "code": "// shared/api/api.go\npackage api\n\nimport (\n\t\"base-be-golang/pkg/cache\"\n\t\"base-be-golang/pkg/logger\"\n\t\"base-be-golang/pkg/miniostorage\"\n\t\"os\"\n\n\t\"github.com/gin-gonic/gin\"\n\t\"gorm.io/gorm\"\n)\n\ntype Api struct {\n\tserver   *gin.Engine\n\tdb       *gorm.DB\n\tcache    cache.DbClient\n\tminioStr miniostorage.StorageMinio\n\treZero   *logger.ReZero\n\trouters  []Router\n}\n\ntype Router interface {\n\tRoute(handler *gin.RouterGroup)\n}\n\nfunc (a *Api) DB() *gorm.DB { return a.db }\n\nfunc (a *Api) Start() error {\n\troot := a.server.Group(\"/api/v1\")\n\tfor _, router := range a.routers {\n\t\trouter.Route(root)\n\t}\n\n\tport := os.Getenv(\"APP_PORT\")\n\treturn a.server.Run(\"0.0.0.0:\" + port)\n}",
+          "description": "API Engine Lifecycle orchestrating router aggregation under /api/v1 prefix",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "cmd/\n  └── api/\n      └── api.go                     <-- Composition Root & Wiring\nshared/\n  ├── api/\n  │   ├── api.go                     <-- Engine struct, Router interface & lifecycle\n  │   ├── default.go                 <-- Default engine constructor & middleware init\n  │   └── register_api.go            <-- Functional registration hook\n  └── base/\n      └── port.go                    <-- Port & BaseController definitions\ninternal/\n  ├── adapter/\n  │   └── controller/                <-- HTTP Controllers (Adapters)\n  └── core/\n      ├── domain/                    <-- Domain Entities (Pure models)\n      └── usecase/                   <-- Use cases & Business Logic",
+      "confidence": 0.98,
+      "considerations": [
+        "Composition Root di cmd/api/api.go memusatkan instansiasi dependensi sehingga package internal tidak bergantung langsung ke konfigurasi runtime environment.",
+        "Pemisahan modul IAM dan Business modul menggunakan feature flag dinamis (IAM_MODULE_OFF) memudahkan skenario deployment modular monolith ataupun transisi ke microservice.",
+        "Router interface memastikan semua controller hanya mengekspos metode registrasi rute tanpa mengekspos dependensi internal ke engine HTTP."
+      ],
+      "keyImplementationPoints": [
+        "Pola Composition Root memusatkan seluruh inisialisasi infrastruktur (DB, Redis, Sentry, MinIO) pada shared/api/default.go.",
+        "Registrasi controller menggunakan factory closure `func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router` sehingga injeksi dependensi dilakukan secara lazy dan seragam.",
+        "Semua modul bisnis dan infrastruktur mengekspor rute melalui implementasi `Route(handler *gin.RouterGroup)`."
+      ],
+      "overview": "Pola Composition Root & Modular Clean Architecture memisahkan siklus hidup aplikasi (bootstrap, migrasi database, lifecycle HTTP server) dari logika bisnis dan rute HTTP. Struktur ini mengelompokkan kode ke dalam Clean/Hexagonal layers (Domain -> Usecase -> Adapter/Controller -> Infrastructure) serta memungkinkan plug-and-play modul secara independen melalui interface pendaftaran Router.",
+      "purpose": "Menyediakan fondasi proyek modular monolith yang scalable, terisolasi, dan mudah di-maintain dengan registrasi modul dinamis dan decoupling infrastruktur.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/hexagonal-architecture.md",
+        "01-Knowledge/patterns/backend/dependency-injection-composition-root.md"
+      ],
+      "summary": "Modular Clean Architecture Skeleton & Composition Root Engine untuk Golang backend application.",
+      "tags": [
+        "backend",
+        "architecture",
+        "golang",
+        "clean-architecture",
+        "composition-root"
+      ],
+      "title": "Modular Clean Skeleton & Composition Root Engine"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// shared/base/port.go\npackage base\n\nimport (\n\t\"base-be-golang/pkg/cache\"\n\t\"base-be-golang/pkg/clock\"\n\t\"base-be-golang/pkg/davinci\"\n\t\"base-be-golang/pkg/environment\"\n\t\"base-be-golang/pkg/localerror\"\n\t\"base-be-golang/pkg/logger\"\n\t\"base-be-golang/pkg/mailing\"\n\t\"base-be-golang/pkg/mapper\"\n\t\"base-be-golang/pkg/middleware\"\n\t\"gorm.io/gorm\"\n)\n\ntype Port struct {\n\tSecurity   Security\n\tErrHandler ErrHandler\n\tCache      Cache\n\tEnv        Environment\n\tDavinci    Generator\n\tMailing    Mailing\n\tClock      Clock\n}\n\nfunc NewPort(dbConn *gorm.DB, dbCache cache.DbClient, zero *logger.ReZero) Port {\n\treturn Port{\n\t\tSecurity:   NewAuth(dbConn, dbCache),\n\t\tErrHandler: localerror.NewHandlerError(zero),\n\t\tCache:      &dbCache,\n\t\tEnv:        environment.NewEnvironment(),\n\t\tDavinci:    davinci.DefaultDavinci(),\n\t\tMailing:    mailing.NewConfig(),\n\t\tClock:      clock.Default(),\n\t}\n}\n\ntype BaseController struct {\n\tMapper   Mapper\n\tEnigma   Validator\n\tSecurity Security\n\tIdem     Idempotent\n}\n\nfunc NewBaseController(db *gorm.DB, dbCache cache.DbClient) BaseController {\n\treturn BaseController{\n\t\tMapper:   mapper.NewMapper(),\n\t\tEnigma:   middleware.NewEnigma(),\n\t\tSecurity: NewAuth(db, dbCache),\n\t\tIdem:     middleware.NewIdempotent(dbCache),\n\t}\n}",
+          "description": "Definisi Port & BaseController sebagai cross-cutting dependency aggregation hub",
+          "language": "go"
+        },
+        {
+          "code": "// internal/adapter/controller/product.go\npackage controller\n\nimport (\n\t\"base-be-golang/internal/core/usecase/product\"\n\t\"base-be-golang/shared/api\"\n\t\"base-be-golang/shared/base\"\n\t\"base-be-golang/shared/payload\"\n\t\"net/http\"\n\n\t\"github.com/gin-gonic/gin\"\n\t\"gorm.io/gorm\"\n)\n\ntype ProductController struct {\n\tbase.BaseController\n\tuc product.Usecase\n}\n\nfunc NewProductController(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\treturn ProductController{\n\t\tBaseController: ctrl,\n\t\tuc:             product.NewUsecase(dbConn, port),\n\t}\n}\n\nfunc (ctrl ProductController) Create(c *gin.Context) {\n\tvar req product.CreateProductRequest\n\tif errs := ctrl.Enigma.BindAndValidate(c, &req); errs != nil {\n\t\tc.JSON(http.StatusBadRequest, payload.DefaultInvalidInputFormResponse(errs))\n\t\treturn\n\t}\n\n\tresult, err := ctrl.uc.Create(c.Request.Context(), req)\n\tctrl.Mapper.NewResponse(c, payload.NewSuccessResponse(result, \"ProductCreated\"), err)\n}",
+          "description": "Controller embedding BaseController dan Use Case embedding Port",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "shared/\n  └── base/\n      ├── port.go                    <-- Port & BaseController Aggregation Hub\n      └── iam_module.go              <-- Auth contract adapter\npkg/\n  ├── cache/                         <-- Cache client interface\n  ├── clock/                         <-- Clock & Timezone interface\n  ├── localerror/                    <-- Standardized Error handler\n  ├── mapper/                        <-- Standardized API Response mapper\n  └── middleware/                    <-- Enigma Validator, Idempotent, Sentry",
+      "confidence": 0.96,
+      "considerations": [
+        "Menghindari 'constructor bloat' pada use case dan controller di mana puluhan service/utility harus di-pass satu per satu.",
+        "Semua dependensi di dalam Port dan BaseController didefinisikan dalam bentuk interface, sehingga mempermudah mock testing untuk setiap unit test.",
+        "Embedding BaseController dan Port memberikan standar konsisten di semua layer controller dan usecase."
+      ],
+      "keyImplementationPoints": [
+        "Struktur `base.Port` mengagregasikan layanan utilitas domain (Clock, Environment, Security, Cache, Error Handler, Mailing, Key Generator).",
+        "Struktur `base.BaseController` mengagregasikan fungsionalitas HTTP helper (Validation Enigma, Response Mapper, Idempotency Middleware, Security).",
+        "Controller dan Use Case meng-embed struct ini secara langsung untuk akses metode seragam tanpa kode redundan."
+      ],
+      "overview": "Pola Unified Port & Base Controller Dependency Hub memecahkan masalah kompleksitas dependency injection di Golang dengan mengelompokkan cross-cutting services ke dalam container terpadu berbasis interface (`base.Port` untuk domain/use case dan `base.BaseController` untuk transport/HTTP adapter).",
+      "purpose": "Menyeragamkan akses utility lintas layer, menyederhanakan signature konstruktor, dan memastikan seluruh modul memiliki kapabilitas cross-cutting yang konsisten.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/dependency-injection-hub.md",
+        "01-Knowledge/concepts/backend/hexagonal-ports-and-adapters.md"
+      ],
+      "summary": "Unified Port & Base Controller Dependency Hub untuk manajemen dependency injection lintas layer di Go.",
+      "tags": [
+        "backend",
+        "golang",
+        "dependency-injection",
+        "ports-and-adapters",
+        "cross-cutting-concerns"
+      ],
+      "title": "Unified Port & Base Controller Dependency Hub"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// iam_module/pkg/middleware/session.go\npackage middleware\n\nimport (\n\t\"context\"\n\t\"net/http\"\n\t\"strings\"\n\t\"time\"\n\n\t\"base-be-golang/pkg/logger\"\n\t\"base-be-golang/shared/payload\"\n\t\"github.com/gin-gonic/gin\"\n\t\"golang.org/x/exp/slices\"\n)\n\nconst AuthCodeContext = \"authData\"\n\nfunc (receiver Auth) Validate() gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\ttokenStr := strings.Replace(c.GetHeader(\"Authorization\"), \"Bearer \", \"\", -1)\n\t\tsecret := []byte(os.Getenv(\"SECRET\"))\n\t\ttoken, err := receiver.parseToken(tokenStr, secret)\n\t\tif err != nil {\n\t\t\tc.JSON(http.StatusUnauthorized, payload.DefaultErrorResponseWithMessage(err.Error(), err))\n\t\t\tc.Abort()\n\t\t\treturn\n\t\t}\n\n\t\tauthData, valid := receiver.getAuthData(token)\n\t\tuserDataStruct := payload.UserData{}\n\t\tif err := userDataStruct.LoadFromMap(authData); err != nil || !valid {\n\t\t\tc.JSON(http.StatusUnauthorized, payload.DefaultErrorResponse(err))\n\t\t\tc.Abort()\n\t\t\treturn\n\t\t}\n\n\t\t// Update activity & enrich standard context\n\t\treceiver.setUserActivity(userDataStruct)\n\t\tc.Set(string(AuthCodeContext), userDataStruct)\n\t\tnewCtx := context.WithValue(c.Request.Context(), AuthCodeContext, userDataStruct)\n\t\tc.Request = c.Request.WithContext(newCtx)\n\t\tc.Next()\n\t}\n}\n\nfunc (receiver Auth) Authorize(roles ...string) gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\tvar authData payload.UserData\n\t\tif val, ok := c.Get(string(AuthCodeContext)); ok {\n\t\t\tauthData = val.(payload.UserData)\n\t\t}\n\n\t\tif slices.Contains(roles, authData.RoleName) {\n\t\t\tc.Next()\n\t\t\treturn\n\t\t}\n\n\t\tc.JSON(http.StatusUnauthorized, payload.DefaultBadRequestResponse())\n\t\tc.Abort()\n\t}\n}",
+          "description": "JWT Session Validation, Context Enrichment, and RBAC Guard Middleware",
+          "language": "go"
+        },
+        {
+          "code": "// internal/adapter/controller/product.go\nfunc (ctrl ProductController) Route(router *gin.RouterGroup) {\n\tproducts := router.Group(\"/products\")\n\t\n\t// Public routes\n\tproducts.GET(\"\", ctrl.Get)\n\t\n\t// Protected routes with Session Validation & Role Authorization\n\tauthorized := products.Group(\"\")\n\tauthorized.Use(ctrl.Security.Validate())\n\t{\n\t\tauthorized.POST(\"\", ctrl.Security.Authorize(\"ADMIN\", \"MANAGER\"), ctrl.Create)\n\t\tauthorized.PUT(\"/:id\", ctrl.Security.Authorize(\"ADMIN\"), ctrl.Edit)\n\t\tauthorized.PATCH(\"/:id\", ctrl.Security.Authorize(\"ADMIN\"), ctrl.EditPartial)\n\t\tauthorized.DELETE(\"/:id\", ctrl.Security.Authorize(\"ADMIN\"), ctrl.Delete)\n\t}\n}",
+          "description": "Deklarasi rute hierarkis dengan pipeline middleware guard terisolasi",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "iam_module/\n  └── pkg/\n      ├── middleware/\n      │   ├── session.go             <-- Validate() & Authorize() Guard Implementations\n      │   └── dto.go                 <-- User context & session payloads\n      └── security/\n          └── authenticate.go        <-- Token generator & parser\nshared/\n  └── api/\n      └── register_api.go            <-- Router registration pipeline",
+      "confidence": 0.95,
+      "considerations": [
+        "Context injection memastikan use case tidak bergantung pada HTTP Gin context melainkan pada standard library `context.Context`.",
+        "Pemisahan guard ke dalam dua tahap (`Validate` untuk autentikasi dan `Authorize` untuk otorisasi granular) memberikan fleksibilitas rute publik, authenticated-only, dan role-restricted.",
+        "Automatic last-active update langsung dieksekusi di middleware tanpa mengotori business logic di use case."
+      ],
+      "keyImplementationPoints": [
+        "Hierarchical Route Grouping mengisolasi endpoint publik dari endpoint yang membutuhkan otentikasi/otorisasi.",
+        "`Validate()` memverifikasi JWT claim, mengecek masa kedaluwarsa, memperbarui aktivitas pengguna, dan menginjeksi struct `UserData` ke dalam Gin context serta `c.Request.Context()`.",
+        "`Authorize(roles...)` melakukan evaluasi role granular (RBAC) dan menghentikan eksekusi rute (`c.Abort()`) jika role tidak sesuai."
+      ],
+      "overview": "Pola Declarative Route Registration & Context-Enriching Guard Pipeline mengatur deklarasi rute modular dan mengamankan endpoint API melalui middleware chain terstandarisasi. Middleware memvalidasi token JWT, menginjeksi informasi user ke standard context, mencatat aktivitas user, dan mengevaluasi Role-Based Access Control (RBAC).",
+      "purpose": "Menyediakan mekanisme proteksi endpoint API yang deklaratif, aman, serta otomatis mengalirkan konteks otentikasi user ke seluruh lapisan use case.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/jwt-authentication-middleware.md",
+        "01-Knowledge/concepts/backend/rbac-authorization.md"
+      ],
+      "summary": "Declarative Route Registration & Context-Enriching Guard Pipeline untuk proteksi endpoint API dan propagasi context di Go.",
+      "tags": [
+        "backend",
+        "golang",
+        "routing",
+        "middleware",
+        "jwt",
+        "rbac",
+        "security"
+      ],
+      "title": "Declarative Route Registration & Context-Enriching Guard Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "func (receiver Auth) Validate() gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\ttokenStr := strings.Replace(c.GetHeader(\"Authorization\"), \"Bearer \", \"\", -1)\n\t\tsecret := os.Getenv(\"SECRET\")\n\t\ttoken, err := receiver.parseToken(tokenStr, []byte(secret))\n\t\tif err != nil {\n\t\t\tresponse := payload.DefaultErrorResponseWithMessage(err.Error(), err)\n\t\t\tc.JSON(http.StatusUnauthorized, response)\n\t\t\tc.Abort()\n\t\t\treturn\n\t\t}\n\n\t\tauthData, valid := receiver.getAuthData(token)\n\t\tuserDataStruct := payload.UserData{}\n\t\terr = userDataStruct.LoadFromMap(authData)\n\t\tif err != nil {\n\t\t\tresponse := payload.DefaultErrorResponse(err)\n\t\t\tresponse.Message = receiver.localize.GetLocalized(userDataStruct.Lang, constant2.SessionExpired.String())\n\t\t\tc.JSON(http.StatusUnauthorized, response)\n\t\t\tc.Abort()\n\t\t\treturn\n\t\t}\n\n\t\tif valid {\n\t\t\treceiver.setUserActivity(userDataStruct)\n\t\t\ttz := time.UTC\n\t\t\tif userDataStruct.Timezone != \"\" {\n\t\t\t\ttz, err = time.LoadLocation(userDataStruct.Timezone)\n\t\t\t\tif err != nil {\n\t\t\t\t\tlogger.Error(err)\n\t\t\t\t}\n\t\t\t}\n\t\t\tuserDataStruct.Tz = tz\n\t\t\tc.Set(string(AuthCodeContext), userDataStruct)\n\t\t\tolCtx := c.Request.Context()\n\t\t\tnewCtx := context.WithValue(olCtx, AuthCodeContext, userDataStruct)\n\t\t\tc.Request = c.Request.WithContext(newCtx)\n\t\t\tc.Next()\n\t\t\treturn\n\t\t}\n\n\t\tresponse := payload.DefaultErrorResponse(err)\n\t\tc.JSON(http.StatusUnauthorized, response)\n\t\tc.Abort()\n\t}\n}",
+          "description": "JWT Validation middleware extracting token claims, resolving timezone location, enriching Gin & Request Context, and triggering activity logging.",
+          "language": "go"
+        },
+        {
+          "code": "func (receiver Auth) SetSession(ctx context.Context, user payload.SessionDataUser) error {\n\tloginCacheKey := \"LOGIN_KEY_\"\n\n\tmarshal, err := json.Marshal(user)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn receiver.cache.Set(\n\t\tctx,\n\t\tloginCacheKey+user.UserReference,\n\t\tstring(marshal),\n\t\ttime.Hour*time.Duration(receiver.env.GetInt(\"EXPIRED_TOKEN_JWT\", 1)),\n\t)\n}\n\nfunc (receiver Auth) GetSession(ctx context.Context, authCode string, sessionData *payload.SessionDataUser) error {\n\tloginCacheKey := \"LOGIN_KEY_\"\n\tsessionStr, err := receiver.cache.Get(ctx, loginCacheKey+authCode)\n\tif err != nil {\n\t\tif errors.Is(redis.Nil, err) {\n\t\t\treturn localerror.AccessControlError{Msg: constant2.AccessNotAllowed.String()}\n\t\t}\n\t\treturn err\n\t}\n\n\terr = json.Unmarshal([]byte(sessionStr), sessionData)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn nil\n}",
+          "description": "Redis-backed session synchronization enabling immediate session invalidation and single-user policies.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "iam_module/\n├── pkg/\n│   ├── security/\n│   │   ├── authenticate.go      # JWT generation & signing\n│   │   └── dto.go               # SingleTokenClaim, UserData DTOs\n│   └── middleware/\n│       ├── session.go           # Validate(), Authorize(), SetSession(), GetSession()\n│       └── dto.go               # Context keys & payload mappings\n└── internal/core/domain/\n    └── user_interface.go        # UserEntityInterface for last_active touch",
+      "confidence": 0.95,
+      "considerations": [
+        "JWT secret must be securely injected via environment variables and rotated periodically.",
+        "Timezone parsing fallback to time.UTC prevents unexpected crashes when clients submit malformed IANA timezone strings.",
+        "Activity timestamp updates should be executed via lightweight partial column updates to minimize database load."
+      ],
+      "keyImplementationPoints": [
+        "Dual Context Enrichment: Sets user manifest both into gin.Context and standard Go context.Context for seamless downstream use case propagation.",
+        "Timezone Dynamic Location: Parses user timezone on-the-fly with fallback to UTC, attaching the loaded time.Location to the request context.",
+        "Hybrid Revocation via Cache: Combines cryptographic JWT signature checks with optional Redis-backed session lookup for immediate token invalidation.",
+        "Role-Based Authorization Interceptor: Authorize(roles...) middleware verifies claims against permitted roles before executing handlers."
+      ],
+      "overview": "This pattern combines stateless JWT verification with stateful Redis session caching to achieve the scalability of JWTs along with immediate revocation and single-login enforcement capabilities. Upon successful signature and expiration verification, the token claims are converted into a rich UserManifest struct, enriched with the user's localized timezone, injected into both Gin Context and Go standard context.Context, and logged for user activity tracking.",
+      "purpose": "Provide robust, revocable authentication and authorization with seamless user metadata enrichment across web requests.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/hybrid-token-session-architecture.md",
+        "01-Knowledge/snippets/backend/gin-context-user-manifest.md"
+      ],
+      "summary": "Stateful Cache-Backed JWT Session Guard with Context Manifest & Activity Tracking combining stateless JWT claims with Redis session storage and context enrichment.",
+      "tags": [
+        "backend",
+        "authentication",
+        "jwt",
+        "session-management",
+        "redis",
+        "security",
+        "golang"
+      ],
+      "title": "Stateful Cache-Backed JWT Session Guard with Context Manifest & Activity Tracking"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "func (idem IDEMPOTENT) Idempotent(name string, paramKey string, lockTime time.Duration) gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\t// prepare the key\n\t\tkey := strings.ReplaceAll(strings.ToLower(c.Param(paramKey)), \" \", \"\")\n\t\tif key == \"\" {\n\t\t\tkey = strings.ReplaceAll(strings.ToLower(c.Query(paramKey)), \" \", \"\")\n\t\t}\n\t\tif key == \"\" {\n\t\t\tcontentType := c.ContentType()\n\t\t\tvar body map[string]any\n\t\t\tswitch contentType {\n\t\t\tcase gin.MIMEMultipartPOSTForm:\n\t\t\t\tbody = idem.getBodyMultiPart(c)\n\t\t\tcase gin.MIMEJSON:\n\t\t\t\tbody = idem.getBodyJSON(c)\n\t\t\t}\n\t\t\tkey = strings.ReplaceAll(strings.ToLower(fmt.Sprint(body[paramKey])), \" \", \"\")\n\t\t}\n\t\tif key == \"\" {\n\t\t\tc.Next()\n\t\t\treturn\n\t\t}\n\n\t\tipAddress := c.ClientIP()\n\t\tidempotenceKey := fmt.Sprintf(\"%v-%v-%v-%v\", IdempotencePrefixKey, ipAddress, name, key)\n\t\tctx := context.Background()\n\t\tlock, err := idem.cache.Get(ctx, idempotenceKey)\n\t\tif lock != \"\" {\n\t\t\tc.JSON(http.StatusConflict, payload.DefaultErrorResponseWithMessage(\"IDEMPOTENT request\", err))\n\t\t\tc.Abort()\n\t\t\treturn\n\t\t}\n\n\t\t// lock request\n\t\t_ = idem.cache.Set(ctx, idempotenceKey, \"locked\", lockTime)\n\n\t\t// handle request\n\t\tc.Next()\n\t}\n}",
+          "description": "Idempotent middleware handler resolving keys from params, query, JSON body, and multipart forms with distributed Redis lock and 409 Conflict rejection.",
+          "language": "go"
+        },
+        {
+          "code": "func (idem IDEMPOTENT) getBodyJSON(c *gin.Context) map[string]any {\n\tvar body = map[string]any{}\n\tbodyRaw := c.Copy().Request.Body\n\tbodyByte, err := io.ReadAll(bodyRaw)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t}\n\terr = json.Unmarshal(bodyByte, &body)\n\tif err != nil {\n\t\tfmt.Println(err)\n\t}\n\n\t// Restore the request body so it can be used by Gin\n\tc.Request.Body = io.NopCloser(bytes.NewBuffer(bodyByte))\n\n\treturn body\n}\n\nfunc (idem IDEMPOTENT) getBodyMultiPart(c *gin.Context) map[string]any {\n\treqBody, err := c.MultipartForm()\n\tif err != nil {\n\t\tfmt.Println(\"c.MultipartForm: %w\", err)\n\t}\n\n\tbody := make(map[string]any)\n\tfor key, val := range reqBody.File {\n\t\tfileName := filepath.Base(val[0].Filename)\n\t\tbody[key] = fileName\n\t}\n\tfor key, val := range reqBody.Value {\n\t\tbody[key] = val\n\t}\n\treturn body\n}",
+          "description": "Stream-preserving body extraction that drains and restores the Request.Body buffer via io.NopCloser and safely parses multipart form values.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n└── middleware/\n    └── idempotent.go            # Idempotent middleware, body draining, multipart parser, Redis lock",
+      "confidence": 0.93,
+      "considerations": [
+        "Reading the entire JSON request body into memory requires appropriate request size limits to prevent memory exhaustion on massive payloads.",
+        "Lock time (TTL) must be tuned to match the expected execution duration of the underlying mutation handler.",
+        "IP-scoping in idempotence keys helps isolate locks per client while preventing cross-tenant locking conflicts."
+      ],
+      "keyImplementationPoints": [
+        "Multi-Tier Key Discovery: Automatically falls back through Route Params -> Query Strings -> JSON Body -> Multipart Form fields to locate the idempotency key.",
+        "Stream Drain & Buffer Rewind: Reads c.Request.Body and restores it using io.NopCloser(bytes.NewBuffer(bodyByte)) so downstream handlers can re-parse the body cleanly.",
+        "Multipart Form Inspector: Safely parses multipart forms without breaking file uploads or value bindings.",
+        "Distributed Redis Mutex: Uses cache TTL locks to atomically reject duplicate concurrent submissions with HTTP 409 Conflict."
+      ],
+      "overview": "This pattern implements a robust distributed idempotency guard designed to protect sensitive state-mutating endpoints (e.g. payment submissions, transaction creation) from duplicate requests and replay attacks. It dynamically resolves the idempotency key across various request formats and restores drained stream buffers using io.NopCloser to preserve payload availability for subsequent middleware and handlers.",
+      "purpose": "Prevent race conditions and duplicate executions during sensitive mutation operations while supporting diverse payload types (JSON & Multipart).",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/distributed-idempotency-pipeline.md",
+        "01-Knowledge/snippets/backend/gin-request-body-rewind.md"
+      ],
+      "summary": "Stream-Preserving Distributed Idempotency Guard with Multi-Source Key Extraction supporting JSON and Multipart forms with body stream rewinding.",
+      "tags": [
+        "backend",
+        "idempotency",
+        "distributed-lock",
+        "redis",
+        "middleware",
+        "gin",
+        "stream-handling"
+      ],
+      "title": "Stream-Preserving Distributed Idempotency Guard with Multi-Source Key Extraction"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type RestRepoBuilder struct {\n\tBuilder Statement\n}\n\ntype Statement struct {\n\tclient       HttpServer\n\tctx          context.Context\n\tbaseUrl      string\n\tbody         interface{}\n\tbodyResponse interface{}\n\tmethod       string\n\tbaseHeader   []RequestHeader\n}\n\nfunc (r *Statement) WithContext(ctx context.Context) *Statement {\n\tr.ctx = ctx\n\treturn r\n}\n\nfunc (r *Statement) Post(path string, args ...QueryKeyVal) *Statement {\n\tvar url = r.baseUrl + path\n\tquery := \"?\"\n\tfor _, arg := range args {\n\t\tquery += fmt.Sprintf(\"&%s=%s\", arg.Key, arg.Val)\n\t}\n\tif len(args) > 0 {\n\t\turl += query\n\t}\n\tr.baseUrl = url\n\tr.method = http.MethodPost\n\treturn r\n}\n\nfunc (r *Statement) BodyJSON(body interface{}) *Statement {\n\tr.baseHeader = append(r.baseHeader, RequestHeader{\n\t\tKey:   \"Content-Type\",\n\t\tValue: gin.MIMEJSON,\n\t})\n\tr.body = body\n\treturn r\n}\n\nfunc (r *Statement) Send() error {\n\tif reflect.TypeOf(r.bodyResponse).Kind() != reflect.Pointer {\n\t\treturn fmt.Errorf(\"body Response struct should be Pointer of struct\")\n\t}\n\n\tif r.ctx == nil {\n\t\tr.ctx = context.Background()\n\t}\n\n\trequest, err := r.client.CreateRequest(\n\t\tr.ctx,\n\t\tr.baseHeader,\n\t\tr.method,\n\t\tr.baseUrl,\n\t\tr.body,\n\t)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tres, err := r.client.Do(request)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\terr = r.client.BindResponse(res, r.bodyResponse)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn nil\n}",
+          "description": "Fluent Statement builder managing context, headers, URL query concatenation, HTTP execution, and response unmarshaling.",
+          "language": "go"
+        },
+        {
+          "code": "func (h HttpServer) convertToUrlFormData(data interface{}) (io.Reader, error) {\n\tforms := url.Values{}\n\tdType := reflect.TypeOf(data)\n\tdValue := reflect.ValueOf(data)\n\n\tif data == nil {\n\t\treturn nil, nil\n\t}\n\n\tif dType.Kind() == reflect.Struct {\n\t\tfor i := 0; i < dType.NumField(); i++ {\n\t\t\tkey := dType.Field(i).Tag.Get(\"json\")\n\t\t\tstval := dValue.Field(i)\n\n\t\t\tif str, ok := stval.Interface().(string); ok {\n\t\t\t\tforms.Set(key, str)\n\t\t\t\tcontinue\n\t\t\t}\n\n\t\t\tkind := dValue.Field(i).Kind()\n\t\t\tswitch {\n\t\t\tcase slices.Contains(TypeIsInt, kind):\n\t\t\t\tforms.Set(key, strconv.FormatInt(stval.Int(), 10))\n\t\t\t\tcontinue\n\t\t\tcase slices.Contains(TypeIsUint, kind):\n\t\t\t\tforms.Set(key, strconv.FormatUint(stval.Uint(), 10))\n\t\t\t\tcontinue\n\t\t\tcase slices.Contains(TypeIsFloat, kind):\n\t\t\t\tforms.Set(key, strconv.FormatFloat(stval.Float(), 'f', -1, 32))\n\t\t\t\tcontinue\n\t\t\tdefault:\n\t\t\t\treturn nil, fmt.Errorf(\"invalid data type\")\n\t\t\t}\n\t\t}\n\n\t\tp := strings.NewReader(forms.Encode())\n\t\treturn p, nil\n\t}\n\n\treturn nil, fmt.Errorf(\"only accept struct type\")\n}",
+          "description": "Reflection-based struct serializer converting Go structs into url.Values form data across multiple primitive data types.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n└── inetproto/\n    ├── builder.go               # RestRepoBuilder & Statement fluent builder\n    ├── http.go                  # HttpServer, HttpInterface, and reflection serializers\n    ├── reflects.go              # Type definitions and reflection slices\n    └── repo.go                  # RestRepoTemplate utility for REST integrations",
+      "confidence": 0.92,
+      "considerations": [
+        "Response targets must always be passed as pointers to allow json.Unmarshal mutation.",
+        "Reusing builder instances across concurrent goroutines requires resetting internal state or creating independent statement instances.",
+        "Reflection overhead is negligible for network I/O operations but should be kept organized within dedicated conversion routines."
+      ],
+      "keyImplementationPoints": [
+        "Fluent Interface API: Allows expressive chaining of WithContext, Post, Header, BodyJSON, and BodyResponse before firing Send().",
+        "Reflection Serialization: Dynamically inspects struct tags (json) and converts string, int, uint, and float types to url.Values encoded streams.",
+        "Context Cancellation Propagation: Propagates parent context cancellation down to http.NewRequestWithContext for deadline enforcement.",
+        "Encapsulated Response Binding: Handles reading res.Body and unmarshaling directly into target structs with status code inspection."
+      ],
+      "overview": "This pattern provides an expressive, type-safe HTTP client builder architecture for external service integrations. It encapsulates standard HTTP client boilerplate, context deadline propagation, header injection, reflection-based struct serialization for JSON/Form/Multipart payloads, and typed response unmarshaling.",
+      "purpose": "Provide clean, fluent, and type-safe HTTP client pipelines for interacting with external microservices and third-party APIs.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/fluent-rest-client-pipeline.md",
+        "01-Knowledge/snippets/backend/struct-to-url-form-reflection.md"
+      ],
+      "summary": "Fluent Typed HTTP Pipeline Builder with Reflection-Driven Form/Multipart Serialization providing expressive API integration tooling.",
+      "tags": [
+        "backend",
+        "http-client",
+        "fluent-builder",
+        "reflection",
+        "rest-repo",
+        "golang"
+      ],
+      "title": "Fluent Typed HTTP Pipeline Builder with Reflection-Driven Form/Multipart Serialization"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "func (d Engine) DeriveKey(password, salt []byte) ([]byte, []byte, error) {\n\tif salt == nil {\n\t\tsalt = make([]byte, 32)\n\t\tif _, err := rand.Read(salt); err != nil {\n\t\t\treturn nil, nil, err\n\t\t}\n\t}\n\n\tkey, err := scrypt.Key(password, salt, 32768, 8, 1, 32)\n\tif err != nil {\n\t\treturn nil, nil, err\n\t}\n\n\treturn key, salt, nil\n}\n\nfunc (d Engine) EncryptMessage(key, data []byte) (string, error) {\n\tkey, salt, err := d.DeriveKey(key, nil)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tblockCipher, err := aes.NewCipher(key)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tgcm, err := cipher.NewGCM(blockCipher)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tnonce := make([]byte, gcm.NonceSize())\n\tif _, err = rand.Read(nonce); err != nil {\n\t\treturn \"\", err\n\t}\n\n\tciphertext := gcm.Seal(nonce, nonce, data, nil)\n\tciphertext = append(ciphertext, salt...)\n\n\treturn hex.EncodeToString(ciphertext), nil\n}\n\nfunc (d Engine) DecryptMessage(key []byte, p string) (string, error) {\n\tdata, err := hex.DecodeString(p)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\tsalt, data := data[len(data)-32:], data[:len(data)-32]\n\n\tkey, _, err = d.DeriveKey(key, salt)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tblockCipher, err := aes.NewCipher(key)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tgcm, err := cipher.NewGCM(blockCipher)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\tnonce, ciphertext := data[:gcm.NonceSize()], data[gcm.NonceSize():]\n\n\tplaintext, err := gcm.Open(nil, nonce, ciphertext, nil)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\n\treturn string(plaintext), nil\n}",
+          "description": "Authenticated symmetric envelope encryption using Scrypt key derivation (N=32768, r=8, p=1) and AES-GCM cipher with bundled salt and nonce.",
+          "language": "go"
+        },
+        {
+          "code": "func (dc Engine) GenerateOTPCode(secret string, counter uint64) (int, error) {\n\tcounterByte := make([]byte, 8)\n\tfor i := 7; i >= 0; i-- {\n\t\tcounterByte[i] = byte(counter & 0xff)\n\t\tcounter >>= 8\n\t}\n\n\tsecretByte, err := base32.StdEncoding.DecodeString(secret)\n\tif err != nil {\n\t\treturn 0, fmt.Errorf(\"StdEncoding.DecodeString: %w\", err)\n\t}\n\thash := hmac.New(sha1.New, secretByte)\n\t_, err = hash.Write(counterByte)\n\tif err != nil {\n\t\treturn 0, fmt.Errorf(\"hash.Write: %w\", err)\n\t}\n\thmacBytes := hash.Sum(nil)\n\n\t// Dynamic truncation in RFC 4226\n\toffset := hmacBytes[len(hmacBytes)-1] & 0xf\n\tcode := (int(hmacBytes[offset])&0x7f)<<24 |\n\t\t(int(hmacBytes[offset+1])&0xff)<<16 |\n\t\t(int(hmacBytes[offset+2])&0xff)<<8 |\n\t\t(int(hmacBytes[offset+3]) & 0xff)\n\tcode = code % 1000000\n\n\tf := fmt.Sprintf(\"%%0%dd\", 6)\n\tcodeStr := fmt.Sprintf(f, code)\n\tnewCode, err := strconv.ParseInt(codeStr, 10, 64)\n\tif err != nil {\n\t\treturn 0, fmt.Errorf(\"strconv.ParseInt newcode: %w\", err)\n\t}\n\n\treturn int(newCode), nil\n}",
+          "description": "RFC 4226 compliant HMAC-SHA1 One-Time Password generator featuring dynamic truncation and 6-digit zero padding.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n└── davinci/\n    └── davinci.go               # Cryptographic engine: Scrypt+AES-GCM, RFC 4226 HOTP, HMAC unique generators, Bcrypt",
+      "confidence": 0.95,
+      "considerations": [
+        "AES-GCM guarantees both confidentiality and authenticity, preventing ciphertext tampering without needing separate HMAC tags.",
+        "Scrypt key derivation parameters (N=32768, r=8, p=1) provide strong resistance against ASIC/GPU hardware brute-forcing.",
+        "Cryptographically secure random generators (crypto/rand) must always be used for nonces and salts."
+      ],
+      "keyImplementationPoints": [
+        "Authenticated Envelope Encryption: Pairs Scrypt KDF with AES-GCM, packaging the resulting payload as [nonce][ciphertext][salt] encoded in hex.",
+        "RFC 4226 HOTP Implementation: Implements exact RFC 4226 dynamic offset bitwise truncation over HMAC-SHA1 digests to generate 6-digit OTP codes.",
+        "Unique Key Generator with Predicate: Combines HMAC-SHA256 with timestamps and recursive predicate verification (isUnique) to guarantee collision-free reference codes.",
+        "Password Hashing & Verification: Implements Bcrypt hashing and constant-time comparison for credential protection."
+      ],
+      "overview": "This pattern centralizes all cryptographic operations into a dedicated, hardened engine (Davinci). It provides high-grade authenticated encryption using Scrypt key derivation combined with AES-GCM symmetric ciphers, RFC 4226 compliant HOTP generation, collision-resistant HMAC unique key generation with predicate verification, and Bcrypt password hashing.",
+      "purpose": "Provide a hardened, centralized cryptographic engine for sensitive data encryption, OTP generation, reference code hashing, and credential security.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/authenticated-envelope-encryption.md",
+        "01-Knowledge/snippets/backend/rfc4226-hotp-implementation.md"
+      ],
+      "summary": "Multi-Pronged Cryptographic Security Engine providing Scrypt AES-GCM envelope encryption, RFC 4226 HOTP, and collision-resistant HMAC key generation.",
+      "tags": [
+        "backend",
+        "cryptography",
+        "aes-gcm",
+        "scrypt",
+        "hotp",
+        "otp",
+        "security",
+        "golang"
+      ],
+      "title": "Multi-Pronged Cryptographic Security Engine: Scrypt AES-GCM Authenticated Encryption & RFC 4226 HOTP"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type GenericRepository[T schema.Tabler] struct {\n\tdb    *gorm.DB\n\tmodel T\n}\n\nfunc NewGenericeRepoPointr[T schema.Tabler](db *gorm.DB, model T) *GenericRepository[T] {\n\treturn &GenericRepository[T]{\n\t\tdb:    db,\n\t\tmodel: model,\n\t}\n}\n\nvar (\n\tSearch = func(val string, col ...string) clause.Expression {\n\t\tvar exps = make([]clause.Expression, len(col))\n\t\tfor i, c := range col {\n\t\t\ttableName, colName := getColNameStr(c)\n\t\t\texps[i] = clause.Like{\n\t\t\t\tColumn: clause.Column{Name: colName, Table: tableName},\n\t\t\t\tValue:  \"%\" + val + \"%\",\n\t\t\t}\n\t\t}\n\t\treturn clause.Or(exps...)\n\t}\n\n\tEqual = func(val interface{}, col string) clause.Expression {\n\t\ttableName, colName := getColNameStr(col)\n\t\treturn clause.Eq{\n\t\t\tColumn: clause.Column{Name: colName, Table: tableName},\n\t\t\tValue:  val,\n\t\t}\n\t}\n)",
+          "description": "GenericRepository struct definition and composable GORM clause expression helpers.",
+          "language": "go"
+        },
+        {
+          "code": "func (repo GenericRepository[T]) FindPagedByExpressionAndPreloadConditioned(\n\tctx context.Context,\n\tcond []clause.Expression,\n\tpaginate PaginationQuery,\n\tjoins []string,\n\tpreload []PreloadWithCondition,\n\texpType int,\n) ([]T, int, error) {\n\tvar result []T\n\tvar total int64\n\n\tdb := repo.db.WithContext(ctx).Model(&result)\n\tdb = repo.applyWhereClause(cond, expType, db)\n\n\tfor _, j := range joins {\n\t\tdb = db.Joins(j)\n\t}\n\n\tfor _, s := range preload {\n\t\tif len(s.Args) == 0 {\n\t\t\tdb = db.Preload(s.ColName)\n\t\t} else {\n\t\t\tdb = db.Preload(s.ColName, s.Args...)\n\t\t}\n\t}\n\n\tif errCount := db.Count(&total).Error; errCount != nil {\n\t\treturn nil, 0, errCount\n\t}\n\n\toffset := paginate.PerPage * (paginate.Page - 1)\n\terr := db.Offset(offset).Limit(paginate.PerPage).Find(&result).Error\n\treturn result, int(total), err\n}",
+          "description": "Paginated query with dynamic clause expressions, conditional preloads, and joined associations.",
+          "language": "go"
+        },
+        {
+          "code": "func (repo GenericRepository[T]) extractSelection(entity interface{}) ([]string, error) {\n\ttypeOf := reflect.TypeOf(entity)\n\tif typeOf.Kind() != reflect.Ptr {\n\t\treturn nil, fmt.Errorf(\"should had parsing entity struct pointer to parameter\")\n\t}\n\n\tvar results = make([]string, 0)\n\telem := typeOf.Elem()\n\tswitch elem.Kind() {\n\tcase reflect.Struct:\n\t\tresults = repo.fromStruct(elem)\n\tcase reflect.Array, reflect.Slice:\n\t\tresults = repo.fromStruct(elem.Elem())\n\t}\n\treturn results, nil\n}\n\nfunc (repo GenericRepository[T]) fromStruct(elem reflect.Type) []string {\n\tvar results = make([]string, elem.NumField())\n\tfor i := 0; i < elem.NumField(); i++ {\n\t\tfield := elem.Field(i)\n\t\tgormTag := field.Tag.Get(\"gorm\")\n\t\tvar columnName string\n\t\tif strings.Contains(gormTag, \"column:\") {\n\t\t\tparts := strings.Split(gormTag, \";\")\n\t\t\tfor _, part := range parts {\n\t\t\t\tpart = strings.TrimSpace(part)\n\t\t\t\tif strings.HasPrefix(part, \"column:\") {\n\t\t\t\t\tcolumnName = strings.TrimPrefix(part, \"column:\")\n\t\t\t\t\tbreak\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tif columnName != \"\" {\n\t\t\tresults[i] = columnName\n\t\t}\n\t}\n\treturn results\n}",
+          "description": "Runtime reflection extracting explicit SQL columns from struct GORM tags for selective query projection.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/\n├── generic_repository.go    # Generic repository implementation, clause helpers, AST projection\n├── dto.go                   # PaginationQuery and repository DTOs\n└── default.go               # GORM database connection initialization",
+      "confidence": 0.95,
+      "considerations": [
+        "Ensures entities implement schema.Tabler interface so TableName() is reliably available.",
+        "Reflection in extractSelection is cached or called per request; keep struct fields organized with explicit gorm:\"column:name\" tags.",
+        "Avoid mixing raw unescaped SQL strings with GORM Clauses to maintain SQL injection resilience."
+      ],
+      "keyImplementationPoints": [
+        "Parameterized generic repository definition GenericRepository[T schema.Tabler] with context propagation.",
+        "Composable clause.Expression helper functions (Search, Equal, ExpressionDateRange, InArray, NotInArray).",
+        "Unified FindPagedByExpression and FindPagedByExpressionAndPreloadConditioned with automated count tracking.",
+        "Reflection-based column projection (extractSelection) for optimized payload retrieval without overhead."
+      ],
+      "overview": "A robust generic repository implementation in Go utilizing GORM and Go 1.18+ type parameters [T schema.Tabler]. It abstracts boilerplate CRUD operations while providing powerful composable clause expressions for complex dynamic filters, joins, conditioned preloading, and struct-tag AST column projections.",
+      "purpose": "Eliminates repetitive data access code across domain modules while standardizing pagination, association loading, and dynamic query filtering with type safety and SQL injection protection.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/clean-architecture-skeleton.md",
+        "01-Knowledge/concepts/backend/gorm-persistence-layer.md"
+      ],
+      "summary": "Type-safe generic GORM repository pattern with composable clause expression builders and reflection-driven AST column projection.",
+      "tags": [
+        "backend",
+        "golang",
+        "gorm",
+        "generic-repository",
+        "sql-clauses",
+        "ast-projection"
+      ],
+      "title": "Generic Type-Safe GORM Repository with Composable Clause Expressions & Struct Tag Projections"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type BaseRepository interface {\n\tSetupConnection(db *gorm.DB)\n}\n\ntype DBTransaction struct {\n\tdb    *gorm.DB\n\trepos []BaseRepository\n}\n\nfunc NewDBTransaction(db *gorm.DB, repos ...BaseRepository) DBTransaction {\n\tvar result = DBTransaction{\n\t\tdb:    db,\n\t\trepos: make([]BaseRepository, 0),\n\t}\n\tfor _, repo := range repos {\n\t\tresult.repos = append(result.repos, repo)\n\t}\n\treturn result\n}",
+          "description": "BaseRepository interface and DBTransaction coordinator struct definition.",
+          "language": "go"
+        },
+        {
+          "code": "func (main *DBTransaction) Begin() {\n\tbegin := main.db.Begin()\n\n\tfor _, rp := range main.repos {\n\t\trp.SetupConnection(begin)\n\t}\n\n\tmain.db = begin\n}\n\nfunc (main *DBTransaction) End(err error) error {\n\tif err != nil {\n\t\terrTrx := main.db.Rollback().Error\n\t\tif errTrx != nil {\n\t\t\treturn errTrx\n\t\t}\n\t\treturn nil\n\t}\n\terrTx := main.db.Commit().Error\n\tif errTx != nil {\n\t\treturn errTx\n\t}\n\treturn nil\n}",
+          "description": "Transaction lifecycle operations (Begin & End) propagating transaction handles across all enrolled repositories.",
+          "language": "go"
+        },
+        {
+          "code": "func (main *DBTransaction) GetRepository(repo BaseRepository) BaseRepository {\n\tpTypeRepo := reflect.TypeOf(repo).Elem()\n\n\tfor _, rp := range main.repos {\n\t\tpTypeMain := reflect.TypeOf(rp).Elem()\n\t\tif pTypeMain.Name() == pTypeRepo.Name() &&\n\t\t\tpTypeMain.PkgPath() == pTypeRepo.PkgPath() {\n\t\t\treturn rp\n\t\t}\n\t}\n\n\treturn repo\n}",
+          "description": "Reflection-based repository retrieval ensuring operations run against the transactional session.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/\n├── dbTransaction.go         # DBTransaction struct, BaseRepository interface, Begin/End/GetRepository\n└── generic_repository.go    # SetupConnection implementation in GenericRepository",
+      "confidence": 0.94,
+      "considerations": [
+        "All participating repositories must implement BaseRepository.SetupConnection(db *gorm.DB).",
+        "Always ensure End(err) is called (typically via defer) to prevent orphaned open transactions on database connections.",
+        "DBTransaction is scoped per usecase execution or request lifecycle; do not share across concurrent goroutines."
+      ],
+      "keyImplementationPoints": [
+        "BaseRepository interface decoupling concrete repository implementations from transactional session wiring.",
+        "Atomic Begin() method that initializes gorm.DB.Begin() and propagates the transaction instance into all registered repositories.",
+        "End(err) method evaluating error states to automatically trigger Commit() on success or Rollback() on failure.",
+        "Type-safe repository reflection resolution via GetRepository."
+      ],
+      "overview": "An atomic Unit of Work and transaction management pattern that orchestrates multiple repositories within a unified database transaction boundary. It decouples transaction demarcations from individual repositories by injecting transaction handles dynamically across registered repository instances.",
+      "purpose": "Guarantees ACID transaction semantics across multi-repository business operations in the application layer without leaking database-specific transaction objects into domain business logic.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/unit-of-work-pattern.md",
+        "01-Knowledge/patterns/backend/generic-gorm-repository.md"
+      ],
+      "summary": "Dynamic multi-repository Unit of Work orchestrator coordinating atomic transactions and session propagation across domain repositories.",
+      "tags": [
+        "backend",
+        "golang",
+        "unit-of-work",
+        "database-transactions",
+        "gorm",
+        "atomic-operations"
+      ],
+      "title": "Dynamic Multi-Repository Unit of Work & Transaction Coordinator"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "func (repo userRepo) UserDashboardList(ctx context.Context, query UserListQuery) ([]domain.UserListItem, int, int, error) {\n\tdb := repo.db.WithContext(ctx)\n\n\tbuildConditions := func(baseQuery *gorm.DB, tableName string, statusCol string) *gorm.DB {\n\t\tvar status = 0\n\t\tif query.StatusKey != \"\" {\n\t\t\tif query.StatusKey == domain.Active {\n\t\t\t\tstatus = 1\n\t\t\t}\n\t\t\tbaseQuery = baseQuery.Where(fmt.Sprintf(\"%s.%s = ?\", tableName, statusCol), status)\n\t\t}\n\t\tif query.Filter.Search != \"\" {\n\t\t\tsearchPattern := \"%\" + query.Filter.Search + \"%\"\n\t\t\tbaseQuery = baseQuery.Where(\n\t\t\t\tfmt.Sprintf(\"%s.full_name LIKE ? OR %s.email LIKE ?\", tableName, tableName),\n\t\t\t\tsearchPattern, searchPattern)\n\t\t}\n\t\treturn baseQuery\n\t}\n\n\tmobileSql := db.ToSQL(func(tx *gorm.DB) *gorm.DB {\n\t\treturn buildConditions(\n\t\t\ttx.Model(&domain.User{}).\n\t\t\t\tSelect(\"`users`.id, full_name as name, email, if(is_verified=1, 'active','inactive') as status, last_active, 'USER' as role_name\"),\n\t\t\tdomain.User{}.TableName(), \"is_verified\",\n\t\t).Where(\"is_verified = 1\").Find(&[]domain.User{})\n\t})\n\n\tdashboardSql := db.ToSQL(func(tx *gorm.DB) *gorm.DB {\n\t\treturn buildConditions(\n\t\t\ttx.Model(&domain.UserAdmin{}).\n\t\t\t\tSelect(\"`user_admins`.id, full_name as name, email, if(is_active=1, 'active','inactive') as status, last_active, master_roles.name as role_name\").\n\t\t\t\tJoins(\"left join master_roles on master_roles.id = user_admins.role_id\"),\n\t\t\tdomain.UserAdmin{}.TableName(), \"is_active\",\n\t\t).Find(&[]domain.UserAdmin{})\n\t})\n\n\tvar finalQuery string\n\tswitch query.RoleName {\n\tcase constant.RoleIsUser:\n\t\tfinalQuery = mobileSql\n\tcase constant.RoleIsAdmin:\n\t\tfinalQuery = dashboardSql\n\tdefault:\n\t\tfinalQuery = fmt.Sprintf(\"(%s) UNION ALL (%s)\", mobileSql, dashboardSql)\n\t}\n...",
+          "description": "Compiling independent GORM subqueries via ToSQL and combining heterogeneous entities using UNION ALL.",
+          "language": "go"
+        },
+        {
+          "code": "\tvar total int64\n\tcountSQL := fmt.Sprintf(\"SELECT COUNT(*) FROM (%s) as union_count\", finalQuery)\n\terr := db.Raw(countSQL).Scan(&total).Error\n\tif err != nil {\n\t\treturn nil, 0, 0, fmt.Errorf(\"failed to count results: %w\", err)\n\t}\n\n\toffset := (query.Filter.Page - 1) * query.Filter.PerPage\n\ttotalPages := int((total + int64(query.Filter.PerPage) - 1) / int64(query.Filter.PerPage))\n\n\tfinalSQL := fmt.Sprintf(`\n\t\tSELECT * FROM (%s) as union_table \n\t\tORDER BY last_active DESC \n\t\tLIMIT ? OFFSET ?\n\t`, finalQuery)\n\n\tvar results []domain.UserListItem\n\terr = db.Raw(finalSQL, query.Filter.PerPage, offset).Scan(&results).Error\n\tif err != nil {\n\t\treturn nil, 0, 0, fmt.Errorf(\"failed to execute union query: %w\", err)\n\t}\n\n\treturn results, int(total), totalPages, nil\n}",
+          "description": "Executing parameterized total count and paginated query over the synthesized UNION query.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "iam_module/internal/adapter/repository/\n├── user_repo.go             # Subquery compilation, UNION view synthesis, and pagination\n└── dto.go                   # UserListQuery, Filter parameters",
+      "confidence": 0.92,
+      "considerations": [
+        "Ensure column aliases and types in all subqueries match identically for valid SQL UNION execution.",
+        "Use db.Raw with parameterized limit and offset arguments to prevent SQL injection during final query execution.",
+        "Index underlying table columns (e.g., last_active, is_verified, is_active) to avoid slow derived table temporary files."
+      ],
+      "keyImplementationPoints": [
+        "db.ToSQL() method extracting SQL statements from GORM query definitions without executing database round-trips.",
+        "Dynamic schema-aware filter builder reusing query condition logic across heterogeneous models.",
+        "Dynamic query routing supporting single-table and multi-table UNION ALL execution branches.",
+        "Two-pass aggregation: derived table count query and paginated ordered result fetch."
+      ],
+      "overview": "A query synthesis and view aggregation pattern that compiles modular GORM subqueries to SQL strings at runtime, binds dynamic conditional filters, unions disparate database tables into a single unified virtual projection, and executes parameterized sorting and pagination.",
+      "purpose": "Enables polymorphic searching and unified administrative dashboard views across disparate tables (e.g. mobile users vs internal admin users) without database schema duplication or manual in-memory stitching.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/gorm-persistence-layer.md",
+        "01-Knowledge/patterns/backend/generic-gorm-repository.md"
+      ],
+      "summary": "Polyglot subquery synthesis and view aggregation pattern unifying heterogeneous entity tables into a single paginated query stream.",
+      "tags": [
+        "backend",
+        "golang",
+        "gorm",
+        "sql-synthesis",
+        "view-aggregation",
+        "union-query"
+      ],
+      "title": "Polyglot Subquery Synthesizer & Heterogeneous View Aggregator"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type StorageMinio struct {\n\tclient *minio.Client\n\tbucket string\n}\n\ntype Conn struct {\n\tEndpoint  string `json:\"endpoint\"`\n\tBucket    string `json:\"bucket\"`\n\tAccessKey string `json:\"access_key\"`\n\tSecretKey string `json:\"secret_key\"`\n}\n\nfunc NewConnection(conn Conn) StorageMinio {\n\tclient, err := minio.New(conn.Endpoint, &minio.Options{\n\t\tCreds:  credentials.NewStaticV4(conn.AccessKey, conn.SecretKey, \"\"),\n\t\tSecure: false,\n\t})\n\tif err != nil {\n\t\tpanic(fmt.Errorf(\"connection to miniostorage err => %s\", err.Error()))\n\t}\n\n\treturn StorageMinio{client: client, bucket: conn.Bucket}\n}",
+          "description": "StorageMinio client initialization with static credential binding and bucket isolation.",
+          "language": "go"
+        },
+        {
+          "code": "func (st StorageMinio) GetFile(ctx context.Context, fileName string) (*bytes.Buffer, error) {\n\tobj, err := st.client.GetObject(ctx, st.bucket, fileName, minio.GetObjectOptions{})\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\tdefer obj.Close()\n\tbuf := new(bytes.Buffer)\n\tif _, err = buf.ReadFrom(obj); err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn buf, nil\n}\n\nfunc (st StorageMinio) StoreFile(ctx context.Context, fileName string, file io.Reader, fileSize int64) (minio.UploadInfo, error) {\n\tuploadInfo, err := st.client.PutObject(ctx, st.bucket, fileName, file, fileSize, minio.PutObjectOptions{})\n\tif err != nil {\n\t\treturn minio.UploadInfo{}, err\n\t}\n\n\treturn uploadInfo, nil\n}\n\nfunc (st StorageMinio) DeleteFile(ctx context.Context, fileName string) error {\n\treturn st.client.RemoveObject(ctx, st.bucket, fileName, minio.RemoveObjectOptions{})\n}",
+          "description": "Streaming file retrieval, chunked storage upload, and object deletion methods.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/miniostorage/\n└── storage.go               # StorageMinio struct, NewConnection, GetFile, StoreFile, DeleteFile",
+      "confidence": 0.91,
+      "considerations": [
+        "Ensure large file uploads stream directly via io.Reader rather than buffering entire payloads into memory upfront.",
+        "Always defer closing minio.Object handles in GetFile to avoid connection leaks in the HTTP pool.",
+        "Configure Secure: true when communicating with TLS-enabled S3 endpoints in production environments."
+      ],
+      "keyImplementationPoints": [
+        "Clean wrapper around MinIO Go SDK decoupling business usecases from S3 vendor API details.",
+        "Streaming upload StoreFile accepting any io.Reader with explicit fileSize for optimal chunked transfer.",
+        "Buffered file reader GetFile returning bytes.Buffer with proper resource closure.",
+        "Thread-safe, reusable storage client instance configured at application startup."
+      ],
+      "overview": "An encapsulated cloud and local object storage adapter that abstracts MinIO / AWS S3 SDK operations into a clean, stream-oriented storage interface. It isolates bucket names, credentials, and network endpoints while providing standardized methods for storing, fetching, and removing binary files.",
+      "purpose": "Provides consistent blob/file storage operations for user uploads, profile pictures, and generated documents across development (local MinIO) and production (AWS S3) without altering application code.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/object-storage-architecture.md",
+        "01-Knowledge/patterns/backend/clean-architecture-skeleton.md"
+      ],
+      "summary": "Encapsulated S3/MinIO object storage adapter providing streaming upload/download pipelines and bucket-scoped operations.",
+      "tags": [
+        "backend",
+        "golang",
+        "minio",
+        "s3",
+        "object-storage",
+        "stream-pipeline"
+      ],
+      "title": "Encapsulated S3/MinIO Object Storage Driver with Stream Buffer Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "type NativeSendEmailPayload struct {\n\tUsername string\n\tPassword string\n\tHost     string\n\tPort     string\n\tSendTo   string\n\tSubject  string\n\tHtmlBody string\n}\n\ntype SendInBlue struct {\n}\n\nfunc NewConfig() SendInBlue {\n\treturn SendInBlue{}\n}",
+          "description": "Mailing configuration and NativeSendEmailPayload DTO definition.",
+          "language": "go"
+        },
+        {
+          "code": "func (sib SendInBlue) NativeSendEmail(payload NativeSendEmailPayload) error {\n\tauth := smtp.PlainAuth(\"\", payload.Username, payload.Password, payload.Host)\n\tmessageBody := fmt.Sprintf(\n\t\t\"From: <%s>\\n\"+\n\t\t\t\"To: <%s>\\r\\n\"+\n\t\t\t\"Subject: %s\\r\\n\",\n\t\tpayload.Username,\n\t\tpayload.SendTo,\n\t\tpayload.Subject,\n\t)\n\tmessageBody += \"MIME-version: 1.0;\\r\\n\"\n\tmessageBody += \"Content-Type: text/html; charset=\\\"UTF-8\\\"\\r\\n\"\n\tmessageBody += payload.HtmlBody\n\n\terr := smtp.SendMail(\n\t\tpayload.Host+\":\"+payload.Port,\n\t\tauth,\n\t\tpayload.Username,\n\t\t[]string{payload.SendTo},\n\t\t[]byte(messageBody),\n\t)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn nil\n}",
+          "description": "Native SMTP plain authentication, RFC MIME multipart header formatting, and mail delivery.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/mailing/\n├── dto.go                   # NativeSendEmailPayload struct\n└── send-in-blu.go           # SendInBlue struct and NativeSendEmail implementation",
+      "confidence": 0.9,
+      "considerations": [
+        "MIME headers must strictly adhere to RFC 2045/2046 carriage return newline (\\r\\n) formatting to avoid rejection by strict mail servers.",
+        "For high-volume asynchronous mailing, wrap NativeSendEmail inside a background worker pool or message queue to avoid blocking HTTP request cycles.",
+        "Ensure SMTP credentials and host configurations are loaded securely via environment variables."
+      ],
+      "keyImplementationPoints": [
+        "Native net/smtp.SendMail integration eliminating external third-party SDK dependencies.",
+        "RFC-compliant MIME 1.0 headers and UTF-8 content-type declaration for rich HTML email rendering.",
+        "smtp.PlainAuth authentication with parameterized SMTP server host and port.",
+        "Mockery-ready interface compatibility for deterministic unit testing in domain services."
+      ],
+      "overview": "A zero-external-dependency transactional email notification provider implementing native Go net/smtp plain authentication with RFC-compliant MIME 1.0 multipart headers and UTF-8 HTML payload rendering.",
+      "purpose": "Delivers transactional notifications, verification emails, and OTPs reliably through any standard SMTP provider without introducing heavyweight SDK dependencies.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/notification-pipelines.md",
+        "01-Knowledge/patterns/backend/clean-architecture-skeleton.md"
+      ],
+      "summary": "Native transactional SMTP mailer adapter with RFC-compliant MIME 1.0 multipart header synthesis.",
+      "tags": [
+        "backend",
+        "golang",
+        "smtp",
+        "mailing",
+        "notification",
+        "mime"
+      ],
+      "title": "Native Transactional SMTP MIME Multipart Notification Engine"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package localerror\n\nimport (\n\t\"base-be-golang/pkg/logger\"\n\t\"errors\"\n\t\"gorm.io/gorm\"\n)\n\ntype InvalidDataError struct {\n\tMsg             string\n\tDataToTemplated map[string]string\n}\n\nfunc (e InvalidDataError) Error() string {\n\treturn e.Msg\n}\n\ntype AccessControlError struct {\n\tMsg string\n}\n\nfunc (e AccessControlError) Error() string {\n\treturn e.Msg\n}\n\nfunc NotFound(err error, msg string) error {\n\tif err != nil && errors.Is(err, gorm.ErrRecordNotFound) {\n\t\treturn InvalidDataError{Msg: msg}\n\t}\n\treturn err\n}\n\nfunc InvalidDataWithData(msg string, data map[string]string) error {\n\treturn InvalidDataError{Msg: msg, DataToTemplated: data}\n}\n\ntype HandleError struct {\n\tlogger *logger.ReZero\n}\n\nfunc (h HandleError) ErrorReturn(err error) error {\n\tif errors.As(err, &AccessControlError{}) || errors.As(err, &InvalidDataError{}) {\n\t\treturn err\n\t}\n\th.logger.Error(err)\n\treturn errors.New(\"InternalError\")\n}",
+          "description": "Definisi typed domain errors dan error handler wrapper.",
+          "language": "go"
+        },
+        {
+          "code": "func (m Mapper) NewResponse(c *gin.Context, res *payload.Response, err error) {\n\tuserData := m.GetAuthDataFromContext(c)\n\tif err != nil {\n\t\tif ok, invErr := m.IsInvalidDataError(err); ok {\n\t\t\tvar templates = make([]localize.TemplatingData, 0)\n\t\t\tif invErr.DataToTemplated != nil {\n\t\t\t\tfor key, val := range invErr.DataToTemplated {\n\t\t\t\t\ttemplates = append(templates, localize.TemplatingData{\n\t\t\t\t\t\tName:  key,\n\t\t\t\t\t\tValue: val,\n\t\t\t\t\t})\n\t\t\t\t}\n\t\t\t}\n\t\t\tc.JSON(\n\t\t\t\thttp.StatusBadRequest,\n\t\t\t\tpayload.DefaultErrorInvalidDataWithMessage(m.localizer.GetLocalized(userData.Lang, err.Error(), templates...)),\n\t\t\t)\n\t\t\treturn\n\t\t}\n\t\tif m.IsAccessControlError(err) {\n\t\t\tc.JSON(\n\t\t\t\thttp.StatusUnauthorized,\n\t\t\t\tpayload.DefaultErrorInvalidDataWithMessage(m.localizer.GetLocalized(userData.Lang, err.Error())),\n\t\t\t)\n\t\t\treturn\n\t\t}\n\t\tmiddleware.CaptureError(c, err)\n\t\tc.JSON(\n\t\t\thttp.StatusInternalServerError,\n\t\t\tpayload.DefaultErrorResponseWithMessage(m.localizer.GetLocalized(userData.Lang, \"InternalError\"), err),\n\t\t)\n\t\treturn\n\t}\n\tif res != nil {\n\t\tres.Message = m.localizer.GetLocalized(userData.Lang, res.Message)\n\t\tc.JSON(http.StatusOK, res)\n\t\treturn\n\t}\n\tc.Status(http.StatusOK)\n}",
+          "description": "Unified HTTP error mapper dengan integrasi localization dan Sentry capture.",
+          "language": "go"
+        },
+        {
+          "code": "func SentryMiddleware() gin.HandlerFunc {\n\treturn func(c *gin.Context) {\n\t\thub := sentry.GetHubFromContext(c.Request.Context())\n\t\tif hub == nil {\n\t\t\thub = sentry.CurrentHub().Clone()\n\t\t}\n\t\tctx := sentry.SetHubOnContext(c.Request.Context(), hub)\n\t\tc.Request = c.Request.WithContext(ctx)\n\n\t\tvar requestBody []byte\n\t\tif c.Request.Body != nil {\n\t\t\trequestBody, _ = io.ReadAll(c.Request.Body)\n\t\t\tc.Request.Body = io.NopCloser(bytes.NewBuffer(requestBody))\n\t\t}\n\n\t\thub.ConfigureScope(func(scope *sentry.Scope) {\n\t\t\tscope.SetRequest(c.Request)\n\t\t\tscope.SetTag(\"request.path\", c.Request.URL.Path)\n\t\t\tscope.SetTag(\"request.method\", c.Request.Method)\n\t\t\tscope.SetExtra(\"request.headers\", convertHeaders(c.Request.Header))\n\t\t\tscope.SetExtra(\"request.body\", string(requestBody))\n\t\t})\n\n\t\tc.Next()\n\t\tenrichSentryWithUserData(hub, c)\n\t}\n}\n\nfunc convertHeaders(headers http.Header) map[string]string {\n\tresult := make(map[string]string)\n\tfor key, values := range headers {\n\t\tif len(values) > 0 {\n\t\t\tif key == \"Authorization\" || key == \"Cookie\" || key == \"X-Api-Key\" {\n\t\t\t\tresult[key] = \"[Filtered]\"\n\t\t\t} else {\n\t\t\t\tresult[key] = values[0]\n\t\t\t}\n\t\t}\n\t}\n\treturn result\n}",
+          "description": "Sentry middleware dengan request body preservation dan header sanitization.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n├── localerror/\n│   └── util.go\n├── mapper/\n│   └── errors.go\n├── middleware/\n│   └── sentry.go\n└── shared/payload/\n    └── response.go",
+      "confidence": 0.96,
+      "considerations": [
+        "Typed domain errors mencegah kebocoran detail teknis database (GORM error) ke response publik.",
+        "Sentry header filter wajib memfilter Authorization dan Cookie token agar tidak terekspos di dashboard log eksternal.",
+        "Penyimpanan dan pembacaan ulang c.Request.Body menggunakan io.NopCloser penting agar downstream handlers tetap dapat membaca payload HTTP."
+      ],
+      "keyImplementationPoints": [
+        "Pemisahan tegas domain error (InvalidDataError, AccessControlError) dan infrastructure error (InternalError).",
+        "Dynamic regex error template matching (ErrorIs, ReplaceLabelErr) untuk memvalidasi error berparameter.",
+        "Response envelope polimorfik terstandardisasi (ResponseMeta, ErrorResponse, Response).",
+        "Sentry context enrichment dengan user ID, role, dan locale setelah pipeline auth."
+      ],
+      "overview": "Arsitektur manajemen error berlapis yang membedakan domain errors dengan runtime infrastructure errors, terintegrasi langsung dengan mapper response HTTP Gin, dynamic template regex error matching, message localization, serta context-aware Sentry hub injection dengan automated header filtering.",
+      "purpose": "Menyediakan standar response error HTTP yang konsisten, mencegah kebocoran data sensitif dan infrastruktur ke API consumers, serta memberikan observability mendalam di Sentry.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/error-handling-architecture.md",
+        "01-Knowledge/patterns/backend/sentry-telemetry-pipeline.md"
+      ],
+      "summary": "Multi-Tier Hierarchical Error Handling & Contextual Sentry Enrichment Pipeline memisahkan typed domain error dengan runtime panic/database error, serta mengintegrasikan pemformatan HTTP envelope, lokalisasi pesan, dan monitoring Sentry yang aman dari kebocoran credentials.",
+      "tags": [
+        "backend",
+        "error-handling",
+        "sentry",
+        "telemetry",
+        "dto-envelope"
+      ],
+      "title": "Multi-Tier Hierarchical Error Handling & Contextual Sentry Enrichment Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "var (\n\tstringAsc = func(prev reflect.Value, next reflect.Value, fieldName string) (interface{}, interface{}) {\n\t\tprevStr := strings.ToLower(prev.FieldByName(fieldName).String())\n\t\tnextStr := strings.ToLower(next.FieldByName(fieldName).String())\n\n\t\tbaseRange := len(nextStr)\n\t\tif len(prevStr) < len(nextStr) {\n\t\t\tbaseRange = len(prevStr)\n\t\t}\n\n\t\tfor i := 0; i < baseRange; i++ {\n\t\t\tswitch {\n\t\t\tcase prevStr[i] < nextStr[i]:\n\t\t\t\treturn prev.Interface(), next.Interface()\n\t\t\tcase prevStr[i] > nextStr[i]:\n\t\t\t\treturn next.Interface(), prev.Interface()\n\t\t\t}\n\t\t}\n\n\t\tif len(prevStr) > len(nextStr) {\n\t\t\treturn next.Interface(), prev.Interface()\n\t\t}\n\t\treturn prev.Interface(), next.Interface()\n\t}\n\n\tsortingFunc = map[SortingDirection]map[reflect.Kind]func(prev reflect.Value, next reflect.Value, fieldName string) (interface{}, interface{}){\n\t\tSortingAscending: {\n\t\t\treflect.String: stringAsc,\n\t\t\treflect.Int: func(prev, next reflect.Value, fieldName string) (interface{}, interface{}) {\n\t\t\t\tif prev.FieldByName(fieldName).Int() > next.FieldByName(fieldName).Int() {\n\t\t\t\t\treturn next.Interface(), prev.Interface()\n\t\t\t\t}\n\t\t\t\treturn prev.Interface(), next.Interface()\n\t\t\t},\n\t\t\tKindIsTime: func(prev, next reflect.Value, fieldName string) (interface{}, interface{}) {\n\t\t\t\tprevDate := prev.FieldByName(fieldName).Interface().(time.Time)\n\t\t\t\tnextDate := next.FieldByName(fieldName).Interface().(time.Time)\n\t\t\t\tif prevDate.After(nextDate) {\n\t\t\t\t\treturn next.Interface(), prev.Interface()\n\t\t\t\t}\n\t\t\t\treturn prev.Interface(), next.Interface()\n\t\t\t},\n\t\t},\n\t}\n)\n\nfunc (m Mapper) SortingByStructField(vals interface{}, fieldName string, sorting SortingDirection) interface{} {\n\tpVal := reflect.ValueOf(vals)\n\tif pVal.Kind() != reflect.Slice && pVal.Kind() != reflect.Array {\n\t\treturn vals\n\t}\n\n\tnewArr := make([]interface{}, pVal.Len())\n\tfor i := 0; i < pVal.Len(); i++ {\n\t\tnewArr[i] = pVal.Index(i).Interface()\n\t}\n\n\tfor i := 0; i < len(newArr)-1; i++ {\n\t\tcurrentVal := pVal.Index(i).FieldByName(fieldName)\n\t\tkind := currentVal.Kind()\n\t\tif currentVal.Kind() == reflect.Struct && reflect.TypeOf(currentVal.Interface()).Name() == \"Time\" {\n\t\t\tkind = KindIsTime\n\t\t}\n\t\tfn := sortingFunc[sorting][kind]\n\t\tprev, next := fn(reflect.ValueOf(newArr[i]), reflect.ValueOf(newArr[i+1]), fieldName)\n\t\tnewArr[i] = prev\n\t\tnewArr[i+1] = next\n\t}\n\n\treturn newArr\n}",
+          "description": "Dynamic reflection struct sorting engine.",
+          "language": "go"
+        },
+        {
+          "code": "func (m Mapper) Base64ToReader(base64String string) (io.Reader, int64, error) {\n\t// Remove data URL prefix if present (e.g., \"data:image/png;base64,\")\n\tif len(base64String) > 0 {\n\t\tif commaIndex := bytes.IndexByte([]byte(base64String), ','); commaIndex != -1 {\n\t\t\tbase64String = base64String[commaIndex+1:]\n\t\t}\n\t}\n\n\t// Decode the base64 string\n\tdecodedData, err := base64.StdEncoding.DecodeString(base64String)\n\tif err != nil {\n\t\treturn nil, 0, fmt.Errorf(\"failed to decode base64: %w\", err)\n\t}\n\n\t// Create a reader from the decoded data\n\treader := bytes.NewReader(decodedData)\n\treturn reader, int64(len(decodedData)), nil\n}",
+          "description": "Base64 data URL MIME stripper and stream reader adapter.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n└── mapper/\n    ├── default.go\n    ├── formatter.go\n    ├── reader.go\n    └── slice.go",
+      "confidence": 0.94,
+      "considerations": [
+        "Operasi reflection memiliki overhead komputasi CPU lebih tinggi dibandingkan direct type-safe slice sorting; gunakan untuk koleksi in-memory dinamis skala moderat.",
+        "Base64ToReader mengembalikan panjang byte riil hasil dekode yang penting untuk Content-Length saat streaming ke S3/MinIO."
+      ],
+      "keyImplementationPoints": [
+        "Dynamic dispatching sorting function berdasarkan reflect.Kind (string, int, uint, time.Time).",
+        "Deduplikasi koleksi slice of struct via UniqueByStructField dan ContainByStructField.",
+        "MIME prefix stripping aman untuk data URL base64 image/file uploads.",
+        "Humanized duration formatting (HH:MM:SS -> Hari/Jam)."
+      ],
+      "overview": "Service normalization engine berbasis Go reflection untuk melakukan manipulasi in-memory, deduplikasi, dan dynamic sorting pada slice of struct heterogen tanpa boilerplate comparator, serta adapter stream data base64 ke io.Reader.",
+      "purpose": "Menyediakan utility normalisasi data generik untuk berbagai domain DTO dan memfasilitasi streaming file binary tanpa menyimpan payload di disk lokal.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/reflection-struct-mapper.md",
+        "01-Knowledge/snippets/backend/base64-stream-reader.md"
+      ],
+      "summary": "Reflection-Driven Universal Struct Normalizer & Stream Data Reader memungkinkan manipulasi slice data dinamis, deduplikasi entitas, serta konversi base64 payload menjadi streaming io.Reader secara efisien.",
+      "tags": [
+        "backend",
+        "reflection",
+        "data-normalization",
+        "stream-reader",
+        "in-memory-sorting"
+      ],
+      "title": "Reflection-Driven Universal Struct Normalizer, Dynamic Sorter & Stream Data Reader"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package main\n\nimport (\n\t\"base-be-golang/internal/adapter/controller\"\n\t\"base-be-golang/shared/api\"\n\t\"base-be-golang/shared/base\"\n\t\"flag\"\n\t\"os\"\n\t\"strconv\"\n\t\"github.com/joho/godotenv\"\n\tiamctrl \"github.com/rdhmuhammad/base-be-golang/iam-module/shared/adapter/controller\"\n\t\"gorm.io/gorm\"\n)\n\nfunc main() {\n\tvar envFile string\n\tflag.StringVar(&envFile, \"env\", \".env.stag\", \"Provide env file path\")\n\tflag.Parse()\n\n\terr := godotenv.Load(envFile)\n\tif err != nil {\n\t\tpanic(err)\n\t}\n\n\tstart := api.Default()\n\n\t// Conditional module mounting\n\tif t, _ := strconv.ParseBool(os.Getenv(\"IAM_MODULE_OFF\")); !t {\n\t\tstart.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\t\t\treturn iamctrl.NewAuthController(dbConn, port, ctrl)\n\t\t})\n\t}\n\n\tstart.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {\n\t\treturn controller.NewProductController(dbConn, port, ctrl)\n\t})\n\n\t_ = start.Start()\n}",
+          "description": "CLI flag-based environment resolution dan conditional module registration.",
+          "language": "go"
+        },
+        {
+          "code": "package environment\n\nimport (\n\t\"os\"\n\t\"strconv\"\n)\n\ntype ENV struct{}\n\nfunc NewEnvironment() ENV {\n\treturn ENV{}\n}\n\nfunc (e ENV) GetUint(key string, defaultValue uint) uint {\n\tstr := os.Getenv(key)\n\tvalue, err := strconv.ParseUint(str, 10, 64)\n\tif err != nil {\n\t\treturn defaultValue\n\t}\n\treturn uint(value)\n}\n\nfunc (e ENV) CheckFlag(flag string) bool {\n\tstr := os.Getenv(flag)\n\tstatus, err := strconv.ParseBool(str)\n\tif err != nil {\n\t\treturn false\n\t}\n\treturn status\n}",
+          "description": "Type-safe environment reader dengan safe fallback defaults.",
+          "language": "go"
+        },
+        {
+          "code": "var sensitiveFieldRegex = regexp.MustCompile(`\"password\"\\s*:\\s*\"[^\"]*\"`)\n\nfunc DefaultLogger() ReZero {\n\tlogLevel := strings.ToLower(os.Getenv(\"LOG_LEVEL\"))\n\tlevel := zerolog.InfoLevel\n\tif logLevel == \"debug\" {\n\t\tlevel = zerolog.DebugLevel\n\t}\n\n\tzerolog.CallerSkipFrameCount = 4\n\tzerolog.SetGlobalLevel(level)\n\toutput := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}\n\tlogger := zerolog.New(output).With().Timestamp().Caller().Logger()\n\n\treturn ReZero{logger: &logger, level: level}\n}\n\nfunc (l *ReZero) LoggingRequest(c *gin.Context) {\n\tif zerolog.DebugLevel != l.level {\n\t\tc.Next()\n\t\treturn\n\t}\n\n\tvar bodyBytes []byte\n\tif c.Request.Body != nil {\n\t\tbodyBytes, _ = io.ReadAll(c.Request.Body)\n\t}\n\tc.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))\n\n\tevent := l.logger.Info().\n\t\tStr(\"method\", c.Request.Method).\n\t\tStr(\"path\", c.Request.URL.Path).\n\t\tStr(\"client_ip\", c.ClientIP())\n\n\tif len(bodyBytes) > 0 {\n\t\tmaskedBody := sensitiveFieldRegex.ReplaceAll(bodyBytes, []byte(`\"password\":\"*****\"`))\n\t\ttrimmed := bytes.TrimSpace(maskedBody)\n\t\tif len(trimmed) > 0 && (trimmed[0] == '{' || trimmed[0] == '[') {\n\t\t\tevent = event.RawJSON(\"body\", maskedBody)\n\t\t} else {\n\t\t\tevent = event.Str(\"body\", string(maskedBody))\n\t\t}\n\t}\n\n\tevent.Msg(\"incoming request\")\n\tc.Next()\n}",
+          "description": "Zero-allocation structured logger dengan HTTP body tapping dan PII masking.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "cmd/\n└── api/\n    └── api.go\npkg/\n├── environment/\n│   └── environment.go\n└── logger/\n    ├── logger.go\n    └── zerolog.go",
+      "confidence": 0.95,
+      "considerations": [
+        "Flag-based env loading (--env) memungkinkan deployment multi-flavor (stag, prod, testing) tanpa container rebuild.",
+        "PII masking regex harus dieksekusi secara efisien pada pre-compiled regex untuk meminimalkan alokasi memori pada hot paths HTTP.",
+        "CallerSkipFrameCount harus dikalibrasi tepat saat meng-embed wrapper logger agar stack trace menunjuk langsung ke usecase/handler pemanggil."
+      ],
+      "keyImplementationPoints": [
+        "Multi-flavor environment switching via CLI flag injection (--env=.env.stag).",
+        "Safe typed environment getters (GetUint, GetInt, GetFloat, CheckFlag) dengan fallback default.",
+        "Conditional module mounting (IAM_MODULE_OFF) untuk arsitektur modular micro/monolith.",
+        "Non-destructive request body inspection dengan zero-leak regex masking untuk field password/sensitif."
+      ],
+      "overview": "Pola inisialisasi aplikasi multi-flavor via CLI flag injection, typed environment accessors dengan safe defaults, serta conditional module mounting, terintegrasi dengan engine Zerolog yang dilengkapi HTTP request body tap & PII masking regex.",
+      "purpose": "Memastikan kesiapan operasional DevOps lintas environment (staging, production), isolasi fitur modular, dan kepatuhan keamanan logging terhadap perlindungan data sensitif (PII).",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/devops/multi-flavor-bootstrapping.md",
+        "01-Knowledge/patterns/backend/pii-masking-structured-logger.md"
+      ],
+      "summary": "Multi-Flavor Environment Bootstrapping & PII-Masking Logger Engine menyediakan orkestrasi bootstrap environment yang fleksibel, safe feature-flagging, dan zero-leak request audit logging.",
+      "tags": [
+        "backend",
+        "devops",
+        "environment",
+        "structured-logging",
+        "pii-masking",
+        "zerolog"
+      ],
+      "title": "Multi-Flavor Environment Bootstrapping, Feature-Flagging & PII-Masking Logger Engine"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package localize\n\nimport (\n\t\"base-be-golang/pkg/environment\"\n\t\"encoding/json\"\n\t\"os\"\n\t\"path\"\n\t\"path/filepath\"\n\t\"strings\"\n\t\"github.com/nicksnyder/go-i18n/v2/i18n\"\n\t\"golang.org/x/text/language\"\n)\n\ntype lang struct {\n\tbundle    *i18n.Bundle\n\tlocalizer map[string]*i18n.Localizer\n\tenv       environment.ENV\n}\n\nfunc NewLanguage(basePath string) Language {\n\tdefaultBundle := i18n.NewBundle(language.English)\n\tdefaultBundle.RegisterUnmarshalFunc(\"json\", json.Unmarshal)\n\n\tfiles, _ := os.ReadDir(basePath)\n\tvar localizer = make(map[string]*i18n.Localizer)\n\n\tfor _, f := range files {\n\t\tif filepath.Ext(f.Name()) == \".json\" {\n\t\t\tfilePath := path.Join(basePath, f.Name())\n\t\t\t_, _ = defaultBundle.LoadMessageFile(filePath)\n\t\t\tlocalCode := strings.Split(f.Name(), \".\")[0]\n\t\t\tlocalizer[localCode] = i18n.NewLocalizer(defaultBundle, localCode, language.English.String())\n\t\t}\n\t}\n\n\treturn &lang{\n\t\tbundle:    defaultBundle,\n\t\tlocalizer: localizer,\n\t\tenv:       environment.NewEnvironment(),\n\t}\n}\n\nfunc (l *lang) GetLocalized(langCode string, messageId string, templates ...TemplatingData) string {\n\tif langCode == \"\" {\n\t\tlangCode = l.env.Get(\"FALLBACK_LANG\")\n\t}\n\ttemplateMap := make(map[string]string, len(templates))\n\tfor _, t := range templates {\n\t\ttemplateMap[t.Name] = t.Value\n\t}\n\n\tloc, ok := l.localizer[langCode]\n\tif !ok {\n\t\tloc = l.localizer[\"en\"]\n\t}\n\tres, err := loc.Localize(&i18n.LocalizeConfig{\n\t\tMessageID:    messageId,\n\t\tTemplateData: templateMap,\n\t})\n\tif err != nil {\n\t\treturn messageId\n\t}\n\treturn res\n}",
+          "description": "Multi-language bundle loader dan dynamic template interpolator.",
+          "language": "go"
+        },
+        {
+          "code": "func (v Enigma) queryToFilter(c *gin.Context, payload interface{}, isDive bool) error {\n\tpVal, pType, vals, err := v.preparingReflection(payload, isDive)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\tfor i := 0; i < vals.NumField(); i++ {\n\t\tfield := pType.Elem().Field(i)\n\t\ttagKeyVal := strings.Split(field.Tag.Get(\"bindQuery\"), \";\")\n\n\t\ttags := map[string]string{}\n\t\tfor _, item := range tagKeyVal {\n\t\t\tif kv := strings.Split(item, \"=\"); len(kv) == 2 {\n\t\t\t\ttags[kv[0]] = kv[1]\n\t\t\t}\n\t\t}\n\n\t\treqField := field.Tag.Get(\"json\")\n\t\tif rn, ok := tags[reqName]; ok {\n\t\t\treqField = rn\n\t\t}\n\n\t\treqVal := getFromRequest(c, tags[reqPlace], reqField)\n\t\tif binder, ok := bindingRules[tags[dataType]]; ok {\n\t\t\tfinalVal, err := binder(c, reqVal, tags)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tvals.Field(i).Set(reflect.ValueOf(finalVal))\n\t\t\tcontinue\n\t\t}\n\t\tvals.Field(i).Set(reflect.ValueOf(reqVal))\n\t}\n\treturn nil\n}",
+          "description": "Reflection-driven query parameter binding and validation engine.",
+          "language": "go"
+        },
+        {
+          "code": "func OverrideTranslation(engine *validator.Validate, trans ut.Translator) error {\n\terr := engine.RegisterTranslation(\"trx-status\", trans, func(ut ut.Translator) error {\n\t\treturn ut.Add(\"trx-status\", \"{0} bukan status yang valid\", true)\n\t}, func(ut ut.Translator, fe validator.FieldError) string {\n\t\tt, _ := ut.T(\"trx-status\", fe.Field())\n\t\treturn t\n\t})\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn engine.RegisterTranslation(\"monthyearformat\", trans, func(ut ut.Translator) error {\n\t\treturn ut.Add(\"monthyearformat\", \"{0} format harus mm-yyyy\", true)\n\t}, func(ut ut.Translator, fe validator.FieldError) string {\n\t\tt, _ := ut.T(\"monthyearformat\", fe.Field())\n\t\treturn t\n\t})\n}",
+          "description": "Custom validation rule tag dan error translation override.",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/\n├── localize/\n│   └── localize.go\n└── middleware/\n    ├── custom-translation-validator.go\n    ├── custome-validation.go\n    └── validator.go",
+      "confidence": 0.93,
+      "considerations": [
+        "Katalog i18n dimuat ke dalam memori saat bootstrap; penambahan file JSON baru di disk memerlukan server reload.",
+        "Timezone-aware date parsing mengekstrak data lokasi dari context token autentikasi user untuk parsing timestamp query yang presisi."
+      ],
+      "keyImplementationPoints": [
+        "Otomatisasi pemuatan catalog JSON locale dari resource/message/*.json ke dalam i18n Bundle.",
+        "Translasi pesan error validasi berbasis go-playground universal-translator.",
+        "Custom validation tags (enum, monthyearformat) dengan custom message override.",
+        "Reflection query binder (bindQuery) dengan automatic type coercion (UUID, timestamp with timezone, uint, bool)."
+      ],
+      "overview": "Pipeline validasi input dan lokalisasi terintegrasi yang menggabungkan go-playground/validator/v10 dan go-i18n/v2 dengan otomatisasi scanning berkas JSON katalog bahasa, custom validator tags, dan binding query reflection.",
+      "purpose": "Menyediakan validasi payload input yang presisi dengan pesan error multibahasa yang ramah pengguna serta mengotomatisasi parsing query/path parameter ke domain DTO.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/i18n-localization.md",
+        "01-Knowledge/patterns/backend/validator-reflection-binder.md"
+      ],
+      "summary": "Multi-Locale i18n Translation & Dynamic Field-Level Validator Pipeline mengotomatisasi lokalisasi pesan API dan validasi struct berbasis refleksi dan tag kustom.",
+      "tags": [
+        "backend",
+        "i18n",
+        "localization",
+        "validator",
+        "reflection-binder"
+      ],
+      "title": "Multi-Locale i18n Translation & Dynamic Field-Level Validator Pipeline"
+    }
+  ]
+}

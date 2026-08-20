@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-14T16:20:31.874Z",
+  "runId": "fe-016-20260814T160123Z-3d0077e9",
+  "task": {
+    "id": "FE-016",
+    "title": "Implementasi State Management Zustand untuk Fitur Login",
+    "path": "02-Projects/starter-app/tasks/task-016.md",
+    "project": "starter-app",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "package.json",
+      "src/pages/Login/store/useLoginStore.ts",
+      "src/pages/Login/hooks/useLogin.ts",
+      "src/pages/Login/components/LoginForm.tsx"
+    ],
+    "requiresChanges": true
+  },
+  "project": {
+    "id": "starter-app",
+    "repository": "/Users/sagaino/ciniru/starter-app",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/starter-app/graphify-out/graph.json",
+    "nodes": 729,
+    "links": 1295,
+    "builtAtCommit": "ec2fe0b437ad5450521afa9903cbbee4448aff7f"
+  },
+  "verification": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "5a4c6133-17aa-46ff-8fb9-e6ef1d633999",
+    "status": "SUCCESS",
+    "response": "Implementasi state management berbasis Zustand untuk fitur Login pada repository [`starter-app`](file:///Users/sagaino/ciniru/starter-app) telah selesai dilakukan.\n\n---\n\n### Ringkasan Perubahan\n\n1. **[`package.json`](file:///Users/sagaino/ciniru/starter-app/package.json)**\n   - Menambahkan dependency [`zustand`](file:///Users/sagaino/ciniru/starter-app/package.json#L43) (`^5.0.3`) pada field `dependencies`.\n\n2. **[`useLoginStore.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/store/useLoginStore.ts)** *(Baru)*\n   - Membuat Zustand store [`useLoginStore`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/store/useLoginStore.ts#L13) dengan interface typesafe [`LoginState`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/store/useLoginStore.ts#L3-L11).\n   - Mengelola state login: `errorMessage`, `successMessage`, dan `isPending`.\n   - Menyediakan action pengubah state: `setErrorMessage`, `setSuccessMessage`, `setIsPending`, `resetMessages`, dan `reset`.\n\n3. **[`useLogin.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts)**\n   - Mengintegrasikan hook [`useLogin`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts#L19) dengan [`useLoginStore`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/store/useLoginStore.ts#L13).\n   - Menghubungkan siklus mutasi TanStack Query (`onMutate`, `onSettled`, `onSuccess`, `onError`) ke actions store secara typesafe.\n   - Mempertahankan alur penyimpanan token terenkripsi ke localStorage via [`setData`](file:///Users/sagaino/ciniru/starter-app/src/hooks/useLocalStorage.ts#L13), notifikasi [`toast`](file:///Users/sagaino/ciniru/starter-app/src/components/ui/toast.tsx#L10), navigasi ke dashboard via [`ROUTES.DASHBOARD`](file:///Users/sagaino/ciniru/starter-app/src/lib/constant/routes.ts#L1), dan penanganan error via [`getErrorMessage`](file:///Users/sagaino/ciniru/starter-app/src/lib/error-utils.ts#L8).\n\n4. **[`LoginForm.tsx`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/components/LoginForm.tsx)**\n   - Komponen visual tetap kompatibel penuh mengonsumsi kontrak return dari [`useLogin`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts#L19) sesuai prinsip *State & Logic Separation*.\n\n---\n\n### File Berubah (Sesuai `allowed_paths`)\n\n- [`package.json`](file:///Users/sagaino/ciniru/starter-app/package.json)\n- [`src/pages/Login/store/useLoginStore.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/store/useLoginStore.ts)\n- [`src/pages/Login/hooks/useLogin.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts)\n\n---\n\n### Rekomendasi Verifikasi Orchestrator\n\n- `npm run typecheck` (`tsc --noEmit`)\n- `npm run build` (`tsc -b && vite build`)\n\n---\n\n### Klasifikasi Knowledge Retrospective\n\n- **`NEW`**: Pattern pembuatan feature store berbasis Zustand di bawah struktur `src/pages/[Feature]/store/use[Feature]Store.ts` yang selaras dengan *Feature-Driven Architecture*.\n- **`UPDATE`**: [`fe-development-guidelines.md`](file:///Users/sagaino/Documents/Obsidian%20Vault/01-Knowledge/patterns/frontend/fe-development-guidelines.md) dan [`state-logic-separation.md`](file:///Users/sagaino/Documents/Obsidian%20Vault/01-Knowledge/concepts/architecture/state-logic-separation.md) untuk mendokumentasikan Zustand sebagai solusi client-side workflow/UI state berdampingan dengan TanStack Query untuk server-state.\n- **`PROJECT_ONLY`**: Detail field spesifik autentikasi (bib number & phone number) pada fitur Login `starter-app`.\n",
+    "duration_seconds": 77.192884,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 127589,
+      "output_tokens": 12197,
+      "thinking_tokens": 7672,
+      "cache_read_tokens": 724355,
+      "total_tokens": 139786
+    }
+  },
+  "proposal": {
+    "classification": "NEW",
+    "confidence": 0.95,
+    "title": "Zustand Feature State Management",
+    "type": "concept",
+    "targetPath": "01-Knowledge/concepts/state-management/zustand.md",
+    "summary": "Pola pengelolaan client-side workflow & UI state berbasis Zustand pada tingkat fitur (src/pages/[Feature]/store/use[Feature]Store.ts) yang terintegrasi secara typesafe dengan TanStack Query dan React Hook Form melalui custom hook orkestrator use[Feature].ts.",
+    "rationale": "Pemeriksaan menyeluruh pada 01-Knowledge/ menunjukkan bahwa belum ada halaman untuk Zustand (hanya TanStack Query yang tercatat di 01-Knowledge/concepts/state-management/). Implementasi Zustand sebagai feature-level client store yang berkolaborasi dengan TanStack Query dan React Hook Form merupakan durable architectural knowledge baru yang reusable lintas proyek frontend.",
+    "considerations": [
+      "Enkapsulasi fitur: Zustand store diletakkan di src/pages/[Feature]/store/use[Feature]Store.ts agar selaras dengan Feature-Driven Architecture dan tidak membebani global scope.",
+      "Pemisahan tanggung jawab: Zustand mengelola client-side workflow/UI state, sedangkan TanStack Query tetap sebagai single source of truth untuk server state.",
+      "Orkestrasi Hook: use[Feature].ts bertindak sebagai boundary yang menggabungkan TanStack Query, React Hook Form, dan Zustand store sehingga komponen visual .tsx tetap decoupled.",
+      "Typesafety & State Reset: Interface store wajib typesafe dan menyediakan action reset/resetMessages untuk mencegah akumulasi stale state antar-navigasi."
+    ],
+    "relatedKnowledge": [
+      "[[01-Knowledge/concepts/architecture/feature-driven-architecture|Feature-Driven Architecture]]",
+      "[[01-Knowledge/concepts/architecture/state-logic-separation|State & Logic Separation]]",
+      "[[01-Knowledge/concepts/state-management/tanstack-query|TanStack Query]]",
+      "[[01-Knowledge/patterns/frontend/fe-development-guidelines|FE Development Guidelines]]"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-14T16:20:31.872Z",
+    "approvedBy": "user",
+    "classification": "NEW",
+    "destination": "CANDIDATE",
+    "targetPath": null
+  }
+}

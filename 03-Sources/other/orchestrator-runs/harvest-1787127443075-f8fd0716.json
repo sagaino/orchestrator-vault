@@ -1,0 +1,782 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T08:22:20.933Z",
+  "harvestId": "harvest-1787127443075-f8fd0716",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/identity-kit-dashboard-web",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/identity-kit-dashboard-web",
+    "packageName": "identify-verification-kit",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@base-ui/react",
+      "@electron-toolkit/preload",
+      "@electron-toolkit/utils",
+      "@hookform/resolvers",
+      "@innovatrics/dot-face-auto-capture",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@tiptap/extension-image",
+      "@tiptap/extension-link",
+      "@tiptap/extension-underline",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "iconsax-reactjs",
+      "input-otp",
+      "leaflet",
+      "leaflet-draw",
+      "leaflet.fullscreen",
+      "leaflet.markercluster",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "pako",
+      "radix-ui",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-leaflet",
+      "react-leaflet-markercluster",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "sonner",
+      "tailwind-merge",
+      "tailwindcss",
+      "vaul",
+      "ws",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/geojson",
+      "@types/leaflet",
+      "@types/leaflet-draw",
+      "@types/leaflet.markercluster",
+      "@types/node",
+      "@types/pako",
+      "@types/react",
+      "@types/react-dom",
+      "@types/ws",
+      "@vitejs/plugin-react",
+      "electron",
+      "electron-builder",
+      "electron-vite",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "shadcn",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "dev:renderer",
+      "dev:electron",
+      "start",
+      "build",
+      "build:renderer",
+      "build:electron",
+      "build:win:dev",
+      "build:win:prod",
+      "build:mac:dev",
+      "build:mac:prod",
+      "build:linux:dev",
+      "build:linux:prod",
+      "build:win",
+      "build:mac",
+      "build:linux",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/main/handlers/auth.handler.ts",
+          "src/main/ipc/auth.ipc.ts",
+          "src/main/services/auth.service.ts",
+          "src/preload/modules/auth.ts",
+          "src/renderer/src/assets/ic_passport.png",
+          "src/renderer/src/lib/clear-auth-session.ts",
+          "src/renderer/src/lib/invoke-ipc-with-auth-handling.ts",
+          "src/shared/auth",
+          "src/shared/auth/channels.ts",
+          "src/shared/auth/roles.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/main/handlers",
+          "src/main/handlers/admin.handler.ts",
+          "src/main/handlers/auth.handler.ts",
+          "src/main/handlers/broadcast.handler.ts",
+          "src/main/handlers/device.handler.ts",
+          "src/main/handlers/division.handler.ts",
+          "src/main/handlers/history.handler.ts",
+          "src/main/handlers/license.handler.ts",
+          "src/main/handlers/log-activity.handler.ts",
+          "src/main/handlers/operator.handler.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/shared/auth/schema.ts"
+        ]
+      },
+      "structure": {
+        "style": "Modular Architecture",
+        "totalFilesScanned": 210,
+        "sampleDirectories": [
+          "out",
+          "out/main",
+          "out/preload",
+          "public",
+          "scripts",
+          "src",
+          "src/main",
+          "src/main/handlers",
+          "src/main/ipc",
+          "src/main/services",
+          "src/main/utils",
+          "src/preload",
+          "src/preload/modules",
+          "src/renderer",
+          "src/renderer/public"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/shared/auth/channels.ts\nexport const AUTH_IPC_CHANNELS = {\n  LOGIN: 'auth:login',\n} as const;\n\n// src/preload/index.ts\nimport { contextBridge } from 'electron';\nimport { authApi } from './modules/auth';\n\nconst api = {\n  auth: authApi,\n  // ... other domain modules\n};\n\nif (process.contextIsolated) {\n  contextBridge.exposeInMainWorld('api', api);\n}",
+          "description": "Strict boundary IPC exposure through contextBridge using shared channel identifiers",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── main/       # Node.js backend logic, window lifecycle, OS integration\n│   ├── handlers/\n│   ├── services/\n│   └── ipc/\n├── preload/    # Secure Context Bridge exposing typed APIs\n│   └── modules/\n├── shared/     # Universal contracts, channels, schemas, and DTOs\n└── renderer/   # Pure React/Vite web application\n    └── src/",
+      "confidence": 0.95,
+      "considerations": [
+        "Context isolation harus selalu aktif (`contextIsolation: true`) untuk mencegah eksekusi Node runtime langsung di renderer.",
+        "Shared directory tidak boleh mengimpor package khusus Node atau browser agar kompatibel di semua target."
+      ],
+      "keyImplementationPoints": [
+        "Pemisahan domain yang ketat antara Main, Preload, Renderer, dan Shared.",
+        "Penggunaan channel enums/constants terpusat di `src/shared` untuk mencegah typo IPC string.",
+        "Preload modular memecah API per domain sebelum digabung di `contextBridge.exposeInMainWorld`."
+      ],
+      "overview": "Arsitektur desktop modular berbasis Electron Vite yang memisahkan Main Process, Preload Context Bridge, dan Renderer UI dengan Typed IPC Channel Contracts di shared layer.",
+      "purpose": "Memastikan keamanan isolasi konteks (security context isolation) dan maintainability tinggi pada aplikasi desktop multi-proses.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/frontend/project-skeleton-template.md",
+        "Electron Security Best Practices"
+      ],
+      "summary": "Multi-tier Electron-React architecture with strictly isolated processes and typed shared IPC contracts.",
+      "tags": [
+        "architecture",
+        "electron",
+        "vite",
+        "react",
+        "ipc"
+      ],
+      "title": "Multi-Tier Modular Electron-React Architecture with Typed IPC Contracts"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/hooks/useLocalStorage.ts\nexport const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};",
+          "description": "AES Encrypted Storage Setter & Getter with Custom Event Dispatch for Cross-Component Sync",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/\n├── hooks/\n│   └── useLocalStorage.ts      # Custom hook with reactive listener and AES crypto\n└── lib/\n    └── clear-auth-session.ts   # Atomic session removal trigger",
+      "confidence": 0.93,
+      "considerations": [
+        "Enkripsi client-side AES melindungi dari inspeksi kasual di LocalStorage namun secret key tetap berada di environment client.",
+        "Event 'storage' asli browser hanya mentrigger tab lain; `window.dispatchEvent(new Event('storage'))` diperlukan agar komponen di tab yang sama ikut sinkron seketika."
+      ],
+      "keyImplementationPoints": [
+        "Enkripsi dan dekripsi otomatis menggunakan CryptoJS AES.",
+        "Sinkronisasi reaktif real-time menggunakan dispatch custom `storage` event pada perubahan data.",
+        "Fallback graceful dan pembersihan otomatis jika terjadi korupsi data payload yang tersimpan."
+      ],
+      "overview": "Pola reactive state synchronization berbasis Web Storage yang diperkuat dengan enkripsi AES dan sinkronisasi lintas komponen via browser storage events.",
+      "purpose": "Menyediakan persistent state management yang aman untuk session/token tanpa overhead state manager eksternal.",
+      "relatedKnowledge": [
+        "React State Management Patterns",
+        "Web Cryptography & Local Storage Security"
+      ],
+      "summary": "Encrypted reactive client storage synchronization with AES encryption and custom event dispatching.",
+      "tags": [
+        "state-management",
+        "crypto",
+        "localstorage",
+        "react-hooks"
+      ],
+      "title": "Encrypted Event-Driven Reactive Storage Hook"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/components/common/Auth/PrivateRoute.tsx\nexport const PrivateRoute: React.FC<IPrivateRoute> = ({ children }: IPrivateRoute) => {\n  const [token] = useLocalStorage<string | null>(LOCALSTORAGE_KEY.TOKEN, null, { encrypted: true });\n  const location = useLocation();\n\n  if (!token) {\n    return <Navigate to=\"/login\" state={{ from: location }} replace />;\n  }\n\n  return <>{children}</>;\n};\n\n// src/renderer/src/lib/invoke-ipc-with-auth-handling.ts\nexport const invokeIpcWithAuthHandling = async <T>(\n  action: () => Promise<T>,\n  options: InvokeIpcWithAuthHandlingOptions\n): Promise<T> => {\n  try {\n    return await action();\n  } catch (error) {\n    const statusCode = extractIpcErrorStatusCode(error, { methodName: options.methodName });\n    if (statusCode === 401 && (options.treatUnauthorizedAsSessionExpired ?? true)) {\n      clearAuthSession();\n      toast.error('Sesi login telah berakhir. Silakan login kembali.');\n      throw new IpcServiceError('Sesi login telah berakhir. Silakan login kembali.', 401);\n    }\n    throw error;\n  }\n};",
+          "description": "Route Guard and IPC Interceptor coordinating session invalidation and navigation redirect",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/\n├── routes/\n│   └── index.tsx                    # createHashRouter with nested guarded layouts\n├── components/common/Auth/\n│   ├── PrivateRoute.tsx             # Auth guard (redirects unauthenticated to login)\n│   └── PublicRoute.tsx              # Guest guard (redirects authenticated to home)\n└── lib/\n    ├── invoke-ipc-with-auth-handling.ts  # 401 Interceptor and Session Invalidation\n    └── clear-auth-session.ts             # Session wipe & storage event broadcast",
+      "confidence": 0.94,
+      "considerations": [
+        "Gunakan `createHashRouter` untuk kompatibilitas native protokol file di Electron (`file://`).",
+        "Penggunaan cooldown toast pada session expiration mencegah toast spam saat banyak request gagal serentak karena 401."
+      ],
+      "keyImplementationPoints": [
+        "Declarative route guards memisahkan public dan private route hierarchy.",
+        "Global IPC Interceptor mendeteksi 401 status code dan mengeksekusi `clearAuthSession`.",
+        "Event `storage` yang dipicu oleh `clearAuthSession` secara otomatis membuat `PrivateRoute` me-render `Navigate to=\"/login\"`."
+      ],
+      "overview": "Sistem navigasi deklaratif berbasis Hash Router yang terintegrasi erat dengan Guard Components dan interceptor IPC otomatis saat sesi kadaluarsa.",
+      "purpose": "Mengamankan akses halaman sensitif dan menyajikan pengalaman re-autentikasi mulus ketika token kadaluarsa.",
+      "relatedKnowledge": [
+        "React Router Declarative Guards",
+        "Token Lifecycle & Session Invalidation Patterns"
+      ],
+      "summary": "Declarative route access guards coupled with IPC interceptor-driven session invalidation cascade.",
+      "tags": [
+        "routing",
+        "guards",
+        "react-router",
+        "auth-flow",
+        "security"
+      ],
+      "title": "Declarative Route Access Guards & Cascading Session Invalidation"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { createHash } from 'node:crypto'\n\nconst mapBodyToSignatureString = (body: unknown, parentKey = ''): string => {\n  if (!body || typeof body !== 'object' || Array.isArray(body)) return ''\n\n  const entries = Object.entries(body as Record<string, unknown>)\n    .sort(([a], [b]) => a.localeCompare(b))\n\n  let keys = ''\n\n  for (const [key, value] of entries) {\n    const finalKey = parentKey ? `${parentKey}.${key}` : key\n\n    if (Array.isArray(value)) {\n      keys += finalKey\n      continue\n    }\n\n    if (value && typeof value === 'object') {\n      keys += mapBodyToSignatureString(value, finalKey)\n      continue\n    }\n\n    keys += `${finalKey}${String(value ?? '')}`\n  }\n\n  return keys\n}\n\nexport const buildRequestSecurityHeaders = (\n  payload: Record<string, unknown>,\n  email = '0'\n): Record<'timestamp' | 'email' | 'sig', string> => {\n  const timestamp = Date.now()\n  const signaturePayload = {\n    ...payload,\n    timestamp,\n    email: payload.email ?? email,\n  }\n  const keys = mapBodyToSignatureString(signaturePayload)\n  const sig = createHash('sha1').update(keys).digest('hex')\n\n  return {\n    timestamp: String(timestamp),\n    email,\n    sig,\n  }\n}",
+          "description": "Recursive payload canonicalizer and SHA-1 signature generator with timestamp and email injection",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/main/\n├── utils/\n│   └── request-signature.ts        # Canonicalizer & SHA-1 signature generator\n└── services/\n    ├── auth.service.ts             # Injeksi signature pada unauthenticated login\n    ├── operator.service.ts         # Injeksi signature pada authenticated mutations & queries\n    └── broadcast.service.ts        # Injeksi signature pada broadcast publishing",
+      "confidence": 0.95,
+      "considerations": [
+        "Perlindungan kuat terhadap payload tampering dan replay attack antara client dan server.",
+        "Data binary seperti Buffer/Stream harus dikonversi ke Base64 sebelum masuk ke canonicalizer agar hashing deterministik.",
+        "Dapat ditingkatkan ke HMAC-SHA256 jika backend mendukung shared secret key."
+      ],
+      "keyImplementationPoints": [
+        "Recursive lexicographical sorting via Object.entries().sort() memastikan urutan field deterministik.",
+        "Flattening nested object hierarchies dengan format dotted-key (parent.child).",
+        "Injeksi synchronized timestamp dan identitas user langsung ke dalam signature payload sebelum hashing.",
+        "Menghasilkan objek security headers siap pakai ({ timestamp, email, sig }) untuk request HTTP Axios."
+      ],
+      "overview": "Dalam komunikasi API antara desktop client dan backend pada sistem verifikasi identitas berspesifikasi tinggi, seluruh HTTP request mutlak membutuhkan perlindungan dari manipulasi data di perjalanan (man-in-the-middle tampering) dan replay attacks. Pola ini mengimplementasikan kanonikalisasi payload rekursif yang deterministik yang digabungkan dengan synchronized timestamp dan identitas user, lalu dikonversi menjadi tanda tangan kriptografi SHA-1 (sig) di HTTP headers.",
+      "purpose": "Menjamin integritas data payload dan mencegah manipulasi data serta replay attacks pada setiap request HTTP dari Electron Main process ke backend API.",
+      "relatedKnowledge": [
+        "concepts/api-security-signature.md",
+        "patterns/electron/main-process-service-architecture.md",
+        "snippets/crypto/canonical-json-signer.md"
+      ],
+      "summary": "Deterministic lexicographical payload canonicalization and SHA-1 cryptographic request signature generator in Node.js Main process.",
+      "tags": [
+        "security",
+        "cryptography",
+        "canonicalization",
+        "request-signing",
+        "electron-main"
+      ],
+      "title": "deterministic-lexicographical-payload-canonicalization-and-request-signing"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { clearAuthSession } from './clear-auth-session'\nimport { IpcServiceError } from './ipc-service-error'\nimport { extractIpcErrorStatusCode, normalizeIpcErrorMessage } from './normalize-ipc-error-message'\nimport { toast } from 'sonner'\n\ninterface InvokeIpcWithAuthHandlingOptions {\n  methodName: string\n  fallbackMessage: string\n  treatUnauthorizedAsSessionExpired?: boolean\n}\n\nconst SESSION_EXPIRED_MESSAGE = 'Sesi login telah berakhir. Silakan login kembali.'\nconst SESSION_EXPIRED_TOAST_COOLDOWN_MS = 3000\nlet lastSessionExpiredToastAt = 0\n\nexport const invokeIpcWithAuthHandling = async <T>(\n  action: () => Promise<T>,\n  options: InvokeIpcWithAuthHandlingOptions\n): Promise<T> => {\n  try {\n    return await action()\n  } catch (error) {\n    const statusCode = extractIpcErrorStatusCode(error, { methodName: options.methodName })\n    const shouldHandle401AsSessionExpired = options.treatUnauthorizedAsSessionExpired ?? true\n\n    if (statusCode === 401 && shouldHandle401AsSessionExpired) {\n      clearAuthSession()\n      const now = Date.now()\n      if (now - lastSessionExpiredToastAt > SESSION_EXPIRED_TOAST_COOLDOWN_MS) {\n        lastSessionExpiredToastAt = now\n        toast.error(SESSION_EXPIRED_MESSAGE)\n      }\n      throw new IpcServiceError(SESSION_EXPIRED_MESSAGE, 401)\n    }\n\n    throw new IpcServiceError(\n      normalizeIpcErrorMessage(error, {\n        methodName: options.methodName,\n        fallbackMessage: options.fallbackMessage,\n      }),\n      statusCode ?? undefined\n    )\n  }\n}",
+          "description": "Higher-order IPC wrapper with status code extraction, debounced toast handling, and multi-window session purge",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/\n├── lib/\n│   ├── invoke-ipc-with-auth-handling.ts  # Higher-order IPC call interceptor\n│   ├── normalize-ipc-error-message.ts    # IPC method prefix stripper & status code extractor\n│   ├── clear-auth-session.ts             # Synchronous session eviction & broadcast\n│   └── ipc-service-error.ts              # Custom Error subclass with statusCode\n└── services/\n    ├── login.ts                          # Auth caller (treatUnauthorizedAsSessionExpired = false)\n    └── operator.ts                       # Authenticated caller (treatUnauthorizedAsSessionExpired = true)",
+      "confidence": 0.95,
+      "considerations": [
+        "Menyatukan error boundary IPC dan auth lifecycle di satu pintu gerbang tanpa mengotori view components.",
+        "Mencegah toast storm saat concurrent queries (misalnya React Query) serentak gagal 401.",
+        "Bergantung pada konvensi penamaan error HTTP_STATUS_xxx:: dari Main process service layer."
+      ],
+      "keyImplementationPoints": [
+        "RegEx-based parsing untuk mengekstrak HTTP status code dari serialized IPC exception strings.",
+        "Pembersihan otomatis prefix internal Electron (Error invoking remote method '...').",
+        "Flag treatUnauthorizedAsSessionExpired untuk membedakan kesalahan login vs session expiration.",
+        "Cooldown debouncing pada sonner toast untuk mencegah toast storm pada concurrent request failures.",
+        "Sinkronisasi multi-window via window.dispatchEvent(new Event('storage'))."
+      ],
+      "overview": "Ketika error HTTP terjadi di Main process Electron, error tersebut diserialisasi dan dilempar melintasi jembatan IPC sebagai error string. Pola ini menyediakan layer abstraction interceptor di Renderer yang mengurai kode status HTTP (misalnya HTTP_STATUS_401::...), membersihkan sesi autentikasi terenkripsi secara serentak via storage event, menerapkan cooldown debouncing pada toast notifikasi, dan membungkus error menjadi IpcServiceError bertipe kuat.",
+      "purpose": "Menangani propagasi error melintasi jembatan IPC Electron, mengekstrak kode status HTTP dari serialisasi error string, dan mengeksekusi invalidasi sesi serta debounced feedback toast.",
+      "relatedKnowledge": [
+        "patterns/frontend/ipc-error-handling-pipeline.md",
+        "decisions/auth-session-invalidation-flow.md",
+        "debugging/electron-ipc-error-serialization.md"
+      ],
+      "summary": "IPC exception protocol with status-code-aware error normalizer, debounced toast cooldown, and multi-window session invalidation.",
+      "tags": [
+        "auth",
+        "error-handling",
+        "ipc-bridge",
+        "electron-renderer",
+        "session-management"
+      ],
+      "title": "ipc-exception-protocol-and-debounced-session-invalidation-interceptor"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// 1. Renderer Layer: JIT Token Extraction & IPC Invocation (src/renderer/src/services/operator.ts)\ntype OperatorCreatePayload = Omit<OperatorCreateRequest, 'token'>\n\nexport const OperatorService = {\n  create: async (payload: OperatorCreatePayload): Promise<OperatorCreateResponse> => {\n    const token = getData(LOCALSTORAGE_KEY.TOKEN)\n    if (!token || typeof token !== 'string') {\n      throw new Error('Sesi login tidak ditemukan. Silakan login ulang.')\n    }\n\n    return invokeIpcWithAuthHandling(\n      () => window.api.operator.create({ ...payload, token }),\n      {\n        methodName: 'operator:create',\n        fallbackMessage: 'Gagal menambahkan operator',\n      }\n    )\n  }\n}\n\n// 2. Main Process Layer: Gateway Execution & Security Injection (src/main/services/operator.service.ts)\nexport const OperatorService = {\n  create: async (payload: OperatorCreateRequest): Promise<OperatorCreateResponse> => {\n    try {\n      const requestBody = {\n        name: payload.name,\n        email: payload.email,\n        phone: payload.phone,\n        nrp: payload.nrp,\n        nik: payload.nik,\n        is_active: payload.is_active,\n        divisi_code: payload.divisi_code,\n        ...(payload.device_code_list ? { device_code_list: payload.device_code_list } : {}),\n        ...(payload.face ? { face: payload.face } : {}),\n      }\n\n      const response = await axios.post<OperatorCreateResponse>(\n        `${API_BASE_URL}${ENDPOINTS.OPERATOR.CREATE}`,\n        requestBody,\n        {\n          headers: {\n            Authorization: `Bearer ${payload.token}`,\n            ...buildRequestSecurityHeaders(requestBody),\n          },\n          timeout: 15000,\n        },\n      )\n      return response.data\n    } catch (error) {\n      if (axios.isAxiosError(error)) {\n        const statusCode = error.response?.status\n        const apiMessage = (error.response?.data as { message?: string })?.message || error.message\n        throw new Error(statusCode ? `HTTP_STATUS_${statusCode}::${apiMessage}` : apiMessage)\n      }\n      throw error\n    }\n  }\n}",
+          "description": "JIT token extraction in renderer service and isolated execution in main process gateway",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── renderer/src/services/\n│   └── operator.ts             # Mengambil token terenkripsi, memvalidasi keberadaan sesi, memanggil window.api\n├── preload/modules/\n│   └── operator.ts             # Typed IPC bridge (ipcRenderer.invoke)\n├── main/handlers/\n│   └── operator.handler.ts     # IPC entrypoint & payload forwarding\n└── main/services/\n    └── operator.service.ts     # Axios instance, Bearer token injection, request signing, response normalization",
+      "confidence": 0.92,
+      "considerations": [
+        "Keamanan maksimum dengan isolasi total network stack dari DOM sandbox.",
+        "Mengeliminasi masalah CORS browser karena HTTP client berjalan di lingkungan Node.js murni.",
+        "Membutuhkan serialisasi IPC untuk payload berukuran besar (misalnya string gambar base64)."
+      ],
+      "keyImplementationPoints": [
+        "Renderer process sepenuhnya terisolasi dari Axios/Fetch langsung ke internet.",
+        "Renderer service mengekstrak token dari encrypted storage just-in-time sebelum dispatch IPC.",
+        "Penggunaan TypeScript Omit<T, 'token'> di level UI service agar komponen React terbebas dari manajemen token.",
+        "Main process bertindak sebagai API Gateway tunggal yang menyuntikkan Bearer token, security headers, dan timeout enforcement."
+      ],
+      "overview": "Untuk memenuhi standar keamanan tinggi, Renderer Process (Chromium DOM Sandbox) diisolasi sepenuhnya dari jaringan luar (tidak ada request Axios/Fetch langsung dari browser window ke API backend). Semua interaksi jaringan diarahkan melalui IPC ke Node.js Main Process yang berfungsi sebagai isolated API Gateway. Renderer Service bertugas membaca token terenkripsi secara just-in-time dari penyimpanan lokal, membongkar parameter, dan mendelegasikan eksekusi HTTP lengkap ke Main Process.",
+      "purpose": "Mencegah akses jaringan langsung dari UI Sandbox, mencegah paparan kredensial global di window scope, dan memusatkan eksekusi HTTP client di Node.js Main Process yang terisolasi.",
+      "relatedKnowledge": [
+        "patterns/electron/two-tier-api-gateway.md",
+        "concepts/zero-trust-renderer-architecture.md",
+        "patterns/frontend/typed-ipc-contracts.md"
+      ],
+      "summary": "Two-tier sandboxed network boundary with main-process isolated HTTP gateway and per-request JIT credential injection.",
+      "tags": [
+        "security",
+        "api-gateway",
+        "token-injection",
+        "electron-main",
+        "sandbox"
+      ],
+      "title": "two-tier-sandboxed-network-boundary-with-isolated-credential-injection"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/utils/normalize-face-url.ts\nconst IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || 'http://localhost:8080/storage'\n\nexport const normalizeFaceUrl = (faceUrl: string): string => {\n  if (!faceUrl) return ''\n  if (faceUrl.startsWith('http://') || faceUrl.startsWith('https://')) return faceUrl\n\n  const baseUrl = IMAGE_BASE_URL.replace(/\\/+$/, '')\n  const normalizedPath = faceUrl.startsWith('/') ? faceUrl : `/${faceUrl}`\n\n  return `${baseUrl}${normalizedPath}`\n}\n\n// Ingress mapping in detail query (src/main/services/operator.service.ts)\nreturn {\n  ...response.data,\n  result: {\n    ...response.data.result,\n    face_list: response.data.result.face_list.map((face) => ({\n      ...face,\n      face: normalizeFaceUrl(face.face),\n    })),\n    fingerprint_list: response.data.result.fingerprint_list.map((fingerprint) => ({\n      ...fingerprint,\n      fingerprint: normalizeFaceUrl(fingerprint.fingerprint),\n    })),\n  },\n}",
+          "description": "Biometric URL normalizer and structural response mapping pipeline",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/main/\n├── utils/\n│   └── normalize-face-url.ts       # Base URL prepender & path cleaner\n└── services/\n    ├── operator.service.ts         # Response mapper untuk list & detail\n    └── device.service.ts           # Transformation biometrik perangkat",
+      "confidence": 0.9,
+      "considerations": [
+        "Renderer menerima URL gambar yang 100% siap konsumsi tanpa dependensi terhadap env IMAGE_BASE_URL di renderer bundle.",
+        "Idempotent normalization mencegah URL ganda jika backend sewaktu-waktu mengembalikan full URI."
+      ],
+      "keyImplementationPoints": [
+        "Idempotent prefixing: mendeteksi http:// atau https:// sebelum menambahkan base URL.",
+        "Deep mapping array data biometrik (face_list, fingerprint_list) pada service egress level.",
+        "Dynamic optional payload merging untuk atribut biometrik pada ingress level (...(payload.face ? { face: payload.face } : {}))."
+      ],
+      "overview": "Aplikasi verifikasi identitas memproses data biometrik multimodal (foto wajah Base64, template sidik jari WSQ/ISO, dan asset URL). Pada layer gateway service di Main process, data hasil fetch dari server mengalami normalisasi URL absolut (normalizeFaceUrl), sementara data mutasi (upload/update) ditransformasikan secara aman menjadi struktur payload seragam dengan dynamic optional fields.",
+      "purpose": "Menormalkan aset biometrik (wajah dan sidik jari) dari representasi path relatif backend menjadi URL absolut siap render serta memvalidasi payload biometrik sebelum dikirim ke API backend.",
+      "relatedKnowledge": [
+        "patterns/data-transformation/biometric-normalization-pipeline.md",
+        "concepts/electron-asset-resolution.md"
+      ],
+      "summary": "Multimodal biometric data ingress/egress normalization pipeline with idempotent URL mapping and optional payload transformation.",
+      "tags": [
+        "biometrics",
+        "data-pipeline",
+        "url-normalization",
+        "data-transformation"
+      ],
+      "title": "multimodal-biometric-ingress-egress-normalization-pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/index.ts\nprotocol.registerSchemesAsPrivileged([\n  {\n    scheme: 'app-resource',\n    privileges: {\n      standard: true,\n      secure: true,\n      supportFetchAPI: true,\n      corsEnabled: true,\n    },\n  },\n])\n\nfunction registerAppResourceProtocol(): void {\n  protocol.handle('app-resource', (request) => {\n    const requestUrl = new URL(request.url)\n    const pathname = requestUrl.pathname.replace(/^\\/+/, '')\n    const assetPath = pathname || requestUrl.hostname\n\n    if (assetPath !== 'sam.wasm') {\n      return new Response('Not found', { status: 404 })\n    }\n\n    const wasmFileUrl = pathToFileURL(join(process.resourcesPath, 'sam.wasm')).toString()\n    return net.fetch(wasmFileUrl)\n  })\n}",
+          "description": "Privileged scheme registration and streaming handler for native WebAssembly binary in Electron Main",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/preload/index.ts\nconst getFaceCaptureWasmUrl = (): string => {\n  if (window.location.protocol !== 'file:') {\n    return '/sam.wasm'\n  }\n  return 'app-resource://sam.wasm'\n}\n\nconst extendedElectronApi: PreloadElectronAPI = {\n  ...electronAPI,\n  ...wsApi,\n  getFaceCaptureWasmUrl\n}",
+          "description": "Dynamic protocol resolution in Preload script providing environment-aware WASM URL",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/renderer/src/pages/UserManagement/components/FaceCamera.tsx\nimport { useEffect, useRef } from 'react';\n\nexport type FaceCallback = (data: Blob | { imageData: string | Blob }) => void;\n\nexport interface FaceCameraProps {\n  imageType: 'png' | 'jpg';\n  cameraFacing: 'user' | 'environment';\n  photoTakenCb: FaceCallback;\n  samWasmUrl: string;\n}\n\nconst samWasmUrl = window.electron.getFaceCaptureWasmUrl();\n\nconst FaceCamera: React.FC<FaceCameraProps> = (props: FaceCameraProps) => {\n  const ref = useRef<HTMLFaceCaptureElement>(null);\n\n  useEffect(() => {\n    window.DOT_DEBUG_MODE = false;\n\n    const loadComponent = async () => {\n      await import('@innovatrics/dot-face-auto-capture/main.js');\n      await customElements.whenDefined('x-dot-face-auto-capture');\n\n      if (ref.current) {\n        ref.current.cameraOptions = {\n          imageType: props.imageType === 'jpg' ? 'jpeg' : 'png',\n          cameraFacing: props.cameraFacing,\n          photoTakenCb: props.photoTakenCb,\n          samWasmUrl: props.samWasmUrl,\n        };\n      }\n    };\n\n    loadComponent();\n  }, [props.cameraFacing, props.imageType, props.photoTakenCb, props.samWasmUrl]);\n\n  return <x-dot-face-auto-capture ref={ref} id=\"x-dot-face-auto-capture\" className=\"block h-full w-full\" />;\n};",
+          "description": "Web component lifecycle bridge and WebAssembly initialization for biometric face auto-capture",
+          "language": "tsx"
+        }
+      ],
+      "codeStructure": "- src/main/index.ts (protocol.registerSchemesAsPrivileged, registerAppResourceProtocol, net.fetch)\n- src/preload/index.ts (getFaceCaptureWasmUrl, contextBridge exposure)\n- src/renderer/index.html (Content Security Policy for wasm-unsafe-eval and app-resource:)\n- src/renderer/src/pages/UserManagement/components/FaceCamera.tsx (Dynamic import of Innovatrics web component and sam.wasm binding)",
+      "confidence": 0.95,
+      "considerations": [
+        "WASM binary size (sam.wasm) is large; streaming via net.fetch from process.resourcesPath avoids buffering entire binary into memory.",
+        "Content Security Policy in index.html must explicitly allow connect-src app-resource: and script-src 'wasm-unsafe-eval' for WASM compilation under strict sandbox.",
+        "Custom elements in React require customElements.whenDefined and dynamic DOM property assignment (ref.current.cameraOptions)."
+      ],
+      "keyImplementationPoints": [
+        "Registering 'app-resource' scheme as privileged with standard, secure, supportFetchAPI, and corsEnabled before app.whenReady().",
+        "Serving local filesystem resources via net.fetch with file:// URLs resolved from process.resourcesPath.",
+        "Preload environment sniffing between development ('/sam.wasm') and packaged production ('app-resource://sam.wasm').",
+        "Asynchronous dynamic import of @innovatrics/dot-face-auto-capture/main.js and web component hydration."
+      ],
+      "overview": "A secure native WASM resource streaming and custom web component integration pattern that allows packaged Electron applications to load and execute heavy AI/biometric models (Innovatrics SAM WebAssembly) under strict CSP and context isolation boundaries without file:// protocol security restrictions.",
+      "purpose": "Enable high-performance biometric face detection and auto-capture directly on the client side using WebAssembly while maintaining production security and sandbox isolation.",
+      "relatedKnowledge": [
+        "Electron Custom Privileged Schemes (protocol.handle, protocol.registerSchemesAsPrivileged)",
+        "WebAssembly Compilation & Streaming (WebAssembly.instantiateStreaming, CSP wasm-unsafe-eval)",
+        "Innovatrics DOT (Digital Onboarding Toolkit) Face Auto Capture Web Component"
+      ],
+      "summary": "Privileged custom protocol streaming WebAssembly AI models (sam.wasm) across Electron boundaries to power client-side biometric camera auto-capture.",
+      "tags": [
+        "electron",
+        "webassembly",
+        "biometrics",
+        "custom-protocol",
+        "innovatrics",
+        "camera"
+      ],
+      "title": "privileged-custom-protocol-wasm-streaming-for-hardware-ai-accelerators"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/services/ws.service.ts\nimport type { WebContents } from 'electron'\nimport { WebSocket, type RawData } from 'ws'\nimport { WS_IPC_CHANNELS } from 'src/shared/ws/channels'\n\nlet ws: WebSocket | null = null\n\nexport const WsService = {\n  connect: (sender: WebContents, url: string): void => {\n    if (ws) {\n      ws.terminate()\n      ws = null\n    }\n\n    ws = new WebSocket(url)\n\n    ws.on('open', () => sender.send(WS_IPC_CHANNELS.STATUS, 'connected'))\n    ws.on('close', () => sender.send(WS_IPC_CHANNELS.STATUS, 'disconnected'))\n    ws.on('error', () => sender.send(WS_IPC_CHANNELS.STATUS, 'error'))\n    ws.on('message', (data: RawData) => {\n      sender.send(WS_IPC_CHANNELS.MESSAGE, data.toString())\n    })\n  },\n\n  send: (message: string): void => {\n    ws?.send(message)\n  },\n\n  disconnect: (): void => {\n    ws?.terminate()\n    ws = null\n  }\n}",
+          "description": "Singleton Node.js WebSocket service in main process managing socket lifecycle and WebContents event emission",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/preload/modules/ws.ts\nimport { ipcRenderer } from 'electron'\nimport { WS_IPC_CHANNELS } from 'src/shared/ws/channels'\n\nexport const wsApi = {\n  wsConnect: (url: string): Promise<void> => ipcRenderer.invoke(WS_IPC_CHANNELS.CONNECT, url),\n  wsSend: (message: string): Promise<void> => ipcRenderer.invoke(WS_IPC_CHANNELS.SEND, message),\n  wsDisconnect: (): Promise<void> => ipcRenderer.invoke(WS_IPC_CHANNELS.DISCONNECT),\n  onWsStatus: (cb: (status: string) => void): (() => void) => {\n    const listener = (_event: unknown, status: string) => cb(status)\n    ipcRenderer.on(WS_IPC_CHANNELS.STATUS, listener)\n    return () => ipcRenderer.removeListener(WS_IPC_CHANNELS.STATUS, listener)\n  },\n  onWsMessage: (cb: (message: string) => void): (() => void) => {\n    const listener = (_event: unknown, message: string) => cb(message)\n    ipcRenderer.on(WS_IPC_CHANNELS.MESSAGE, listener)\n    return () => ipcRenderer.removeListener(WS_IPC_CHANNELS.MESSAGE, listener)\n  }\n}",
+          "description": "Preload module exposing typed socket commands and subscription listeners with automatic cleanup closures",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/main/ipc/ws.ipc.ts\nimport { ipcMain } from 'electron'\nimport { WS_IPC_CHANNELS } from 'src/shared/ws/channels'\nimport { WsHandler } from '../handlers/ws.handler'\nimport { WsService } from '../services/ws.service'\n\nexport function registerWsIpcHandlers(): void {\n  ipcMain.handle(WS_IPC_CHANNELS.CONNECT, WsHandler.connect)\n  ipcMain.handle(WS_IPC_CHANNELS.SEND, WsHandler.send)\n  ipcMain.handle(WS_IPC_CHANNELS.DISCONNECT, WsHandler.disconnect)\n}\n\nexport function unregisterWsIpcHandlers(): void {\n  ipcMain.removeHandler(WS_IPC_CHANNELS.CONNECT)\n  ipcMain.removeHandler(WS_IPC_CHANNELS.SEND)\n  ipcMain.removeHandler(WS_IPC_CHANNELS.DISCONNECT)\n  WsService.disconnect()\n}",
+          "description": "IPC handler registration with lifecycle teardown on application shutdown (app.on('before-quit'))",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/shared/ws/channels.ts (WS_IPC_CHANNELS constant mappings)\n- src/main/services/ws.service.ts (Node ws socket singleton, lifecycle, event forwarding)\n- src/main/handlers/ws.handler.ts (IPC invocations unpacker & error guard)\n- src/main/ipc/ws.ipc.ts (register/unregister IPC handlers)\n- src/preload/modules/ws.ts (Subscribable listener closures returning unbind functions)",
+      "confidence": 0.94,
+      "considerations": [
+        "WebSockets in the Main process bypass browser CORS, mixed-content, and renderer thread UI blocking.",
+        "Calling ws.terminate() instead of ws.close() guarantees immediate socket teardown when reconnecting or closing.",
+        "Listener subscription functions in Preload return cleanup callbacks to prevent memory leaks in React useEffect."
+      ],
+      "keyImplementationPoints": [
+        "Main-process WebSocket management utilizing native 'ws' package with direct access to local network hardware and telemetry feeds.",
+        "Event forwarding via WebContents.send to stream real-time sensor and device events without polluting renderer security scope.",
+        "Teardown guarantees via app.on('before-quit') to unregister handlers and sever open connections cleanly."
+      ],
+      "overview": "A robust bi-directional communication bridge pattern that runs WebSocket socket management inside Electron's Node.js main process and multiplexes status and data streams to the renderer process through clean, subscribable IPC channels.",
+      "purpose": "Enable stable, high-throughput, real-time device telemetry and hardware streaming while keeping the renderer sandboxed and avoiding UI thread degradation.",
+      "relatedKnowledge": [
+        "Electron IPC Multiplexing (ipcMain.handle / webContents.send / ipcRenderer.on)",
+        "Node.js WebSocket ('ws') Architecture",
+        "Observer Teardown Pattern in React / ContextBridge"
+      ],
+      "summary": "Main-process native WebSocket lifecycle manager with event-driven IPC channel multiplexing for real-time device telemetry.",
+      "tags": [
+        "websocket",
+        "device-bridge",
+        "ipc",
+        "realtime",
+        "telemetry",
+        "electron"
+      ],
+      "title": "bidirectional-native-websocket-bridge-with-ipc-multiplexing"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/shared/device/types.ts\nexport interface DeviceRecord {\n  code: string\n  hwid: string\n  serial_number: string\n  type: string\n  is_init: boolean\n  is_active: boolean\n  deleted: boolean\n  status_txt: string\n  division: DeviceDetailDivision | null\n  license_list: DeviceLicenseRecord[]\n}\n\nexport interface DeviceLicenseRecord {\n  code: string\n  keys: string\n  name: string\n  type: 'APPLICATION' | 'FACE' | 'FINGERPRINT' | string\n  owner: string\n  software: string\n  description: string\n  is_active: boolean\n  is_used: boolean\n  device_license_is_active: boolean | null\n}\n\nexport interface DeviceCreateRequest {\n  serial_number: string\n  license_application: string\n  license_face: string\n  license_fingerprint: string\n  license_ktp: string\n  license_passport: string\n  is_active: boolean\n  division_code: string\n  face?: string\n  token: string\n}",
+          "description": "Device hardware metadata schema binding hardware identity (HWID, serial_number) to capability-specific license slots",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/main/services/device.service.ts\nexport const DeviceService = {\n  create: async (payload: DeviceCreateRequest): Promise<DeviceCreateResponse> => {\n    try {\n      const requestBody = {\n        serial_number: payload.serial_number,\n        license_application: payload.license_application,\n        license_face: payload.license_face,\n        license_fingerprint: payload.license_fingerprint,\n        license_ktp: payload.license_ktp,\n        license_passport: payload.license_passport,\n        is_active: payload.is_active,\n        division_code: payload.division_code,\n        ...(payload.face ? { face: payload.face } : {}),\n      }\n\n      const response = await axios.post<DeviceCreateResponse>(\n        `${API_BASE_URL}${ENDPOINTS.DEVICE.CREATE}`,\n        requestBody,\n        {\n          headers: {\n            Authorization: `Bearer ${payload.token}`,\n            ...buildRequestSecurityHeaders(requestBody),\n          },\n          timeout: 15000,\n        },\n      )\n\n      return response.data\n    } catch (error) {\n      if (axios.isAxiosError(error)) {\n        const statusCode = error.response?.status\n        const apiMessage =\n          (error.response?.data as { message?: string } | undefined)?.message ||\n          error.message ||\n          'Gagal menambahkan perangkat'\n\n        throw new Error(\n          statusCode ? `HTTP_STATUS_${statusCode}::${apiMessage}` : apiMessage\n        )\n      }\n\n      throw error\n    }\n  },\n}",
+          "description": "Device provisioning service binding individual hardware modules to signed cryptographic payload dispatch",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/shared/device/types.ts (Hardware and capability license domain models)\n- src/shared/license/types.ts (License allocation & validation models)\n- src/main/services/device.service.ts (Provisioning & hardware binding operations)\n- src/main/services/license.service.ts (Modality-based license filtering and allocation)",
+      "confidence": 0.92,
+      "considerations": [
+        "Hardware ID (HWID) and Serial Number form an immutable cryptographic tuple for field device verification.",
+        "Granular license slots prevent unauthorized hardware module activation (e.g. fingerprint or passport OCR scanner) without valid capability keys.",
+        "Signed security headers prevent tampering with license allocation payloads during provisioning."
+      ],
+      "keyImplementationPoints": [
+        "Granular multi-slot biometric and scanner capability provisioning per hardware terminal (FACE, FINGERPRINT, KTP, PASSPORT, APPLICATION).",
+        "State machine tracking license availability ('is_used', 'is_active', 'device_license_is_active') to prevent double-binding.",
+        "Cryptographic request signing wrapping all device hardware provisioning requests."
+      ],
+      "overview": "An enterprise hardware provisioning and biometric capability matrix pattern that maps distinct physical sensors and software capabilities to dedicated cryptographic license slots bound by unique hardware identifiers (HWID and Serial Numbers).",
+      "purpose": "Ensure strict hardware-level capability gating and auditability across distributed edge devices with heterogeneous sensor configurations.",
+      "relatedKnowledge": [
+        "Hardware-Locked Licensing Architecture (HWID / Dongle binding)",
+        "Biometric Modality Capabilities Provisioning",
+        "Cryptographic Request Signing (HMAC-SHA256 Payload Canonicalization)"
+      ],
+      "summary": "HWID-bound multi-capability hardware licensing and biometric module matrix provisioning architecture.",
+      "tags": [
+        "hardware-licensing",
+        "hwid",
+        "device-provisioning",
+        "biometrics",
+        "security"
+      ],
+      "title": "hwid-bound-multimodal-hardware-licensing-matrix-provisioning"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/components/ui/map.tsx\nfunction createLazyComponent<T extends ComponentType<any>>(\n    factory: () => Promise<{ default: T }>\n) {\n    const LazyComponent = lazy(factory)\n\n    return (props: React.ComponentProps<T>) => {\n        const [isMounted, setIsMounted] = useState(false)\n\n        useEffect(() => {\n            setIsMounted(true)\n        }, [])\n\n        if (!isMounted) {\n            return null\n        }\n\n        return (\n            <Suspense>\n                <LazyComponent {...props} />\n            </Suspense>\n        )\n    }\n}\n\nconst LeafletMapContainer = createLazyComponent(() =>\n    import(\"react-leaflet\").then((mod) => ({\n        default: mod.MapContainer,\n    }))\n)\n\nfunction MapMarker({\n    icon = <MapPinIcon className=\"size-6\" />,\n    iconAnchor = [12, 12],\n    bgPos,\n    popupAnchor,\n    tooltipAnchor,\n    ...props\n}: Omit<MarkerProps, \"icon\"> &\n    Pick<DivIconOptions, \"iconAnchor\" | \"bgPos\" | \"popupAnchor\" | \"tooltipAnchor\"> & {\n        icon?: ReactNode\n        ref?: Ref<Marker>\n    }) {\n    const { L } = useLeaflet()\n    if (!L) return null\n\n    return (\n        <LeafletMarker\n            icon={L.divIcon({\n                html: renderToString(icon),\n                iconAnchor,\n                ...(bgPos ? { bgPos } : {}),\n                ...(popupAnchor ? { popupAnchor } : {}),\n                ...(tooltipAnchor ? { tooltipAnchor } : {}),\n            })}\n            riseOnHover\n            {...props}\n        />\n    )\n}",
+          "description": "SSR-safe dynamic Leaflet component factory and DOM-rendered HTML marker icon bridge",
+          "language": "tsx"
+        },
+        {
+          "code": "// src/renderer/src/pages/Dashboard/components/MapSection.tsx\nconst FocusMapMarker: React.FC<{ position: [number, number] | null }> = ({ position }) => {\n  const map = useMap()\n\n  React.useEffect(() => {\n    if (!position) return\n\n    map.flyTo(position, Math.max(map.getZoom(), 12), {\n      animate: true,\n      duration: 0.8,\n    })\n  }, [map, position])\n\n  return null\n}\n\nconst MapSection: React.FC<IMapSectionProps> = ({ locations, selectedPosition }) => {\n  const mappedLocations = locations.filter(\n    (device): device is IDeviceLocation & { position: [number, number] } => device.position !== null\n  )\n\n  return (\n    <div className=\"w-full rounded-[12px] bg-accent p-0\">\n      <div className=\"overflow-hidden rounded-[12px] border border-[#334155] h-full\">\n        <Map center={[0.7893, 113.9213]} zoom={5} minZoom={4} className=\"h-full min-h-0 w-full rounded-none\">\n          <MapLayers defaultTileLayer=\"Street\">\n            <FocusMapMarker position={selectedPosition} />\n            <MapTileLayer name=\"Street\" url=\"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png\" />\n            <MapTileLayer name=\"Dark\" url=\"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png\" />\n            {mappedLocations.map((device) => (\n              <MapMarker\n                key={device.rowKey}\n                position={device.position}\n                iconAnchor={[44, 12]}\n                icon={\n                  <span className=\"inline-flex h-6 min-w-22 items-center justify-center whitespace-nowrap rounded-full bg-primary px-3 py-0.5 text-xs font-semibold text-white shadow-md\">\n                    {device.id}\n                  </span>\n                }\n              />\n            ))}\n          </MapLayers>\n        </Map>\n      </div>\n    </div>\n  )\n}",
+          "description": "Reactive geospatial tracking view with animated camera focus and custom telemetry status badges",
+          "language": "tsx"
+        }
+      ],
+      "codeStructure": "- src/renderer/src/components/ui/map.tsx (SSR/bundler safe lazy Leaflet wrapper, DivIcon renderer, theme-aware tiles, clustering)\n- src/renderer/src/pages/Dashboard/components/MapSection.tsx (Device GPS telemetry integration and reactive camera flyTo controller)",
+      "confidence": 0.93,
+      "considerations": [
+        "Leaflet requires window/document access; lazy mounting with createLazyComponent avoids bundler errors and ensures clean mount cycles.",
+        "Using renderToString with L.divIcon allows rich React/Tailwind component rendering inside native Leaflet canvas markers.",
+        "Smooth camera navigation (map.flyTo) enhances UX when inspecting specific field devices from list tables."
+      ],
+      "keyImplementationPoints": [
+        "Lazy dynamic component loading factory ensuring Leaflet DOM instances only instantiate after component mount.",
+        "React DOM SSR server rendering (renderToString) to generate dynamic Tailwind-styled HTML markers inside Leaflet DivIcon.",
+        "Theme-reactive tile layer switcher (CARTO Light/Dark) integrated with next-themes.",
+        "Imperative camera trajectory controller (FocusMapMarker) triggering animated flyTo upon coordinate updates."
+      ],
+      "overview": "A reactive, lazy-loaded geospatial map visualization engine built on Leaflet and React-Leaflet that converts live GPS sensor telemetry from field identity devices into clustered, interactive, theme-aware map layers with smooth viewport transitions.",
+      "purpose": "Render real-time device location coordinates, monitor fleet distribution across regions, and provide smooth interactive location transitions.",
+      "relatedKnowledge": [
+        "Leaflet & React-Leaflet Component Architecture",
+        "Dynamic React-to-DOM Marker Icon Generation (L.divIcon + renderToString)",
+        "Geospatial Telemetry Visualizations (GPS/LongLat coordinates)"
+      ],
+      "summary": "Lazy-loaded geospatial telemetry engine with dynamic React DivIcon badges and reactive viewport tracking.",
+      "tags": [
+        "geospatial",
+        "leaflet",
+        "telemetry",
+        "device-tracking",
+        "react-leaflet",
+        "maps"
+      ],
+      "title": "lazy-loaded-geospatial-telemetry-engine-with-reactive-viewport-tracking"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// scripts/build-electron.mjs\nconst targetArg = (process.argv[2] ?? '').toLowerCase()\nconst modeArg = (process.argv[3] ?? 'production').toLowerCase()\n\nconst targetFlags = { win: '--win', mac: '--mac', linux: '--linux' }\nconst targetFlag = targetFlags[targetArg]\n\nconst env = {\n  ...process.env,\n  APP_ENV: modeArg,\n  NODE_ENV: modeArg,\n}\n\n// Persist compile-time flavor manifest\nwriteFileSync(\n  resolve(rootDir, 'build-info.json'),\n  JSON.stringify({ appEnv: modeArg }, null, 2),\n)\n\n// Orchestrate electron-vite bundling followed by electron-builder packaging\nawait runCommand(process.execPath, [electronViteCli, 'build'], env)\nawait runCommand(\n  process.execPath,\n  [electronBuilderCli, targetFlag, '--config', 'electron-builder.config.cjs'],\n  env,\n)",
+          "description": "Build runner script that parameterizes the environment mode, emits compile manifest, and spawns electron-vite and electron-builder.",
+          "language": "typescript"
+        },
+        {
+          "code": "// electron-builder.config.cjs\nconst isDev = process.env.APP_ENV === 'development'\n\nconst productName = isDev ? 'Identify Verification Kit Dev' : 'Identify Verification Kit'\nconst appId = isDev ? 'com.identitykit.dashboard.dev' : 'com.identitykit.dashboard'\nconst packageName = isDev ? 'identify-verification-kit-dev' : 'identify-verification-kit'\nconst artifactPrefix = isDev ? 'identify-verification-kit-dev' : 'identify-verification-kit'\n\nmodule.exports = {\n  appId,\n  productName,\n  extraMetadata: { name: packageName },\n  artifactName: `${artifactPrefix}-\\${version}-\\${arch}.\\${ext}`,\n  directories: {\n    output: isDev ? 'release/dev' : 'release/prod',\n  },\n  extraResources: [\n    { from: 'src/renderer/public/sam.wasm', to: 'sam.wasm' },\n    { from: 'build-info.json', to: 'build-info.json' },\n  ],\n  win: { icon: 'public/logo-ina.ico' },\n  nsis: {\n    include: 'build/installer.nsh',\n    shortcutName: productName,\n    uninstallDisplayName: `${productName} \\${version}`,\n  },\n}",
+          "description": "Dynamic electron-builder configuration adapting app identifiers, release directories, and bundling extra binary resources.",
+          "language": "javascript"
+        },
+        {
+          "code": "// src/main/load-env.ts\nconst readBuildMode = (): string | undefined => {\n  const candidatePaths = [\n    resolve(process.resourcesPath, 'build-info.json'),\n    resolve(process.cwd(), 'build-info.json'),\n  ]\n\n  for (const candidatePath of candidatePaths) {\n    if (!existsSync(candidatePath)) continue\n    try {\n      const parsed = JSON.parse(readFileSync(candidatePath, 'utf-8')) as { appEnv?: string }\n      if (parsed.appEnv) return parsed.appEnv\n    } catch {\n      continue\n    }\n  }\n  return undefined\n}\n\nexport const resolvedAppEnv =\n  readBuildMode() ??\n  process.env.APP_ENV ??\n  process.env.NODE_ENV ??\n  (process.env.ELECTRON_RENDERER_URL ? 'development' : 'production')\n\nconst isProductionMode = resolvedAppEnv === 'production'\nconst envFileNames = isProductionMode ? ['.env.production', '.env'] : ['.env']\n\nconst envBaseDirs = [\n  process.cwd(),\n  resolve(__dirname, '../../'),\n  resolve(__dirname, '../../../'),\n  process.resourcesPath,\n]\n\nconst envCandidatePaths = envBaseDirs.flatMap((baseDir) =>\n  envFileNames.map((fileName) => resolve(baseDir, fileName))\n)\n\nconst loadedPaths = new Set<string>()\nfor (const envPath of envCandidatePaths) {\n  if (loadedPaths.has(envPath)) continue\n  if (!existsSync(envPath)) continue\n  dotenvConfig({ path: envPath, override: false })\n  loadedPaths.add(envPath)\n}",
+          "description": "Hierarchical runtime environment bootstrapping resolving build mode from packaged assets, cwd, and environment variables.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "scripts/\n  └── build-electron.mjs             # CLI orchestrator emitting build-info.json and executing multi-target builds\nelectron-builder.config.cjs          # Dynamic builder config resolving app ID, release dir, and resource bundling\nsrc/main/\n  └── load-env.ts                    # Cascading runtime environment loader traversing candidate directories",
+      "confidence": 0.95,
+      "considerations": [
+        "build-info.json must be declared as an extraResource in electron-builder so packaged production apps can inspect their build flavor at runtime via process.resourcesPath.",
+        "Candidate paths for .env resolution must prioritize process.cwd() and process.resourcesPath without overwriting already loaded environment keys (override: false).",
+        "Different app IDs (com.identitykit.dashboard.dev vs prod) enable side-by-side installations of development and production builds on client workstations."
+      ],
+      "keyImplementationPoints": [
+        "Compile-time manifest synthesis via build-electron.mjs injecting appEnv into build-info.json.",
+        "Conditional electron-builder target matrix generating parameterized artifact names, release folders, and Windows NSIS uninstaller display names.",
+        "Multi-tiered runtime bootstrapping in load-env.ts checking process.resourcesPath before process.cwd and dotenv cascading."
+      ],
+      "overview": "A multi-flavor DevOps packaging and runtime bootstrapping architecture that parameterizes build targets (development vs production across Windows/Mac/Linux) through a custom build runner script, generates isolated application identifiers, and dynamically resolves cascading environment files at runtime across packaged desktop resource directories.",
+      "purpose": "Enable isolated development and production desktop application binaries to coexist without configuration collision, while maintaining clean environment separation across build-time and runtime.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/electron-vite-configuration-pipeline.md]]",
+        "[[01-Knowledge/patterns/devops/multi-flavor-desktop-packaging.md]]"
+      ],
+      "summary": "Multi-Flavor Build Parameterization and Runtime Environment Bootstrapping Pipeline with isolated product identifiers and cascading dotenv resolution.",
+      "tags": [
+        "devops",
+        "electron",
+        "build-pipeline",
+        "environment-bootstrapping",
+        "electron-builder"
+      ],
+      "title": "Multi-Flavor Build Parameterization and Runtime Environment Bootstrapping Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/shared/admin/types.ts\nexport interface AdminManagementResult {\n  values: AdminRecord[]\n  element_total: number\n  page: number\n  page_total: number\n  first: boolean\n  empty: boolean\n  last: boolean\n}\n\nexport interface AdminManagementResponse {\n  code: number\n  message: string\n  result: AdminManagementResult\n}\n\nexport interface AdminDetailResponse {\n  code: number\n  message: string\n  result: AdminRecord\n}",
+          "description": "Generic response envelope and paginated result contracts.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/main/utils/normalize-face-url.ts\nconst IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || 'http://localhost:8080/storage'\n\nexport const normalizeFaceUrl = (faceUrl: string): string => {\n  if (!faceUrl) return ''\n  if (faceUrl.startsWith('http://') || faceUrl.startsWith('https://')) return faceUrl\n\n  const baseUrl = IMAGE_BASE_URL.replace(/\\/+$/, '')\n  const normalizedPath = faceUrl.startsWith('/') ? faceUrl : `/${faceUrl}`\n\n  return `${baseUrl}${normalizedPath}`\n}",
+          "description": "URL normalizer utility handling relative path canonicalization and trailing slash trimming.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/main/services/admin.service.ts\nexport const AdminService = {\n  management: async (payload: AdminManagementRequest): Promise<AdminManagementResponse> => {\n    try {\n      const response = await axios.get<AdminManagementResponse>(\n        `${API_BASE_URL}${ENDPOINTS.ADMIN.MANAGEMENT}`,\n        {\n          headers: {\n            Authorization: `Bearer ${payload.token}`,\n            ...buildRequestSecurityHeaders({}),\n          },\n          params: {\n            page: Math.max(payload.page - 1, 0),\n            size: payload.size,\n            search: payload.search ?? '',\n            status: payload.status ?? '',\n            order: payload.order ?? 'desc',\n            sortBy: payload.sortBy ?? 'id',\n          },\n          timeout: 15000,\n        },\n      )\n\n      return {\n        ...response.data,\n        result: {\n          ...response.data.result,\n          values: response.data.result.values.map((item) => ({\n            ...item,\n            face_list: item.face_list.map((face) => ({\n              ...face,\n              face: normalizeFaceUrl(face.face),\n            })),\n          })),\n        },\n      }\n    } catch (error) {\n      if (axios.isAxiosError(error)) {\n        const statusCode = error.response?.status\n        const apiMessage =\n          (error.response?.data as { message?: string } | undefined)?.message ||\n          error.message ||\n          'Gagal mengambil data admin'\n\n        throw new Error(\n          statusCode ? `HTTP_STATUS_${statusCode}::${apiMessage}` : apiMessage\n        )\n      }\n      throw error\n    }\n  },\n}",
+          "description": "Main process service intercepting raw backend envelopes and mapping nested biometric asset URLs into canonical addresses.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/\n│   ├── admin/types.ts               # Envelope DTOs, record models, and pagination contracts\n│   └── endpoint.ts                  # Centralized endpoint registry\n└── main/\n    ├── utils/\n    │   └── normalize-face-url.ts    # Biometric asset path normalization utility\n    └── services/\n        └── admin.service.ts         # Service layer executing deep response transformation",
+      "confidence": 0.94,
+      "considerations": [
+        "Prevent double-prefixing by inspecting if the asset URL already begins with http:// or https://.",
+        "Trailing slashes in IMAGE_BASE_URL and leading slashes in relative paths must be sanitized to avoid malformed URL paths.",
+        "Performing URL canonicalization in the Main process shields the Renderer UI components from having to manage backend storage host configurations."
+      ],
+      "keyImplementationPoints": [
+        "Standardized DTO envelope structure ({ code, message, result }) wrapping scalar entities or paginated collections.",
+        "Recursive Main process interceptor traversing nested DTO collections (e.g. values[i].face_list[j].face) to sanitize asset endpoints before IPC return.",
+        "Decoupled storage URL resolution driven by environment variables in the Main process boundary."
+      ],
+      "overview": "A backend envelope DTO handling and recursive biometric asset URL normalization architecture where raw backend DTO envelopes are validated and deeply transformed in the Main process service layer, ensuring the Renderer layer receives fully-qualified, render-ready asset URLs without leaking environment storage configurations to the client.",
+      "purpose": "Standardize data transmission formats and automate the canonicalization of relative biometric media storage paths across nested DTO records.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/generic-api-envelope-dto-handling.md]]",
+        "[[01-Knowledge/patterns/frontend/biometric-asset-url-canonicalization.md]]"
+      ],
+      "summary": "Standardized Response Envelope DTO Architecture with Recursive Biometric Asset URL Normalization in Electron Main Process.",
+      "tags": [
+        "dto-envelope",
+        "normalization",
+        "biometrics",
+        "services",
+        "electron-main"
+      ],
+      "title": "Standardized Response Envelope DTO Architecture with Recursive Biometric Asset URL Normalization"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/shared/report/types.ts\nexport interface ReportExportRequest {\n  from: string\n  to: string\n  period: string\n  token: string\n}\n\nexport interface ReportExportResult {\n  filename: string\n  savedPath: string\n}",
+          "description": "Report export request parameters and native filesystem result schema.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/main/services/report.service.ts\nconst getFilenameFromHeaders = (\n  contentDisposition: string | undefined,\n  contentType: string,\n  payload: ReportExportRequest,\n): string => {\n  const fallbackBaseName = `operator-reports-${payload.from}-to-${payload.to}`\n\n  if (contentDisposition) {\n    // RFC 5987 UTF-8 encoded filename resolution\n    const utf8FilenameMatch = contentDisposition.match(/filename\\*=UTF-8''([^;]+)/i)\n    if (utf8FilenameMatch?.[1]) {\n      return decodeURIComponent(utf8FilenameMatch[1])\n    }\n\n    // Standard RFC 6266 filename resolution\n    const filenameMatch = contentDisposition.match(/filename=\"?([^\";]+)\"?/i)\n    if (filenameMatch?.[1]) {\n      return filenameMatch[1]\n    }\n  }\n\n  if (contentType.includes('csv')) return `${fallbackBaseName}.csv`\n  if (contentType.includes('pdf')) return `${fallbackBaseName}.pdf`\n  return `${fallbackBaseName}.xlsx`\n}\n\nexport const ReportService = {\n  exportOperator: async (payload: ReportExportRequest): Promise<ReportExportResult> => {\n    try {\n      const response = await axios.get<ArrayBuffer>(\n        `${API_BASE_URL}${ENDPOINTS.REPORT.OPERATOR_EXPORT}`,\n        {\n          headers: {\n            Authorization: `Bearer ${payload.token}`,\n            ...buildRequestSecurityHeaders({}),\n          },\n          params: {\n            from: payload.from,\n            to: payload.to,\n            period: payload.period,\n          },\n          responseType: 'arraybuffer',\n          timeout: 30000,\n        },\n      )\n\n      const contentDisposition = response.headers['content-disposition'] as string | undefined\n      const contentType = (response.headers['content-type'] as string | undefined) ?? ''\n      const filename = getFilenameFromHeaders(contentDisposition, contentType, payload)\n      const defaultDirectory = app.getPath('downloads')\n      const defaultPath = path.join(defaultDirectory, filename)\n\n      await writeFile(defaultPath, Buffer.from(response.data))\n\n      return {\n        filename,\n        savedPath: defaultPath,\n      }\n    } catch (error) {\n      if (axios.isAxiosError(error)) {\n        const statusCode = error.response?.status\n        const apiMessage =\n          (error.response?.data as { message?: string } | undefined)?.message ||\n          error.message ||\n          'Gagal mengunduh laporan operator'\n\n        throw new Error(statusCode ? `HTTP_STATUS_${statusCode}::${apiMessage}` : apiMessage)\n      }\n      throw error\n    }\n  },\n}",
+          "description": "Binary arraybuffer streaming, RFC 5987/6266 header parsing, and direct OS filesystem export pipeline.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/\n│   └── report/types.ts              # Data contracts for binary export parameters and output path\n└── main/\n    ├── services/\n    │   └── report.service.ts        # Binary stream requester, MIME/Header parser, and FS writer\n    └── handlers/\n        └── report.handler.ts        # IPC invocation delegator returning local file metadata",
+      "confidence": 0.93,
+      "considerations": [
+        "ArrayBuffer responseType must be set in Axios to avoid UTF-8 string conversion corrupting binary spreadsheets or PDF files.",
+        "Content-Disposition header parsing must support RFC 5987 percent-encoded UTF-8 filenames (filename*=UTF-8'') before standard quotes filename= attributes.",
+        "Writing directly to native OS downloads path via app.getPath('downloads') avoids renderer memory exhaustion and bypasses browser download dialog restrictions."
+      ],
+      "keyImplementationPoints": [
+        "Binary streaming via Axios ArrayBuffer with expanded timeout for large data exports.",
+        "Dual-format RFC 5987 / RFC 6266 Content-Disposition header regex parsing with MIME-type fallback.",
+        "Atomic persistence to native OS user directories (app.getPath('downloads')) using Node.js fs/promises."
+      ],
+      "overview": "A native binary stream exfiltration and local persistence service pattern that fetches large binary report payloads in the Main process via ArrayBuffer, dynamically resolves server-specified filenames using RFC-5987/6266 Content-Disposition headers with MIME-type fallbacks, and writes directly to native OS directories.",
+      "purpose": "Streamline document and audit report exports to user download directories while preventing memory bottlenecks and binary corruption in the web renderer.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/electron-binary-stream-file-writer.md]]",
+        "[[01-Knowledge/patterns/frontend/rfc-content-disposition-parser.md]]"
+      ],
+      "summary": "Native Binary Stream Exfiltration with RFC-Compliant Content-Disposition Filename Resolution and Local Disk Persistence.",
+      "tags": [
+        "binary-stream",
+        "file-export",
+        "content-disposition",
+        "electron-main",
+        "report-service"
+      ],
+      "title": "Native Binary Stream Exfiltration with RFC-Compliant Content-Disposition Filename Resolution"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/lib/validate-image-dimension.ts\nexport interface ImageDimensionConstraint {\n  minWidth: number\n  minHeight: number\n  maxWidth: number\n  maxHeight: number\n}\n\nexport const validateImageDimension = (\n  imageSrc: string,\n  constraint: ImageDimensionConstraint\n): Promise<boolean> =>\n  new Promise((resolve) => {\n    const img = new Image()\n    img.onload = () => {\n      const isValidDimension =\n        img.width >= constraint.minWidth &&\n        img.height >= constraint.minHeight &&\n        img.width <= constraint.maxWidth &&\n        img.height <= constraint.maxHeight\n      resolve(isValidDimension)\n    }\n    img.onerror = () => resolve(false)\n    img.src = imageSrc\n  })",
+          "description": "Asynchronous offscreen image dimension and aspect constraint validator.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n└── renderer/\n    └── src/\n        └── lib/\n            └── validate-image-dimension.ts   # Offscreen image validator enforcing biometric bounds",
+      "confidence": 0.92,
+      "considerations": [
+        "Image dimensions must be verified asynchronously before base64 serialization to prevent CPU-intensive canvas processing of out-of-spec media.",
+        "If imageSrc is an ObjectURL generated via URL.createObjectURL(file), the caller must ensure URL.revokeObjectURL(url) is invoked after resolution to prevent WebKit heap leaks."
+      ],
+      "keyImplementationPoints": [
+        "Offscreen Image DOM element instantiation for non-blocking dimension pre-flight checks.",
+        "Bounding box boundary check (minWidth, minHeight, maxWidth, maxHeight) matching face biometric ingestion standards.",
+        "Graceful failure resolution on image load error or corrupted image data."
+      ],
+      "overview": "A client-side image dimension pre-flight validation utility that uses offscreen HTMLImageElement instances to asynchronously verify resolution constraints prior to biometric upload, preventing unnecessary network traffic and backend rejections.",
+      "purpose": "Prevent malformed, oversized, or unparseable face image assets from entering the IPC transmission and backend AI processing pipeline.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/client-side-image-dimension-validator.md]]",
+        "[[01-Knowledge/patterns/frontend/biometric-pre-flight-verification.md]]"
+      ],
+      "summary": "Client-Side Visual Asset Dimension Pre-Flight Validation with Memory Lifecycle Management.",
+      "tags": [
+        "image-validation",
+        "biometrics",
+        "pre-flight",
+        "renderer",
+        "memory-management"
+      ],
+      "title": "Client-Side Visual Asset Dimension Pre-Flight Validation with Memory Lifecycle Management"
+    }
+  ]
+}

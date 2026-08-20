@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T04:07:05.097Z",
+  "harvestId": "harvest-1787112360086-3c0f5be1",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/identity-kit-dashboard-web",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/identity-kit-dashboard-web",
+    "packageName": "identify-verification-kit",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@base-ui/react",
+      "@electron-toolkit/preload",
+      "@electron-toolkit/utils",
+      "@hookform/resolvers",
+      "@innovatrics/dot-face-auto-capture",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@tiptap/extension-image",
+      "@tiptap/extension-link",
+      "@tiptap/extension-underline",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "iconsax-reactjs",
+      "input-otp",
+      "leaflet",
+      "leaflet-draw",
+      "leaflet.fullscreen",
+      "leaflet.markercluster",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "pako",
+      "radix-ui",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-leaflet",
+      "react-leaflet-markercluster",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "sonner",
+      "tailwind-merge",
+      "tailwindcss",
+      "vaul",
+      "ws",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/geojson",
+      "@types/leaflet",
+      "@types/leaflet-draw",
+      "@types/leaflet.markercluster",
+      "@types/node",
+      "@types/pako",
+      "@types/react",
+      "@types/react-dom",
+      "@types/ws",
+      "@vitejs/plugin-react",
+      "electron",
+      "electron-builder",
+      "electron-vite",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "shadcn",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "dev:renderer",
+      "dev:electron",
+      "start",
+      "build",
+      "build:renderer",
+      "build:electron",
+      "build:win:dev",
+      "build:win:prod",
+      "build:mac:dev",
+      "build:mac:prod",
+      "build:linux:dev",
+      "build:linux:prod",
+      "build:win",
+      "build:mac",
+      "build:linux",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/main/handlers/auth.handler.ts",
+          "src/main/ipc/auth.ipc.ts",
+          "src/main/services/auth.service.ts",
+          "src/preload/modules/auth.ts",
+          "src/renderer/src/assets/ic_passport.png",
+          "src/renderer/src/lib/clear-auth-session.ts",
+          "src/renderer/src/lib/invoke-ipc-with-auth-handling.ts",
+          "src/shared/auth",
+          "src/shared/auth/channels.ts",
+          "src/shared/auth/roles.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/main/handlers",
+          "src/main/handlers/admin.handler.ts",
+          "src/main/handlers/auth.handler.ts",
+          "src/main/handlers/broadcast.handler.ts",
+          "src/main/handlers/device.handler.ts",
+          "src/main/handlers/division.handler.ts",
+          "src/main/handlers/history.handler.ts",
+          "src/main/handlers/license.handler.ts",
+          "src/main/handlers/log-activity.handler.ts",
+          "src/main/handlers/operator.handler.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/shared/auth/schema.ts"
+        ]
+      },
+      "structure": {
+        "style": "Modular Architecture",
+        "totalFilesScanned": 210,
+        "sampleDirectories": [
+          "out",
+          "out/main",
+          "out/preload",
+          "public",
+          "scripts",
+          "src",
+          "src/main",
+          "src/main/handlers",
+          "src/main/ipc",
+          "src/main/services",
+          "src/main/utils",
+          "src/preload",
+          "src/preload/modules",
+          "src/renderer",
+          "src/renderer/public"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// 1. src/shared/auth/channels.ts\nexport const AUTH_IPC_CHANNELS = {\n  LOGIN: 'auth:login',\n} as const\n\n// 2. src/main/ipc/auth.ipc.ts\nimport { ipcMain } from 'electron'\nimport { AuthHandler } from '../handlers/auth.handler'\nimport { AUTH_IPC_CHANNELS } from 'src/shared/auth/channels'\n\nexport function registerAuthIpcHandlers(): void {\n  ipcMain.handle(AUTH_IPC_CHANNELS.LOGIN, AuthHandler.login)\n}\n\nexport function unregisterAuthIpcHandlers(): void {\n  ipcMain.removeHandler(AUTH_IPC_CHANNELS.LOGIN)\n}\n\n// 3. src/preload/index.ts\nimport { contextBridge } from 'electron'\nimport { authApi } from './modules/auth'\n\nconst api = {\n  auth: authApi,\n  // other modules...\n}\n\nif (process.contextIsolated) {\n  contextBridge.exposeInMainWorld('api', api)\n}",
+          "description": "4-tier contract-driven IPC registration and exposure mechanism in Electron",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/         # Single source of truth for channel constants, request/response DTOs\n├── main/\n│   ├── ipc/        # ipcMain.handle / removeHandler registrations\n│   ├── handlers/   # Payload unwrapping and routing\n│   └── services/   # Node-level Axios/HTTP business logic\n├── preload/\n│   ├── modules/    # Typed invoke wrappers using ipcRenderer.invoke\n│   └── index.ts    # contextBridge.exposeInMainWorld('api', api)\n└── renderer/\n    └── src/services/ # UI service callers invoking window.api",
+      "confidence": 0.95,
+      "considerations": [
+        "Ensure all IPC channels are defined with `as const` to prevent runtime typos and preserve TypeScript type narrowing.",
+        "Always clean up IPC handlers with `removeHandler` during window or app lifecycle teardowns to prevent memory leaks and duplicate handler registrations.",
+        "Never expose raw `ipcRenderer` to renderer context; strictly expose explicit typed domain modules."
+      ],
+      "keyImplementationPoints": [
+        "Define shared channel constants using `as const` under `src/shared/<module>/channels.ts`.",
+        "Implement modular IPC registration functions (`register*IpcHandlers` & `unregister*IpcHandlers`).",
+        "Bridge methods safely via `contextBridge.exposeInMainWorld` in `src/preload/index.ts` with context isolation checks.",
+        "Call `window.api.<module>.<method>` through typed renderer services."
+      ],
+      "overview": "A strict 4-tier IPC architecture separating channel contracts, Electron main handlers, preload context bridges, and UI service invocations with end-to-end TypeScript types.",
+      "purpose": "Guarantees compile-time type safety across Electron process boundaries while preserving context isolation and preventing UI access to Node.js internals.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/concepts/electron-ipc-architecture.md]]",
+        "[[01-Knowledge/patterns/security/context-isolation-best-practices.md]]"
+      ],
+      "summary": "End-to-end type-safe multi-process IPC bridging architecture ensuring context isolation and preventing contract drift between Electron main and renderer processes.",
+      "tags": [
+        "electron",
+        "ipc",
+        "typescript",
+        "security",
+        "architecture"
+      ],
+      "title": "Strict End-to-End Type-Safe Multi-Process IPC Bridge"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/utils/request-signature.ts\nimport { createHash } from 'node:crypto'\n\nconst mapBodyToSignatureString = (body: unknown, parentKey = ''): string => {\n  if (!body || typeof body !== 'object' || Array.isArray(body)) return ''\n\n  const entries = Object.entries(body as Record<string, unknown>)\n    .sort(([a], [b]) => a.localeCompare(b))\n\n  let keys = ''\n\n  for (const [key, value] of entries) {\n    const finalKey = parentKey ? `${parentKey}.${key}` : key\n\n    if (Array.isArray(value)) {\n      keys += finalKey\n      continue\n    }\n\n    if (value && typeof value === 'object') {\n      keys += mapBodyToSignatureString(value, finalKey)\n      continue\n    }\n\n    keys += `${finalKey}${String(value ?? '')}`\n  }\n\n  return keys\n}\n\nexport const buildRequestSecurityHeaders = (\n  payload: Record<string, unknown>,\n  email = '0'\n): Record<'timestamp' | 'email' | 'sig', string> => {\n  const timestamp = Date.now()\n  const signaturePayload = {\n    ...payload,\n    timestamp,\n    email: payload.email ?? email,\n  }\n  const keys = mapBodyToSignatureString(signaturePayload)\n  const sig = createHash('sha1').update(keys).digest('hex')\n\n  return {\n    timestamp: String(timestamp),\n    email,\n    sig,\n  }\n}",
+          "description": "Deterministic request payload canonicalization and SHA-1 signature generation for API security",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/main/\n├── utils/\n│   └── request-signature.ts # Canonicalization & signature generator\n└── services/\n    └── *.service.ts        # Injects timestamp, email, and sig into Axios request headers",
+      "confidence": 0.95,
+      "considerations": [
+        "Keys must be strictly sorted alphabetically at all nesting levels to maintain deterministic hashing across client and backend.",
+        "Array values append key names without indexing; nested objects are traversed recursively.",
+        "Timestamp header prevents replay attacks within the backend validity window."
+      ],
+      "keyImplementationPoints": [
+        "Recursive alphabetical key sorting (`sort(([a], [b]) => a.localeCompare(b))`).",
+        "Deterministic string flattening handling nested objects, arrays, and primitive values.",
+        "SHA-1 digest computation over concatenated keys with synchronous timestamp and identity metadata.",
+        "Centralized injection into Axios headers via `buildRequestSecurityHeaders`."
+      ],
+      "overview": "Deterministic payload canonicalization and cryptographic hash generation executed in the Electron main process prior to dispatching outbound HTTP requests.",
+      "purpose": "Protects backend REST endpoints from payload tampering, parameter pollution, and replay attacks originating from client-side requests.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/security/api-request-signing.md]]",
+        "[[01-Knowledge/concepts/hmac-canonicalization.md]]"
+      ],
+      "summary": "Outbound request signature pipeline that deterministically flattens and hashes payloads with timestamps to prevent API tampering and replay attacks.",
+      "tags": [
+        "security",
+        "cryptography",
+        "api-signing",
+        "electron-main"
+      ],
+      "title": "Automated Request Canonicalization & Cryptographic Signature Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/lib/invoke-ipc-with-auth-handling.ts\nimport { clearAuthSession } from './clear-auth-session'\nimport { IpcServiceError } from './ipc-service-error'\nimport { extractIpcErrorStatusCode, normalizeIpcErrorMessage } from './normalize-ipc-error-message'\nimport { toast } from 'sonner'\n\ninterface InvokeIpcWithAuthHandlingOptions {\n  methodName: string\n  fallbackMessage: string\n  treatUnauthorizedAsSessionExpired?: boolean\n}\n\nconst SESSION_EXPIRED_MESSAGE = 'Sesi login telah berakhir. Silakan login kembali.'\nconst SESSION_EXPIRED_TOAST_COOLDOWN_MS = 3000\nlet lastSessionExpiredToastAt = 0\n\nexport const invokeIpcWithAuthHandling = async <T>(\n  action: () => Promise<T>,\n  options: InvokeIpcWithAuthHandlingOptions\n): Promise<T> => {\n  try {\n    return await action()\n  } catch (error) {\n    const statusCode = extractIpcErrorStatusCode(error, { methodName: options.methodName })\n    const shouldHandle401AsSessionExpired = options.treatUnauthorizedAsSessionExpired ?? true\n\n    if (statusCode === 401 && shouldHandle401AsSessionExpired) {\n      clearAuthSession()\n      const now = Date.now()\n      if (now - lastSessionExpiredToastAt > SESSION_EXPIRED_TOAST_COOLDOWN_MS) {\n        lastSessionExpiredToastAt = now\n        toast.error(SESSION_EXPIRED_MESSAGE)\n      }\n      throw new IpcServiceError(SESSION_EXPIRED_MESSAGE, 401)\n    }\n\n    throw new IpcServiceError(\n      normalizeIpcErrorMessage(error, {\n        methodName: options.methodName,\n        fallbackMessage: options.fallbackMessage,\n      }),\n      statusCode ?? undefined\n    )\n  }\n}",
+          "description": "Centralized IPC error handler with 401 interceptor, toast cooldown, and session cleanup",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/lib/\n├── clear-auth-session.ts          # Removes auth tokens and redirects\n├── ipc-service-error.ts           # Custom error class with HTTP status code\n├── normalize-ipc-error-message.ts # Parses IPC error serialization strings (e.g. HTTP_STATUS_401::...)\n└── invoke-ipc-with-auth-handling.ts # Higher-order execution wrapper for all IPC calls",
+      "confidence": 0.95,
+      "considerations": [
+        "Requires main-process services to serialize status codes in a known prefix format (`HTTP_STATUS_${status}::${message}`).",
+        "Toast cooldown window (3000ms) prevents UI jitter and toast storming when multiple parallel queries fail with 401 simultaneously.",
+        "Throws structured `IpcServiceError` allowing downstream React Query hooks to selectively suppress alerts for already-handled status codes."
+      ],
+      "keyImplementationPoints": [
+        "Extracts HTTP status codes across serialized Electron IPC error strings.",
+        "Automatically invokes `clearAuthSession()` on 401 Unauthorized responses.",
+        "Rate-limits expired session toast notifications via a timestamp cooldown guard.",
+        "Normalizes raw errors into strongly-typed `IpcServiceError` instances."
+      ],
+      "overview": "A centralized IPC invocation wrapper in the renderer process that intercepts unauthorized status codes, clears authentication credentials, rate-limits error toasts, and normalizes error messages.",
+      "purpose": "Provides seamless authentication session expiration handling, prevents duplicate error toasts across concurrent queries, and standardizes error representation across the UI.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/error-handling/ipc-error-normalization.md]]",
+        "[[01-Knowledge/patterns/auth/session-expiration-handling.md]]"
+      ],
+      "summary": "Centralized IPC error handler and auth session gate with status code extraction, rate-limited toast alerts, and automatic credential cleanup.",
+      "tags": [
+        "error-handling",
+        "auth",
+        "session-management",
+        "toast-cooldown"
+      ],
+      "title": "Centralized IPC Error Normalization & Auth Session Expiration Gate"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/pages/Device/hooks/useDeviceManagementState.ts\nexport const useDeviceManagementState = () => {\n  const queryClient = useQueryClient()\n  const [filter, setFilter] = useState<IDeviceManagementFilter>({\n    page: 1,\n    size: 10,\n    search: '',\n    status: '',\n    available: '',\n    divisionCode: '',\n  })\n\n  const { data, isLoading, error } = useQuery({\n    queryKey: ['device-list', filter.page, filter.size, filter.search, filter.status, filter.available, filter.divisionCode],\n    queryFn: () =>\n      DeviceService.page({\n        page: filter.page,\n        size: filter.size,\n        search: filter.search,\n        status: filter.status,\n        available: filter.available,\n        order: 'desc',\n        sortBy: 'id',\n        divisionCode: filter.divisionCode,\n      }),\n    refetchOnMount: 'always',\n    refetchInterval: 10000,\n    refetchOnWindowFocus: true,\n  })\n\n  useEffect(() => {\n    if (!error) return\n    if (error instanceof IpcServiceError && error.statusCode === 401) return\n    toast.error(error instanceof Error ? error.message : 'Gagal mengambil data perangkat')\n  }, [error])\n\n  const paginatedData = useMemo(() => {\n    const values = data?.result?.values ?? []\n    return values.map((item) => ({\n      code: item.code,\n      hwid: item.hwid,\n      serialNumber: item.serial_number,\n      status: item.is_active ? 'active' : 'inactive',\n    }))\n  }, [data?.result?.values])\n\n  return {\n    filter,\n    isLoading,\n    paginatedData,\n    setPage: (page: number) => setFilter(prev => ({ ...prev, page: Math.max(page, 1) })),\n    setSearch: (search: string) => setFilter(prev => ({ ...prev, search, page: 1 })),\n  }\n}",
+          "description": "Headless page state hook with TanStack Query, filter derivation, polling, and memoized transformation",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/pages/<Feature>/\n├── index.tsx                     # Declarative view container\n├── components/                   # Pure UI presentation components\n├── hooks/\n│   └── use<Feature>State.ts     # Headless query, mutation, filter, and pagination coordinator\n└── data/\n    └── index.ts                  # Local UI view model types",
+      "confidence": 0.92,
+      "considerations": [
+        "Keep query keys fully exhaustive with all active filter variables to guarantee proper cache invalidation on filter change.",
+        "Always ignore 401 errors in page-level error `useEffect` since they are globally handled by the IPC auth interceptor.",
+        "Transform server DTOs into clean view models via `useMemo` to shield UI presentation components from backend schema changes."
+      ],
+      "keyImplementationPoints": [
+        "Encapsulates all TanStack Query logic (`useQuery`, `useMutation`, `useQueryClient`) in a dedicated feature hook.",
+        "Synchronizes multi-parameter filter state with automatic reset to page 1 on search/filter updates.",
+        "Implements background polling (`refetchInterval`) for near-real-time dashboard status.",
+        "Transforms raw backend DTO payloads into memoized UI presentation models (`paginatedData`)."
+      ],
+      "overview": "Decoupled page architecture where all asynchronous data fetching, mutation lifecycles, filter parameters, and view transformations are managed inside headless custom hooks.",
+      "purpose": "Separates business and network logic from React rendering, ensuring testability, maintainability, and clean UI components.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/headless-state-management.md]]",
+        "[[01-Knowledge/patterns/frontend/tanstack-query-patterns.md]]"
+      ],
+      "summary": "Headless page-level state management pattern integrating TanStack Query, filter synchronization, memoized transformations, and error boundary suppression.",
+      "tags": [
+        "react",
+        "tanstack-query",
+        "custom-hooks",
+        "state-management"
+      ],
+      "title": "Headless Page-Level Reactive State & Query Orchestration"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/preload/index.ts\nconst getFaceCaptureWasmUrl = (): string => {\n  if (window.location.protocol !== 'file:') {\n    return '/sam.wasm'\n  }\n\n  return 'app-resource://sam.wasm'\n}\n\nconst extendedElectronApi = {\n  ...electronAPI,\n  ...wsApi,\n  getFaceCaptureWasmUrl\n}\n\nif (process.contextIsolated) {\n  contextBridge.exposeInMainWorld('electron', extendedElectronApi)\n}",
+          "description": "Protocol-aware WASM asset locator bridge for desktop and web runtime environments",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "public/\n└── sam.wasm                   # Biometric WASM binary engine\nsrc/\n├── preload/\n│   └── index.ts              # Protocol-aware WASM URL resolver\n└── renderer/\n    └── src/lib/              # Face & biometric verification services consuming window.electron.getFaceCaptureWasmUrl()",
+      "confidence": 0.9,
+      "considerations": [
+        "Packaged Electron applications serving content from `file://` must route heavy binary assets through registered custom protocols (`app-resource://`) to bypass CSP and origin restrictions.",
+        "Development mode under Vite dev server continues to serve the WASM file directly from root (`/sam.wasm`)."
+      ],
+      "keyImplementationPoints": [
+        "Detects execution protocol (`window.location.protocol !== 'file:'`).",
+        "Routes to custom Electron resource protocol scheme (`app-resource://`) in production packages.",
+        "Exposes helper method securely via Preload Context Bridge without exposing file system paths."
+      ],
+      "overview": "Dual-mode protocol resolution mechanism for loading large WebAssembly biometric models seamlessly across both Vite development servers and packaged Electron applications.",
+      "purpose": "Eliminates origin, CORS, and local file scheme restrictions when initializing heavy biometric WASM modules in desktop environments.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/electron/custom-protocols-asset-loading.md]]",
+        "[[01-Knowledge/concepts/wasm-biometrics-integration.md]]"
+      ],
+      "summary": "Protocol-aware WASM asset loader resolving binaries via custom app protocols in Electron packages and standard paths in web dev servers.",
+      "tags": [
+        "electron",
+        "wasm",
+        "biometrics",
+        "protocol-handling"
+      ],
+      "title": "Native WASM Biometric Asset Loading & Protocol Isolation"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/preload/modules/ws.ts\nimport { ipcRenderer } from 'electron'\nimport { WS_IPC_CHANNELS } from 'src/shared/ws/channels'\n\nexport const wsApi = {\n  onWsMessage: (callback: (data: unknown) => void) => {\n    const subscription = (_event: Electron.IpcRendererEvent, value: unknown) => callback(value)\n    ipcRenderer.on(WS_IPC_CHANNELS.MESSAGE, subscription)\n    return () => {\n      ipcRenderer.removeListener(WS_IPC_CHANNELS.MESSAGE, subscription)\n    }\n  },\n  sendWsMessage: (data: unknown) => {\n    ipcRenderer.send(WS_IPC_CHANNELS.SEND, data)\n  }\n}",
+          "description": "Preload IPC listener and sender bridge for main-process WebSocket events with auto-cleanup subscription",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/ws/channels.ts      # WebSocket IPC channel contracts\n├── main/\n│   ├── services/ws.service.ts # Persistent Node.js WebSocket client lifecycle\n│   └── handlers/ws.handler.ts # Relays socket frames to renderer via webContents.send\n└── preload/modules/ws.ts      # Exposes subscription callback with unlistener closure",
+      "confidence": 0.9,
+      "considerations": [
+        "Always return an unsubscription cleanup function from listener attachments to avoid dangling listeners on React component unmount.",
+        "Hosting WebSocket connections in the main process keeps the connection alive across page navigations and window reloads."
+      ],
+      "keyImplementationPoints": [
+        "Node.js WebSocket client managed entirely in Electron main process.",
+        "Dispatches incoming frames to renderer windows via `webContents.send(WS_IPC_CHANNELS.MESSAGE, data)`.",
+        "Preload module provides a clean subscription function returning a cleanup closure."
+      ],
+      "overview": "A persistent WebSocket connection maintained in Electron's Node.js main process that relays real-time messages and device events to renderer windows via IPC.",
+      "purpose": "Ensures resilient real-time socket connections that survive renderer window reloads, navigation, and view unmounts.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/electron/main-process-websocket-relay.md]]",
+        "[[01-Knowledge/patterns/realtime/ipc-event-broadcasting.md]]"
+      ],
+      "summary": "Main-process hosted WebSocket relay pattern bridging socket network events to renderer views through typed IPC channels with subscription cleanup.",
+      "tags": [
+        "electron",
+        "websocket",
+        "realtime",
+        "ipc"
+      ],
+      "title": "Main-Process WebSocket Relay & IPC Event Multiplexer"
+    }
+  ]
+}

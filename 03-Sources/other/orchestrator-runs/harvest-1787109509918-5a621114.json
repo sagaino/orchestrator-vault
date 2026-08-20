@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:19:19.540Z",
+  "harvestId": "harvest-1787109509918-5a621114",
+  "type": "codebase-harvest",
+  "domain": "backend",
+  "repositoryPath": "/Users/sagaino/belajar/base-be-golang",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/belajar/base-be-golang",
+    "packageName": "base-be-golang",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "pkg/middleware/session-user.go"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "internal/constant/errors.go",
+          "pkg/localerror",
+          "pkg/localerror/util.go",
+          "pkg/mapper/errors.go",
+          "pkg/middleware",
+          "pkg/middleware/cors.go",
+          "pkg/middleware/custom-translation-validator.go",
+          "pkg/middleware/custome-validation.go",
+          "pkg/middleware/dto.go",
+          "pkg/middleware/idempotent.go"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "pkg/db",
+          "pkg/db/db-custome.go",
+          "pkg/db/dbtransaction.go",
+          "pkg/db/default.go",
+          "pkg/db/dto.go",
+          "pkg/db/generic_repository.go"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 96,
+        "sampleDirectories": [
+          ".opencode",
+          ".opencode/plugins",
+          "cmd",
+          "cmd/api",
+          "internal",
+          "internal/constant",
+          "pkg",
+          "pkg/cache",
+          "pkg/clock",
+          "pkg/davinci",
+          "pkg/db",
+          "pkg/environment",
+          "pkg/inetproto",
+          "pkg/localerror",
+          "pkg/localize"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 469,
+      "linkCount": 748
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "package db\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"reflect\"\n\t\"strings\"\n\t\"gorm.io/gorm\"\n\t\"gorm.io/gorm/clause\"\n\t\"gorm.io/gorm/schema\"\n)\n\ntype GenericRepository[T schema.Tabler] struct {\n\tdb    *gorm.DB\n\tmodel T\n}\n\nfunc NewGenericeRepoPointr[T schema.Tabler](db *gorm.DB, model T) *GenericRepository[T] {\n\treturn &GenericRepository[T]{\n\t\tdb:    db,\n\t\tmodel: model,\n\t}\n}\n\nfunc (repo GenericRepository[T]) FindOneByIDSelection(\n\tctx context.Context,\n\tentity interface{},\n\tid interface{},\n) error {\n\tselection, err := repo.extractSelection(entity)\n\tif err != nil {\n\t\treturn err\n\t}\n\n\treturn repo.db.WithContext(ctx).\n\t\tTable(repo.model.TableName()).\n\t\tSelect(selection).\n\t\tFirst(entity, \"id = ?\", id).Error\n}\n",
+          "description": "Type-safe generic repository implementation with dynamic reflection-based column selection in GORM",
+          "language": "go"
+        },
+        {
+          "code": "var (\n\tSearch = func(val string, col ...string) clause.Expression {\n\t\tvar exps = make([]clause.Expression, len(col))\n\t\tfor i, c := range col {\n\t\t\ttableName, colName := getColNameStr(c)\n\t\t\texps[i] = clause.Like{\n\t\t\t\tColumn: clause.Column{Name: colName, Table: tableName},\n\t\t\t\tValue:  \"%\" + val + \"%\",\n\t\t\t}\n\t\t}\n\t\treturn clause.Or(exps...)\n\t}\n\n\tEqual = func(val interface{}, col string) clause.Expression {\n\t\ttableName, colName := getColNameStr(col)\n\t\treturn clause.Eq{\n\t\t\tColumn: clause.Column{Name: colName, Table: tableName},\n\t\t\tValue:  val,\n\t\t}\n\t}\n)\n",
+          "description": "Reusable AST clause expression builders for composable and parameterized queries",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/generic_repository.go defines GenericRepository[T schema.Tabler], AST expression helpers (Search, Equal, InArray, ExpressionDateRange), and reflection struct extractors.",
+      "confidence": 0.95,
+      "considerations": [
+        "Requires struct tags with gorm:\"column:...\" for dynamic column projections",
+        "All repository methods receive context.Context for cancellation and timeout propagation",
+        "Clause expressions use parameter binding to prevent SQL injection"
+      ],
+      "keyImplementationPoints": [
+        "Go generics constraint on schema.Tabler interface ensuring compile-time safety",
+        "Parameterized AST clause expressions to prevent SQL injection and enable composable queries",
+        "Dynamic reflection projection via extractSelection to fetch only requested columns"
+      ],
+      "overview": "Generic repository pattern for GORM leveraging Go 1.18+ type parameters to provide type-safe CRUD, dynamic expression building, and reflection-based selective field loading.",
+      "purpose": "Provide a centralized, reusable, and type-safe data access layer that eliminates boilerplate CRUD while retaining fine-grained query control.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/declarative-multi-repository-unit-of-work-transaction-coordinator.md",
+        "01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md"
+      ],
+      "summary": "Type-safe generic repository abstraction with dynamic GORM expression builders and reflection-driven column projections.",
+      "tags": [
+        "pattern",
+        "backend",
+        "golang",
+        "gorm",
+        "generic",
+        "repository",
+        "database",
+        "orm"
+      ],
+      "title": "Go GORM Generic Repository & Dynamic Expression Builder Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package db\n\nimport (\n\t\"gorm.io/gorm\"\n)\n\ntype BaseRepository interface {\n\tSetupConnection(db *gorm.DB)\n}\n\ntype DBTransaction struct {\n\tdb    *gorm.DB\n\trepos []BaseRepository\n}\n\nfunc NewDBTransaction(db *gorm.DB, repos ...BaseRepository) DBTransaction {\n\tresult := DBTransaction{\n\t\tdb:    db,\n\t\trepos: make([]BaseRepository, 0),\n\t}\n\tfor _, repo := range repos {\n\t\tresult.repos = append(result.repos, repo)\n\t}\n\treturn result\n}\n\nfunc (main *DBTransaction) Begin() {\n\ttx := main.db.Begin()\n\tfor _, rp := range main.repos {\n\t\trp.SetupConnection(tx)\n\t}\n\tmain.db = tx\n}\n\nfunc (main *DBTransaction) End(err error) error {\n\tif err != nil {\n\t\tif errTrx := main.db.Rollback().Error; errTrx != nil {\n\t\t\treturn errTrx\n\t\t}\n\t\treturn nil\n\t}\n\treturn main.db.Commit().Error\n}\n",
+          "description": "Multi-repository unit-of-work transaction coordinator in Go GORM",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/db/dbTransaction.go provides DBTransaction struct and BaseRepository interface.",
+      "confidence": 0.92,
+      "considerations": [
+        "Repositories must implement BaseRepository.SetupConnection to swap the active GORM session instance",
+        "Always handle deferred rollback/commit with defer trx.End(err) to prevent hanging transactions"
+      ],
+      "keyImplementationPoints": [
+        "Decoupled transaction management from business usecase layer",
+        "Transparent DB session switching across multiple participating repositories",
+        "Atomic rollback or commit via unified End(err) method"
+      ],
+      "overview": "Declarative unit-of-work transaction manager that coordinates multiple repositories within an atomic GORM transaction.",
+      "purpose": "Coordinate atomic operations spanning multiple separate repository instances without leaking transaction handle objects directly into business domain logic.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/go-gorm-generic-repository-dynamic-expression-builder-pattern.md"
+      ],
+      "summary": "Declarative Multi-Repository Unit-of-Work Transaction Coordinator managing GORM transactions across distinct repositories.",
+      "tags": [
+        "pattern",
+        "backend",
+        "golang",
+        "database",
+        "transaction",
+        "gorm",
+        "unit-of-work"
+      ],
+      "title": "Declarative Multi-Repository Unit-of-Work Transaction Coordinator"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package localerror\n\nimport (\n\t\"base-be-golang/pkg/logger\"\n\t\"errors\"\n\t\"gorm.io/gorm\"\n)\n\ntype InvalidDataError struct {\n\tMsg             string\n\tDataToTemplated map[string]string\n}\n\nfunc (e InvalidDataError) Error() string { return e.Msg }\n\ntype AccessControlError struct {\n\tMsg string\n}\n\nfunc (e AccessControlError) Error() string { return e.Msg }\n\nfunc IsInvalidData(err error) bool {\n\treturn err != nil && errors.As(err, &InvalidDataError{})\n}\n\nfunc IsAccessNotAllowedUserNotFound(err error) bool {\n\treturn err != nil && errors.Is(err, AccessControlError{Msg: \"SessionExpired\"})\n}\n",
+          "description": "Domain error classification with typed errors and semantic predicate helpers",
+          "language": "go"
+        },
+        {
+          "code": "package payload\n\ntype ResponseMeta struct {\n\tSuccess      bool   `json:\"success\"`\n\tMessageTitle string `json:\"messageTitle\"`\n\tMessage      string `json:\"message\"`\n\tErrorServer  string `json:\"errorServer,omitempty\"`\n}\n\ntype ErrorResponse struct {\n\tResponseMeta\n\tData   any `json:\"data\"`\n\tErrors any `json:\"errors,omitempty\"`\n}\n\nfunc DefaultDataInvalidResponse(validationErrors any) *ErrorResponse {\n\treturn &ErrorResponse{\n\t\tResponseMeta: ResponseMeta{\n\t\t\tMessageTitle: \"Oops, something went wrong.\",\n\t\t\tMessage:      \"Data invalid.\",\n\t\t},\n\t\tErrors: validationErrors,\n\t}\n}\n",
+          "description": "Standardized API envelope formatting for error and validation responses",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "pkg/localerror/util.go, pkg/middleware/custom-translation-validator.go, and shared/payload/response.go define error classification, validator translations, and HTTP response envelopes.",
+      "confidence": 0.9,
+      "considerations": [
+        "Use errors.As and errors.Is for safe error inspection across wrapped call stacks",
+        "Avoid leaking sensitive internal database errors in public JSON responses"
+      ],
+      "keyImplementationPoints": [
+        "Strongly-typed custom domain errors for data validation, access control, and internal faults",
+        "Translation override integration with go-playground/validator for localized field error messages",
+        "Consistent JSON response envelope containing meta, data, and granular field error arrays"
+      ],
+      "overview": "Hierarchical error handling and validation architecture combining custom domain error types, localized validator messages, and uniform JSON response envelopes.",
+      "purpose": "Provide predictable, typed, and localized error responses across all API endpoints while shielding internal system details from clients.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/go-gorm-generic-repository-dynamic-expression-builder-pattern.md"
+      ],
+      "summary": "Domain error classification, custom validation translation, and standardized HTTP response envelopes in Go.",
+      "tags": [
+        "pattern",
+        "backend",
+        "golang",
+        "error-handling",
+        "validation",
+        "i18n",
+        "api"
+      ],
+      "title": "Structured Domain Error Hierarchy & Response Mapping Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "package api\n\nimport (\n\t\"base-be-golang/pkg/cache\"\n\t\"base-be-golang/pkg/logger\"\n\t\"base-be-golang/pkg/miniostorage\"\n\t\"os\"\n\t\"github.com/gin-gonic/gin\"\n\t\"gorm.io/gorm\"\n)\n\ntype Router interface {\n\tRoute(handler *gin.RouterGroup)\n}\n\ntype Api struct {\n\tserver   *gin.Engine\n\tdb       *gorm.DB\n\tcache    cache.DbClient\n\tminioStr miniostorage.StorageMinio\n\treZero   *logger.ReZero\n\trouters  []Router\n}\n\nfunc (a *Api) Start() error {\n\troot := a.server.Group(\"/api/v1\")\n\tfor _, router := range a.routers {\n\t\trouter.Route(root)\n\t}\n\tport := os.Getenv(\"APP_PORT\")\n\treturn a.server.Run(\"0.0.0.0:\" + port)\n}\n",
+          "description": "Modular router interface and application bootstrap registration",
+          "language": "go"
+        },
+        {
+          "code": "package payload\n\nimport \"time\"\n\ntype SessionDataUser struct {\n\tID            uint      `json:\"id\"`\n\tCode          string    `json:\"code\"`\n\tUserReference string    `json:\"userReference\"`\n\tRoleName      string    `json:\"roleName\"`\n\tTimeZone      string    `json:\"timeZone\"`\n\tLang          string    `json:\"lang\"`\n\tEmail         string    `json:\"email\"`\n\tName          string    `json:\"name\"`\n\tIsVerified    bool      `json:\"isVerified\"`\n\tLastActive    time.Time `json:\"lastActive\"`\n}\n\ntype ctxKey string\nconst AuthCodeContext = ctxKey(\"authCode\")\n",
+          "description": "Typed session context payload and context keys for request-scoped propagation",
+          "language": "go"
+        }
+      ],
+      "codeStructure": "shared/api/api.go and shared/payload/user_context.go manage modular route registration and request-scoped session payloads.",
+      "confidence": 0.88,
+      "considerations": [
+        "Requires consistent registration of module routers during application bootstrap",
+        "Context keys should be typed to avoid key collisions across middlewares"
+      ],
+      "keyImplementationPoints": [
+        "Router interface allows modular feature packages to register route groups independently",
+        "Typed session data structure provides consistent user metadata across handlers and services",
+        "Context key encapsulation ensures safe retrieval from gin.Context / context.Context"
+      ],
+      "overview": "Modular HTTP routing and request-scoped user session propagation pattern for Gin web framework in Go.",
+      "purpose": "Organize large API applications into pluggable module routers while standardizing session context injection.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md"
+      ],
+      "summary": "Modular router group registration pattern with typed user session context injection in Go Gin.",
+      "tags": [
+        "candidate",
+        "backend",
+        "golang",
+        "gin",
+        "modular",
+        "routing",
+        "auth"
+      ],
+      "title": "Modular Router Registration & Contextual Session Propagation"
+    }
+  ]
+}

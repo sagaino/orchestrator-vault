@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:54:58.293Z",
+  "harvestId": "harvest-1787111639165-e1d30e37",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/pam-ad-web",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/pam-ad-web",
+    "packageName": "pam-ad-web",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@cycjimmy/jsmpeg-player",
+      "@dnd-kit/core",
+      "@dnd-kit/modifiers",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
+      "@hookform/resolvers",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-alert-dialog",
+      "@radix-ui/react-aspect-ratio",
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-checkbox",
+      "@radix-ui/react-collapsible",
+      "@radix-ui/react-context-menu",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-hover-card",
+      "@radix-ui/react-label",
+      "@radix-ui/react-menubar",
+      "@radix-ui/react-navigation-menu",
+      "@radix-ui/react-popover",
+      "@radix-ui/react-progress",
+      "@radix-ui/react-radio-group",
+      "@radix-ui/react-scroll-area",
+      "@radix-ui/react-select",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-switch",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-toggle",
+      "@radix-ui/react-toggle-group",
+      "@radix-ui/react-tooltip",
+      "@radix-ui/react-visually-hidden",
+      "@stomp/stompjs",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "d3",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-infinite-scroller",
+      "react-resizable-panels",
+      "react-router-dom",
+      "react-webcam",
+      "recharts",
+      "sonner",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "use-debounce",
+      "vaul",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/d3",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@types/react-infinite-scroller",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "build:dev",
+      "build:prod",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/components/common/auth",
+          "src/components/common/auth/moduleguard.tsx",
+          "src/components/common/auth/privateroute.tsx",
+          "src/components/common/auth/publicroute.tsx",
+          "src/services/auth.ts",
+          "src/types/response/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/config/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/pages/cctvmonitoring/schema",
+          "src/pages/digitalvisitor/meeting/schema",
+          "src/pages/login/schema",
+          "src/pages/login/schema/index.ts",
+          "src/pages/personaccess/schema",
+          "src/pages/personaccess/schema/addperson",
+          "src/pages/personaccess/schema/index.ts"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 614,
+        "sampleDirectories": [
+          "public",
+          "public/assets",
+          "public/assets/images",
+          "public/assets/vector",
+          "src",
+          "src/assets",
+          "src/assets/images",
+          "src/assets/vector",
+          "src/components",
+          "src/components/common",
+          "src/components/common/Auth",
+          "src/components/common/Video",
+          "src/components/common/select",
+          "src/components/common/toast",
+          "src/components/ui"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "import Axios from \"axios\";\nimport { getTimestamp, makeSignature } from \"./signature\";\nimport { LOCALSTORAGE_KEY } from \"./constant/localstorage\";\nimport { getData } from \"@/hooks/useLocalStorage\";\nimport Swal from \"sweetalert2\";\n\nexport const axios = Axios.create({\n  baseURL: import.meta.env.VITE_API_URL || \"http://localhost:3000\",\n});\n\n// Request Interceptor: Inject JWT Token & Cryptographic HMAC Signature\naxios.interceptors.request.use(\n  async (config) => {\n    const token = getData(LOCALSTORAGE_KEY.TOKEN);\n    const timestamp = getTimestamp();\n\n    if (token) {\n      config.headers.Authorization = `Bearer ${token}`;\n    }\n\n    const signature = makeSignature(\n      0,\n      timestamp,\n      config.data || {},\n      config.data instanceof FormData\n    );\n\n    config.headers[\"sig\"] = signature;\n    config.headers[\"email\"] = \"0\";\n    config.headers[\"timestamp\"] = timestamp.toString();\n\n    return config;\n  },\n  (error) => Promise.reject(error)\n);\n\n// Response Interceptor: Centralized 401 Session Invalidation & Expiration Handling\naxios.interceptors.response.use(\n  (response) => response,\n  async (error) => {\n    const status = error.response?.status;\n    const data = error.response?.data;\n\n    if (status === 401) {\n      const isLoginPage = window.location.pathname.includes(\"/login\") || window.location.hash.includes(\"/login\");\n\n      if (!isLoginPage) {\n        localStorage.removeItem(LOCALSTORAGE_KEY.TOKEN);\n        localStorage.removeItem(LOCALSTORAGE_KEY.USER);\n\n        let msg = \"Sesi telah kedaluwarsa.\";\n        if (data?.message) {\n          msg = typeof data.message === \"string\" ? data.message : (data.message.msg_ind || JSON.stringify(data.message));\n        }\n\n        await Swal.fire({\n          title: msg.split(\",\")[0],\n          text: \"Sesi telah kedaluwarsa.\",\n          icon: \"warning\",\n          confirmButtonText: \"Go to Login\",\n          allowOutsideClick: false,\n          allowEscapeKey: false,\n          confirmButtonColor: \"#FFD700\",\n        });\n\n        window.location.href = \"/login\";\n      }\n    }\n    return Promise.reject(error);\n  }\n);",
+          "description": "Axios Interceptor for automatic HMAC signature injection and centralized 401 session expiration handling.",
+          "language": "typescript"
+        },
+        {
+          "code": "import CryptoJS from \"crypto-js\";\n\nexport const getTimestamp = () => new Date().getTime();\n\nfunction flattenObject(obj: any, prefix: string = \"\"): any {\n  let flattened: any = {};\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const prefixedKey = prefix === \"\" ? key : `${prefix}.${key}`;\n      if (typeof value === \"object\" && value !== null && !Array.isArray(value)) {\n        const nested = flattenObject(value, prefixedKey);\n        flattened = { ...flattened, ...nested };\n      } else if (Array.isArray(value)) {\n        flattened[prefixedKey] = \"\";\n      } else {\n        flattened[prefixedKey] = value;\n      }\n    }\n  }\n  return flattened;\n}\n\nfunction formatObject(obj: any): string {\n  const flattened = flattenObject(obj);\n  let result = \"\";\n  Object.keys(flattened)\n    .sort()\n    .forEach((key) => {\n      const value = flattened[key];\n      result += `${key}${value}`;\n    });\n  return result;\n}\n\nexport const makeSignature = (email: number, timestamp: number, data: any, isFormData?: boolean) => {\n  const formDataObject: any = { email, timestamp };\n  if (isFormData) {\n    for (const pair of data.entries()) {\n      formDataObject[pair[0]] = pair[1];\n    }\n  }\n  const newPayload = { email, ...data, timestamp };\n  const newData = isFormData ? formDataObject : newPayload;\n  const finalPayload = formatObject(newData);\n  return CryptoJS.SHA1(finalPayload);\n};",
+          "description": "Deterministic object flattening, alphabetical key sorting, and SHA-1 signature generation algorithm.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   ├── axios.ts         # Axios instance with request and response interceptors\n│   ├── signature.ts     # Canonical flattening, sorting, and SHA-1 hashing logic\n│   └── constant/\n│       └── localstorage.ts # LocalStorage key constants (TOKEN, USER)\n└── hooks/\n    └── useLocalStorage.ts # Safe storage reader/writer",
+      "confidence": 0.95,
+      "considerations": [
+        "Ensure backend uses identical deterministic key sorting and prefix flattening algorithm to verify signatures.",
+        "FormData payload signing only captures primitive key-value pairs; binary streams should have dedicated checksums.",
+        "401 redirect ignores active login pages to avoid infinite redirect loops."
+      ],
+      "keyImplementationPoints": [
+        "Request Interceptors automatically compute canonical SHA-1 payload signatures alongside request timestamps.",
+        "Recursive object flattening ensures nested structures are deterministically sorted prior to hashing.",
+        "Response Interceptor isolates 401 Unauthorized responses to gracefully clear auth storage and trigger SweetAlert2 modal."
+      ],
+      "overview": "Centralized HTTP communication pattern utilizing Axios interceptors to automatically enforce anti-tampering request signing (HMAC/SHA-1) on every outgoing HTTP request and gracefully manage authentication lifecycle/session revocation globally.",
+      "purpose": "Protect API requests against man-in-the-middle payload tampering and maintain single-source-of-truth token injection and session expiration handling without scattering logic across components.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/security/hmac-request-signing.md",
+        "01-Knowledge/patterns/frontend/axios-interceptor-architecture.md"
+      ],
+      "summary": "Comprehensive pattern for securing outgoing REST API requests with deterministic HMAC SHA-1 signature calculation and centralizing authentication lifecycle (session timeout/token eviction).",
+      "tags": [
+        "security",
+        "api",
+        "axios",
+        "hmac",
+        "interceptor",
+        "auth"
+      ],
+      "title": "HMAC Payload Signature & Centralized Auth Interceptor Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { Client } from \"@stomp/stompjs\";\nimport { useCallback, useEffect, useRef, useState } from \"react\";\nimport type { INotificationValue } from \"../types/NotificationResponse\";\n\ninterface UseStompNotificationsProps {\n  onNewNotification?: () => void;\n}\n\ntype ConnectionStatus = \"connecting\" | \"connected\" | \"disconnected\" | \"error\";\n\nexport const useStompNotifications = ({\n  onNewNotification,\n}: UseStompNotificationsProps = {}) => {\n  const [notifications, setNotifications] = useState<INotificationValue[]>([]);\n  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(\"disconnected\");\n\n  const clientRef = useRef<Client | null>(null);\n  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);\n  const isInitialLoadRef = useRef(true);\n  const onNewNotificationRef = useRef(onNewNotification);\n\n  useEffect(() => {\n    onNewNotificationRef.current = onNewNotification;\n  }, [onNewNotification]);\n\n  useEffect(() => {\n    isInitialLoadRef.current = false;\n  }, []);\n\n  const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;\n\n  useEffect(() => {\n    const connectWebSocket = () => {\n      if (clientRef.current && clientRef.current.active) return;\n      if (!WEBSOCKET_URL) {\n        setConnectionStatus(\"error\");\n        return;\n      }\n\n      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);\n\n      const wsUrl = `${WEBSOCKET_URL}/web-socket`;\n      setConnectionStatus(\"connecting\");\n\n      try {\n        const client = new Client({\n          brokerURL: wsUrl,\n          reconnectDelay: 5000,\n          heartbeatIncoming: 4000,\n          heartbeatOutgoing: 4000,\n        });\n\n        client.onConnect = (frame) => {\n          setConnectionStatus(\"connected\");\n          client.subscribe(\"/queue/notification\", (message) => {\n            try {\n              const response: INotificationValue = JSON.parse(message.body);\n              setNotifications((prev) => [response, ...prev]);\n              if (!isInitialLoadRef.current && onNewNotificationRef.current) {\n                onNewNotificationRef.current();\n              }\n            } catch (parseError) {\n              console.error(\"Error parsing notification:\", parseError);\n            }\n          });\n        };\n\n        client.onStompError = () => {\n          setConnectionStatus(\"error\");\n          reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);\n        };\n\n        client.onWebSocketClose = (event) => {\n          setConnectionStatus(\"disconnected\");\n          if (event.code !== 1000) {\n            reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);\n          }\n        };\n\n        clientRef.current = client;\n        client.activate();\n      } catch (error) {\n        setConnectionStatus(\"error\");\n        reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);\n      }\n    };\n\n    connectWebSocket();\n\n    return () => {\n      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);\n      if (clientRef.current) {\n        clientRef.current.deactivate();\n        clientRef.current = null;\n      }\n    };\n  }, [WEBSOCKET_URL]);\n\n  const handleMarkAllRead = useCallback(() => {\n    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));\n  }, []);\n\n  const clearNotifications = useCallback(() => {\n    setNotifications([]);\n  }, []);\n\n  return { notifications, connectionStatus, handleMarkAllRead, clearNotifications };\n};",
+          "description": "Custom React Hook encapsulating STOMP over WebSocket subscription, auto-reconnection, and message state management.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n└── pages/\n    ├── Alert/\n    │   ├── hooks/\n    │   │   └── useStompNotifications.ts # Realtime notification STOMP subscriber hook\n    │   └── types/\n    │       └── NotificationResponse.ts  # Notification payload typing\n    └── PersonAccess/\n        └── hooks/\n            └── useCardWebSocket.ts      # Card tap WebSocket subscriber",
+      "confidence": 0.93,
+      "considerations": [
+        "Always clean up STOMP clients and timeouts in the React effect cleanup phase to prevent memory leaks and duplicate sockets.",
+        "Use mutable refs for incoming event callbacks to prevent re-subscribing on each render cycle.",
+        "Set up bidirectional heartbeats (heartbeatIncoming & heartbeatOutgoing) to detect dead TCP connections behind reverse proxies."
+      ],
+      "keyImplementationPoints": [
+        "Maintains explicit connection states ('connecting' | 'connected' | 'disconnected' | 'error').",
+        "Employs resilient auto-reconnect fallback on abnormal socket closures or broker errors.",
+        "Uses ref synchronization for event callbacks to avoid unnecessary effect re-executions."
+      ],
+      "overview": "A production-grade React Hook abstraction for STOMP/WebSocket pub-sub channels featuring lifecycle management, exponential or timed auto-reconnection, heartbeat monitoring, and reactive UI updates.",
+      "purpose": "Provide real-time broadcast and queue event streaming (e.g. alerts, hardware badge scans) with automatic recovery from network disruptions and clean component teardown.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/realtime/stomp-websocket-protocol.md",
+        "01-Knowledge/patterns/frontend/react-realtime-hook.md"
+      ],
+      "summary": "Resilient STOMP over WebSocket subscriber hook providing fault-tolerant real-time event streaming and state management.",
+      "tags": [
+        "websocket",
+        "stomp",
+        "realtime",
+        "hooks",
+        "state-management"
+      ],
+      "title": "Resilient STOMP/WebSocket Realtime Broker Subscription Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { ROUTES } from \"@/config/constant/routes\";\nimport { Navigate } from \"react-router-dom\";\nimport { getData } from \"@/hooks/useLocalStorage\";\nimport { LOCALSTORAGE_KEY } from \"@/config/constant/localstorage\";\nimport { defaultModules } from \"@/config/constant/DefaultModules\";\n\ninterface ModuleGuardProps {\n  children: React.ReactNode;\n  moduleKey: string;\n}\n\nconst ModuleGuard = ({ children, moduleKey }: ModuleGuardProps) => {\n  const userData = getData(LOCALSTORAGE_KEY.USER);\n  const userRole = userData?.role_code;\n  const modules = userData?.modules || [];\n\n  // SUPERADMIN: Access to all modules except designated exclusions\n  if (userRole === \"SUPERADMIN\") {\n    if (moduleKey === \"inventory\") {\n      return <Navigate to={ROUTES.DASHBOARD} replace />;\n    }\n    return <>{children}</>;\n  }\n\n  // Standard Role: Access restricted to default whitelist or explicit user modules\n  const hasAccess = defaultModules.includes(moduleKey) || modules.includes(moduleKey);\n\n  if (!hasAccess) {\n    return <Navigate to={ROUTES.DASHBOARD} replace />;\n  }\n\n  return <>{children}</>;\n};\n\nexport default ModuleGuard;",
+          "description": "ModuleGuard component providing declarative role and module-level permission enforcement for UI views.",
+          "language": "typescript"
+        },
+        {
+          "code": "import { Navigate, Outlet } from \"react-router-dom\";\nimport { getData } from \"@/hooks/useLocalStorage\";\nimport { LOCALSTORAGE_KEY } from \"@/config/constant/localstorage\";\nimport { ROUTES } from \"@/config/constant/routes\";\n\nconst PrivateRoute = () => {\n  const token = getData(LOCALSTORAGE_KEY.TOKEN);\n\n  if (!token) {\n    return <Navigate to={ROUTES.LOGIN} replace />;\n  }\n\n  return <Outlet />;\n};\n\nexport default PrivateRoute;",
+          "description": "PrivateRoute component safeguarding protected routing subtrees against unauthenticated access.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── components/\n│   └── common/\n│       └── auth/\n│           ├── ModuleGuard.tsx # Module entitlement guard\n│           ├── PrivateRoute.tsx # Auth token presence guard\n│           └── PublicRoute.tsx  # Guest-only route guard\n├── config/\n│   └── constant/\n│       ├── DefaultModules.ts    # Whitelisted modules for all users\n│       └── routes.ts            # Canonical route path mappings\n└── routes/\n    └── index.tsx                # Nested route tree applying guards",
+      "confidence": 0.92,
+      "considerations": [
+        "Avoid relying solely on client-side RBAC guards; backend endpoints must independently enforce role authorization.",
+        "Keep route constants and module names synchronized via TypeScript string literals/enums to avoid permission drift."
+      ],
+      "keyImplementationPoints": [
+        "Layered authorization: PrivateRoute ensures token validity, while ModuleGuard evaluates fine-grained module entitlements.",
+        "Special SUPERADMIN bypass with targeted module blacklisting.",
+        "Fallback to whitelisted default modules for baseline operational access."
+      ],
+      "overview": "Multi-layered route and module authorization pattern combining authentication route wrappers (PrivateRoute/PublicRoute) with granular module capability guards (ModuleGuard) based on user roles and assigned feature flags.",
+      "purpose": "Control view accessibility and prevent unauthorized page navigation based on authenticated user tokens, enterprise roles, and dynamic module grants.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/security/rbac-authorization.md",
+        "01-Knowledge/patterns/frontend/react-router-guarding.md"
+      ],
+      "summary": "Declarative, multi-tiered Role-Based Access Control (RBAC) and module entitlement guarding pattern for React Router applications.",
+      "tags": [
+        "rbac",
+        "security",
+        "authorization",
+        "routing",
+        "react-router"
+      ],
+      "title": "Hierarchical RBAC & Dynamic Module Authorization Guard Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import axios from \"@/config/axios\";\nimport { ENDPOINTS } from \"@/config/constant/endpoint\";\nimport type { AddCategoryRequest } from \"@/pages/PersonAccess/schema\";\nimport type { ICategoryResponse } from \"@/pages/PersonAccess/types/CategoryResponse\";\nimport type { IPersonAccessDefaultResponse } from \"@/pages/PersonAccess/types/PersonAccessDefaultResponse\";\n\nexport const PersonAccessServices = {\n  createCategory: async (data: AddCategoryRequest): Promise<IPersonAccessDefaultResponse> => {\n    const response = await axios.post<IPersonAccessDefaultResponse>(\n      ENDPOINTS.PERSON_ACCESS.CATEGORY.CREATE,\n      data\n    );\n    return response.data;\n  },\n\n  updateCategory: async ({ id, data }: { id: string; data: AddCategoryRequest }): Promise<IPersonAccessDefaultResponse> => {\n    const URL = ENDPOINTS.PERSON_ACCESS.CATEGORY.UPDATE.replace(\":id\", id);\n    const response = await axios.put<IPersonAccessDefaultResponse>(URL, data);\n    return response.data;\n  },\n\n  deleteCategory: async ({ id, password }: { id: string; password: string }): Promise<IPersonAccessDefaultResponse> => {\n    const URL = ENDPOINTS.PERSON_ACCESS.CATEGORY.DELETE.replace(\":id\", id);\n    const response = await axios.delete<IPersonAccessDefaultResponse>(URL, {\n      data: { password }\n    });\n    return response.data;\n  },\n\n  getAllCategory: async (params?: string): Promise<ICategoryResponse> => {\n    const response = await axios.get<ICategoryResponse>(\n      ENDPOINTS.PERSON_ACCESS.CATEGORY.GET_ALL,\n      { params: { search: params } }\n    );\n    return response.data;\n  },\n};",
+          "description": "Service layer isolating API transport logic, URL substitution, and TypeScript typing from UI components.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   └── constant/\n│       └── endpoint.ts      # Structured constant mapping of all backend endpoints\n├── services/\n│   ├── PersonAccess.ts      # Domain-specific API service functions\n│   ├── auth.ts              # Authentication service methods\n│   └── masterdata.ts        # Master data service methods\n└── types/\n    └── response/            # Strongly-typed response interfaces",
+      "confidence": 0.94,
+      "considerations": [
+        "Parametric endpoints using string templates (e.g. :id) must be replaced before execution.",
+        "Services return raw response.data ensuring consumers handle typed data without Axios envelope pollution."
+      ],
+      "keyImplementationPoints": [
+        "Zero HTTP logic in UI components; all API interaction is channeled through domain service modules.",
+        "Centralized endpoint registry eliminates magic URL strings throughout the project.",
+        "Full end-to-end typing from request schema to response payload interfaces."
+      ],
+      "overview": "An architectural pattern separating UI view logic from backend HTTP communication by encapsulating endpoints in a structured dictionary and exposing strongly-typed domain service methods.",
+      "purpose": "Enable high maintainability, testability, and refactorability of backend API integrations by decoupling component lifecycles from REST transport details.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/architecture/api-service-layer.md",
+        "01-Knowledge/patterns/frontend/service-repository-pattern.md"
+      ],
+      "summary": "Strongly-typed, decoupled API service layer and endpoint dictionary pattern isolating network calls from component code.",
+      "tags": [
+        "api",
+        "architecture",
+        "typescript",
+        "service-layer",
+        "rest"
+      ],
+      "title": "Type-Safe Endpoint Registry & Decoupled Service Layer Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { AxiosError } from \"axios\";\nimport { toast } from \"sonner\";\n\nexport interface ApiError {\n  code: number;\n  message: string;\n  errors?: Record<string, string>;\n  result: null;\n}\n\nexport const formatErrorMessage = (error: unknown): string[] => {\n  const axiosError = error as AxiosError<ApiError>;\n  const apiError = axiosError.response?.data;\n\n  if (!apiError) {\n    return [axiosError.message || \"An error occurred\"];\n  }\n\n  // Handle field-specific validation errors dictionary\n  if (apiError.errors && Object.keys(apiError.errors).length > 0) {\n    return Object.values(apiError.errors);\n  }\n\n  // Handle general API error message\n  if (apiError.message) {\n    const formattedMessage =\n      apiError.message.charAt(0).toUpperCase() + apiError.message.slice(1);\n    return [formattedMessage];\n  }\n\n  return [\"An error occurred\"];\n};\n\nexport const showErrorToast = (error: AxiosError<ApiError>) => {\n  const errors = formatErrorMessage(error);\n  const errorList = errors.map((err) => `• ${err}`).join(\"\\n\");\n\n  toast.error(\"Error\", {\n    description: errorList,\n    style: { whiteSpace: \"pre-line\" },\n  });\n};",
+          "description": "API error parser extracting and normalizing field validation errors vs generic messages into formatted toast notifications.",
+          "language": "typescript"
+        },
+        {
+          "code": "import { z } from \"zod\";\n\nexport const addCategorySchema = z.object({\n  category_name: z\n    .string()\n    .min(1, \"Category name is required\")\n    .max(50, \"Category name cannot exceed 50 characters\"),\n  category_description: z\n    .string()\n    .max(255, \"Description cannot exceed 255 characters\")\n    .optional(),\n});\n\nexport type AddCategoryRequest = z.infer<typeof addCategorySchema>;",
+          "description": "Zod schema declaration exporting inferable TypeScript types for forms and API requests.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   └── error-utils.ts       # Unified error formatter and Sonner toast bridge\n└── pages/\n    └── PersonAccess/\n        └── schema/\n            └── index.ts     # Zod validation schemas for forms and API mutations",
+      "confidence": 0.91,
+      "considerations": [
+        "Ensure backend field error keys align with Zod schema property names for smooth field-level error mapping.",
+        "Always supply a defensive fallback string when parsing undefined error payloads."
+      ],
+      "keyImplementationPoints": [
+        "Dual error handling: extracts both key-value validation dictionaries and single error messages.",
+        "Multi-line formatting formatted cleanly for Sonner toast components with pre-line whitespace.",
+        "Zod schema inference establishes compile-time and runtime validation contract parity."
+      ],
+      "overview": "A cohesive validation and error handling pipeline combining Zod runtime schema validation on the client with structured error normalization from backend Axios responses.",
+      "purpose": "Provide consistent user feedback across forms and mutations by systematically converting varied backend error structures into clean, standardized UI notifications.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/validation/zod-schema-validation.md",
+        "01-Knowledge/patterns/frontend/unified-error-handling.md"
+      ],
+      "summary": "Unified validation pipeline combining client-side Zod schemas with centralized API error message normalization and toast presentation.",
+      "tags": [
+        "validation",
+        "zod",
+        "error-handling",
+        "toast",
+        "user-experience"
+      ],
+      "title": "Unified Schema Validation & Multi-format Error Normalization Pattern"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "action": "PROMOTE",
+  "decidedAt": "2026-08-14T16:43:05.973Z",
+  "decidedBy": "user",
+  "title": "Zustand Feature State Management",
+  "candidatePath": "05-Knowledge-Candidates/zustand-feature-state-management.md",
+  "targetPath": "01-Knowledge/concepts/state-management/zustand.md",
+  "sourcePath": "03-Sources/other/orchestrator-runs/fe-016-20260814T160123Z-3d0077e9.json",
+  "runId": "fe-016-20260814T160123Z-3d0077e9",
+  "mergedIntoExisting": false
+}

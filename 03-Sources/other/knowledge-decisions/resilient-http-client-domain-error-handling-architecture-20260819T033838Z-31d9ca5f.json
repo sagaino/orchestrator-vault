@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "action": "PROMOTE",
+  "decidedAt": "2026-08-19T03:38:38.201Z",
+  "decidedBy": "user",
+  "title": "Resilient HTTP Client & Domain Error Handling Architecture",
+  "candidatePath": "05-Knowledge-Candidates/resilient-http-client-domain-error-handling-architecture.md",
+  "targetPath": "01-Knowledge/concepts/resilient-http-client-domain-error-handling-architecture.md",
+  "sourcePath": "03-Sources/other/orchestrator-runs/harvest-1787110568549-448b547b.json",
+  "runId": "harvest-1787110568549-448b547b",
+  "mergedIntoExisting": false
+}

@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T05:08:41.504Z",
+  "harvestId": "harvest-1787116045805-ce1291de",
+  "type": "codebase-harvest",
+  "domain": "mobile",
+  "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+    "packageName": "lovlet-mobile",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "android/.kotlin/sessions",
+          "android/app/proguard-rules.pro",
+          "lib/data/api/service/auth",
+          "lib/data/repository/auth",
+          "lib/data/repository/auth/auth_repository.dart",
+          "lib/data/repository/auth/auth_repository_impl.dart",
+          "lib/data/repository/auth/auth_repository_impl.g.dart",
+          "lib/router/dashboard_route_guard.dart",
+          "lib/router/login_route_guard.dart"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "assets/icon/ic_error.svg",
+          "assets/image/image_error.png",
+          "lib/common/util/error_util.dart",
+          "lib/model/error_data.dart"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/.filecache",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/app.dill",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build_result.json",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/debug_android_application.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/flutter_assets.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_dart_plugin_registrant.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_localizations.stamp"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 945,
+        "sampleDirectories": [
+          ".dart_tool",
+          ".dart_tool/build_resolvers",
+          ".dart_tool/extension_discovery",
+          ".dart_tool/flutter_build",
+          ".dart_tool/flutter_build/46fa5a2ab69f2753f07f8421bd70e532",
+          ".dart_tool/flutter_build/5132091c9de2af21da5e205b6f85243d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/971675559299deef62949c0076419cfa",
+          ".dart_tool/flutter_build/aa02f16b76ccfcdf225307de8a0acb2c",
+          ".dart_tool/flutter_build/b1f05784000fe294765ca005ba0dc7d5",
+          ".dart_tool/hooks_runner",
+          ".dart_tool/hooks_runner/objective_c",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4/out",
+          ".dart_tool/hooks_runner/objective_c/7f969c740e"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "import 'package:lovelet_lookin/data/repository/match/match_repository.dart';\nimport 'package:lovelet_lookin/data/repository/match/match_repository_impl.dart';\nimport 'package:lovelet_lookin/data/repository/mailbox/mailbox_repository.dart';\nimport 'package:lovelet_lookin/data/repository/mailbox/mailbox_repository_impl.dart';\nimport 'package:lovelet_lookin/model/error_data.dart';\nimport 'package:riverpod_annotation/riverpod_annotation.dart';\n\npart 'card_notifier.g.dart';\n\n@riverpod\nclass CardNotifier extends _$CardNotifier {\n  late final MatchRepository _matchRepository;\n  late final MailboxRepository _mailboxRepository;\n  bool isMatch = false;\n  bool? isLike;\n  bool isLoadingMailbox = false;\n  bool isMailboxSent = false;\n\n  @override\n  CardState build(String targetUserId) {\n    _matchRepository = ref.watch(matchRepositoryProvider);\n    _mailboxRepository = ref.watch(mailboxRepositoryProvider);\n    return CardState(\n      isMatch: isMatch,\n      isLoadingMailbox: isLoadingMailbox,\n      isMailboxSent: isMailboxSent,\n    );\n  }\n\n  void dislike(String content) async {\n    try {\n      final result = await _matchRepository.dislike(targetUserId: targetUserId);\n      isMatch = result?.isMatched ?? false;\n      isLike = false;\n      state = CardState(\n        isMatch: isMatch,\n        isLike: isLike,\n        isLoadingMailbox: isLoadingMailbox,\n        isMailboxSent: isMailboxSent,\n      );\n    } on ErrorData catch (e) {\n      isLike = null;\n      isMatch = false;\n      state = CardState(\n        isMatch: isMatch,\n        isLike: isLike,\n        isLoadingMailbox: isLoadingMailbox,\n        isMailboxSent: isMailboxSent,\n      );\n    }\n  }\n}",
+          "description": "Riverpod notifier class with code generation, parameter injection in build(), and immutable state emission.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── presenter/\n│   └── <feature>/\n│       ├── component/\n│       ├── notifier/\n│       │   ├── <feature>_notifier.dart\n│       │   └── <feature>_notifier.g.dart\n│       └── page_<feature>.dart\n└── data/\n    └── repository/\n        └── <feature>/",
+      "confidence": 0.95,
+      "considerations": [
+        "Gunakan immutable state class untuk memicu re-render widget secara presisi.",
+        "Gunakan ref.watch() di dalam build() untuk dependency injection dari provider lain.",
+        "Gunakan code-generator build_runner secara konsisten saat menambahkan state provider baru."
+      ],
+      "keyImplementationPoints": [
+        "Anotasi @riverpod memicu generasi boilerplate code secara otomatis.",
+        "Method build() menerima parameter dinamis (family pattern) dan menginisialisasi repository.",
+        "Mutasi state selalu menghasilkan instans state baru yang memicu update reaktif pada UI."
+      ],
+      "overview": "Pola arsitektur state management menggunakan Riverpod 2 dengan anotasi generator (@riverpod). Menyatukan Business Logic Controller, Dependency Injection, dan Reactive State Binding ke widget Flutter secara type-safe dan testable.",
+      "purpose": "Memisahkan logika bisnis dari lapisan presentasi (UI widget) serta mengelola siklus hidup data dan dependensi secara deklaratif.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/state-management.md",
+        "01-Knowledge/patterns/mobile/clean-architecture-flutter.md"
+      ],
+      "summary": "Pola implementasi state management Riverpod 2 berbasis code generation (@riverpod) dengan pemisahan immutable state dan dependency injection otomatis.",
+      "tags": [
+        "flutter",
+        "riverpod",
+        "state-management",
+        "code-generation",
+        "mobile"
+      ],
+      "title": "Riverpod Code-Gen Notifier Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class RefreshTokenInterceptor extends Interceptor {\n  RefreshTokenInterceptor(this.baseHttpClient, this.parentContainer);\n\n  final BaseHttpClient baseHttpClient;\n  final ProviderContainer parentContainer;\n\n  @override\n  Future<void> onResponse(\n    Response<dynamic> response,\n    ResponseInterceptorHandler handler,\n  ) async {\n    try {\n      final header = response.requestOptions.headers;\n      if ((response.statusCode ?? 0) >= 400 && (response.statusCode ?? 0) < 500) {\n        final baseResponse = BaseResponse.fromJson(json: response.data);\n        if (baseResponse.status == ErrorUtil.codeRefreshTokenExpiredError ||\n            baseResponse.status == ErrorUtil.codeTokenInvalidError ||\n            baseResponse.status == ErrorUtil.codeUserNotFoundError) {\n          Util.logout(context: appRouter.navigatorKey.currentContext);\n          return;\n        }\n        if ((response.statusCode ?? 0) == 401) {\n          final SignUpData? value = await getRefreshToken();\n          if (value == null) {\n            handler.resolve(response);\n          } else {\n            header[\"Authorization\"] =\n                \"Bearer ${await CacheUtil.getString(Strings.keyAccessToken)}\";\n            dynamic newData = response.requestOptions.data;\n            if (newData is FormData) {\n              newData = await _remakeFormData(newData, response.requestOptions.extra);\n            }\n            final Response<dynamic> value = await baseHttpClient.client\n                .fetch<dynamic>(response.requestOptions\n                    .copyWith(headers: header, data: newData));\n            handler.resolve(value);\n            return;\n          }\n        }\n      }\n      super.onResponse(response, handler);\n    } catch (e) {\n      return;\n    }\n  }\n\n  Future<FormData> _remakeFormData(\n      FormData oldData, Map<String, dynamic> requestExtra) async {\n    final Map<String, dynamic> newFormData = Map.fromEntries(oldData.fields);\n    for (var file in oldData.files) {\n      newFormData.putIfAbsent(file.key, () => file.value.clone());\n    }\n    return FormData.fromMap(newFormData);\n  }\n}",
+          "description": "Dio interceptor for automatic token refresh, recursive replay, and multipart FormData rebuilding.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── data/\n    └── api/\n        ├── default_interceptor.dart\n        ├── http_client.dart\n        ├── http_routes.dart\n        └── refresh_token_interceptor.dart",
+      "confidence": 0.95,
+      "considerations": [
+        "FormData Dio yang sudah dikonsumsi stream-nya tidak dapat digunakan ulang tanpa cloning eksplisit via _remakeFormData().",
+        "Terminal authentication error codes harus langsung memicu centralized logout flow untuk mencegah infinite refresh loop."
+      ],
+      "keyImplementationPoints": [
+        "Intercept response HTTP 401 dan periksa apakah error dapat dipulihkan via refresh token.",
+        "Clone dan rekonstruksi binary stream / multipart FormData sebelum melakukan request replay.",
+        "Simpan token baru ke secure cache dan perbarui header Authorization secara atomik.",
+        "Picu sinkronisasi FCM token baru jika terdeteksi token device belum terdaftar."
+      ],
+      "overview": "Interceptor Dio cerdas yang mendeteksi kedaluwarsa token (HTTP 401 / expired code), mengeksekusi refresh token di background, merekonstruksi payload request (termasuk multipart file upload FormData), dan melakukan retry request asli secara transparan.",
+      "purpose": "Menjaga sesi pengguna tetap aktif tanpa interupsi UI serta menangani retry request kompleks (seperti upload file) secara otomatis saat token kedaluwarsa.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/jwt-authentication.md",
+        "01-Knowledge/snippets/mobile/dio-interceptor.md"
+      ],
+      "summary": "Pola interceptor HTTP untuk auto-refresh JWT token yang mendukung request replay transparan dan rekonstruksi payload multipart FormData.",
+      "tags": [
+        "flutter",
+        "dio",
+        "networking",
+        "jwt",
+        "authentication",
+        "interceptor"
+      ],
+      "title": "Resilient Token Refresh Interceptor & Multipart Rebuilder"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import 'package:auto_route/auto_route.dart';\nimport 'package:lovelet_lookin/common/resource/strings.dart';\nimport 'package:lovelet_lookin/common/util/cache_util.dart';\nimport 'package:lovelet_lookin/router/app_route.dart';\n\nclass LoginRouteGuard extends AutoRouteGuard {\n  @override\n  void onNavigation(NavigationResolver resolver, StackRouter router) async {\n    CacheUtil.getBoolean(Strings.keyIsLogin).then(\n      (isLogin) {\n        if (isLogin) {\n          CacheUtil.getBoolean(Strings.keyIsNewUser).then((isNewUser) {\n            if (isNewUser) {\n              router.push(const RouteNewAccount());\n            } else {\n              CacheUtil.getBoolean(Strings.keyIsVerified).then(\n                (isVerified) {\n                  if (isVerified) {\n                    router.push(RouteDashboard());\n                  } else {\n                    router.push(RouteEditProfile(isInitialPage: true));\n                  }\n                },\n              );\n            }\n          });\n        } else {\n          resolver.next(true);\n        }\n      },\n    );\n  }\n}",
+          "description": "AutoRouteGuard implementation checking authentication, onboarding, and verification state before resolving navigation.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── router/\n    ├── app_route.dart\n    ├── app_route.gr.dart\n    ├── dashboard_route_guard.dart\n    └── login_route_guard.dart",
+      "confidence": 0.93,
+      "considerations": [
+        "Pastikan pengecekan cache/persisted session dilakukan secara non-blocking atau dengan splash screen fallback.",
+        "Gunakan resolver.next(false) atau route push eksplisit untuk mencegah navigation loop."
+      ],
+      "keyImplementationPoints": [
+        "AutoRouteGuard memotong siklus navigasi sebelum rute target ditampilkan.",
+        "Evaluasi bertingkat status sesi: Login -> New User -> Profile Verification -> Main Dashboard.",
+        "Pemisahan logika otorisasi rute dari lapisan UI view/screen."
+      ],
+      "overview": "Pola guard navigasi bertingkat menggunakan pustaka AutoRoute untuk memvalidasi status autentikasi, status onboarding akun baru, dan kelengkapan verifikasi profil sebelum mengizinkan transisi ke layar tertentu.",
+      "purpose": "Mencegah akses ke layar privat dan mengarahkan alur pengguna secara deterministik sesuai state akun yang tersimpan.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/routing-guards.md",
+        "01-Knowledge/patterns/mobile/auto-route-flutter.md"
+      ],
+      "summary": "Pola routing guard berantai deklaratif dengan AutoRoute untuk validasi sesi, onboarding, dan verifikasi akun.",
+      "tags": [
+        "flutter",
+        "auto-route",
+        "navigation",
+        "route-guard",
+        "security"
+      ],
+      "title": "Declarative Multi-Tier Route Guarding"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class BaseResponse<T> {\n  final int? status;\n  final int? code;\n  final String? message;\n  final bool? error;\n  final T? data;\n\n  BaseResponse({\n    this.status,\n    this.code,\n    this.message,\n    this.error,\n    this.data,\n  });\n\n  factory BaseResponse.fromJson({\n    required Map<String, dynamic> json,\n    T Function(Map<String, dynamic>)? dataFromJson,\n  }) {\n    return BaseResponse<T>(\n      status: json['status'] as int?,\n      code: json['code'] as int?,\n      message: json['message'] as String?,\n      error: json['error'] as bool?,\n      data: json['data'] != null && dataFromJson != null\n          ? dataFromJson(json['data'] as Map<String, dynamic>)\n          : null,\n    );\n  }\n}\n\n// Penggunaan pada Repository:\n@override\nFuture<SendOtpData?> sendOtp({required OtpRequest req}) async {\n  try {\n    final response = await service.sendOtp(request: req);\n    final baseResponse = BaseResponse<SendOtpData>.fromJson(\n        json: response.data, dataFromJson: SendOtpData.fromJson);\n    if ((baseResponse.error ?? false)) {\n      throw ErrorData(code: baseResponse.status, message: baseResponse.message);\n    } else {\n      return baseResponse.data;\n    }\n  } on DioException {\n    throw ErrorData(code: 500, message: \"System error :: network connection\");\n  }\n}",
+          "description": "Generic BaseResponse parser with nested DTO deserializer closure and typed ErrorData normalization.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── data/\n│   ├── api/\n│   │   ├── base/\n│   │   │   └── base_response.dart\n│   │   └── dto/\n│   │       ├── request/\n│   │       └── response/\n│   └── repository/\n└── model/\n    └── error_data.dart",
+      "confidence": 0.92,
+      "considerations": [
+        "Gunakan closure function dataFromJson untuk menghindari refleksi runtime pada parsing generik Dart.",
+        "Selalu tangkap DioException di repository boundary dan konversi ke domain-level ErrorData."
+      ],
+      "keyImplementationPoints": [
+        "Envelope generic BaseResponse<T> membungkus metadata server (status, code, message, error).",
+        "Factory deserializer menerima callback parser dataFromJson khusus untuk generic T.",
+        "Repository layer mengubah kegagalan API dan koneksi menjadi objek domain ErrorData yang seragam."
+      ],
+      "overview": "Pola deserialisasi respons API generik menggunakan Generic Envelope DTO yang dipadukan dengan pemetaan exception jaringan (DioException) ke dalam Domain ErrorData yang konsisten di lapisan Repository.",
+      "purpose": "Menyederhanakan parsing respons API yang konsisten dari backend dan mencegah bocornya DioException ke lapisan presentasi/UI.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/api-contract-envelope.md",
+        "01-Knowledge/patterns/mobile/clean-architecture-flutter.md"
+      ],
+      "summary": "Pola generic envelope DTO dan normalisasi exception jaringan menjadi domain error terstruktur di repository layer.",
+      "tags": [
+        "flutter",
+        "clean-architecture",
+        "networking",
+        "error-handling",
+        "dto"
+      ],
+      "title": "Generic DTO Envelope & Domain Error Normalization"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import 'dart:typed_data';\nimport 'package:flutter_keychain/flutter_keychain.dart';\n\nclass CacheUtil {\n  CacheUtil._();\n\n  static Future<void> putString(String key, String value) async {\n    await FlutterKeychain.put(key: key, value: value);\n  }\n\n  static Future<void> putBoolean(String key, bool value) async {\n    await FlutterKeychain.put(key: key, value: value.toString());\n  }\n\n  static Future<String> getString(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    return value ?? '';\n  }\n\n  static Future<bool> getBoolean(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    return value == 'true';\n  }\n\n  static Future<Uint8List?> getUint8List(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    if (value == null) return null;\n    List<String> stringList =\n        value.replaceAll('[', '').replaceAll(']', '').split(', ');\n    List<int> intList = stringList.map(int.parse).toList();\n    return Uint8List.fromList(intList);\n  }\n\n  static Future<void> remove(String key) async {\n    await FlutterKeychain.remove(key: key);\n  }\n\n  static Future<void> clear() async {\n    FlutterKeychain.clear();\n  }\n}",
+          "description": "Static helper encapsulating hardware-backed iOS Keychain and Android Keystore with type-safe operations.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── common/\n    ├── resource/\n    │   └── strings.dart\n    └── util/\n        └── cache_util.dart",
+      "confidence": 0.9,
+      "considerations": [
+        "Keychain I/O bersifat asynchronous; hindari pemanggilan berulang dalam synchronous build methods.",
+        "Pada reset sesi/logout, panggil CacheUtil.clear() untuk menjamin data sensitif terhapus dari hardware secure storage."
+      ],
+      "keyImplementationPoints": [
+        "Abstraksi statis CacheUtil membungkus flutter_keychain untuk platform iOS Keychain dan Android KeyStore.",
+        "Menyediakan serializer type-safe untuk String, Boolean, Integer, dan Uint8List binary.",
+        "Sentralisasi key string konstan untuk mencegah typo pada key storage."
+      ],
+      "overview": "Pola penyimpanan data persisten lokal berorientasi keamanan tinggi menggunakan iOS Keychain dan Android KeyStore melalui wrapper CacheUtil yang seragam dan type-safe.",
+      "purpose": "Mengamankan penyimpanan token autentikasi, status verifikasi pengguna, dan identitas perangkat pada hardware security module perangkat mobile.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/secure-storage.md",
+        "01-Knowledge/patterns/mobile/session-persistence.md"
+      ],
+      "summary": "Abstraksi secure storage berbasis hardware-backed keychain untuk manajemen kredensial dan sesi mobile.",
+      "tags": [
+        "flutter",
+        "security",
+        "keychain",
+        "keystore",
+        "storage",
+        "persistence"
+      ],
+      "title": "Keychain-Backed Secure Session Persistence"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// pubspec.yaml:\n// facesdk_plugin:\n//   path: ./facesdk_plugin\n\nimport 'package:facesdk_plugin/facesdk_plugin.dart';\nimport 'package:lovelet_lookin/data/api/dto/request/auth/passive_liveness_request.dart';\nimport 'package:lovelet_lookin/data/repository/auth/auth_repository.dart';\n\nclass FaceRecognitionPresenter {\n  final FacesdkPlugin _facesdkPlugin = FacesdkPlugin();\n\n  Future<void> initCameraAndScan({\n    required Function(String imageBase64) onFaceCaptured,\n    required Function(String error) onError,\n  }) async {\n    try {\n      // Inisialisasi plugin native SDK lokal\n      // Mendengarkan platform channel stream untuk verifikasi liveness wajah\n    } catch (e) {\n      onError(e.toString());\n    }\n  }\n}",
+          "description": "Integration of embedded native path plugin for camera-based face liveness detection.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "facesdk_plugin/\n├── android/\n├── ios/\n└── lib/\n    └── facesdk_plugin.dart\nlib/\n└── presenter/\n    └── face_recognition/",
+      "confidence": 0.88,
+      "considerations": [
+        "Plugin lokal membutuhkan konfigurasi permission kamera yang ketat di AndroidManifest.xml dan Info.plist.",
+        "Stream frame kamera berpotensi menimbulkan memory leak jika tidak di-dispose saat perpindahan route."
+      ],
+      "keyImplementationPoints": [
+        "Pemanfaatan path-based local plugin (./facesdk_plugin) untuk integrasi C++/Native SDK liveness detection.",
+        "Komunikasi dua arah antara Flutter UI dan Native Camera feed melalui MethodChannel & EventChannel.",
+        "Ekstraksi data frame wajah menjadi payload verifikasi backend."
+      ],
+      "overview": "Pola integrasi plugin native lokal (path dependency) untuk modul deteksi wajah dan verifikasi liveness pasif/aktif menggunakan binding platform channels iOS dan Android.",
+      "purpose": "Memungkinkan aplikasi Flutter memanfaatkan library native performa tinggi (C++/Kotlin/Obj-C) untuk pengenalan wajah secara offline/on-device.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/native-bridge.md",
+        "01-Knowledge/patterns/mobile/platform-channels.md"
+      ],
+      "summary": "Pola integrasi plugin lokal platform channel untuk integrasi native camera dan on-device face recognition SDK.",
+      "tags": [
+        "flutter",
+        "native-bridge",
+        "platform-channel",
+        "camera",
+        "face-recognition"
+      ],
+      "title": "Embedded Native Plugin Bridge & Liveness Verification"
+    }
+  ]
+}

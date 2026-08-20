@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-14T15:54:27.516Z",
+  "runId": "fe-015-20260814T154940Z-74fa4ce1",
+  "task": {
+    "id": "FE-015",
+    "title": "Tambahkan Toast Notifikasi Ketika Login Berhasil",
+    "path": "02-Projects/starter-app/tasks/task-015.md",
+    "project": "starter-app",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "src/pages/Login/hooks/useLogin.ts"
+    ],
+    "requiresChanges": true
+  },
+  "project": {
+    "id": "starter-app",
+    "repository": "/Users/sagaino/ciniru/starter-app",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/starter-app/graphify-out/graph.json",
+    "nodes": 729,
+    "links": 1293,
+    "builtAtCommit": "ec2fe0b437ad5450521afa9903cbbee4448aff7f"
+  },
+  "verification": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "e1c758a9-6680-4ae0-8efd-30c3b6c1ce32",
+    "status": "SUCCESS",
+    "response": "Implementasi untuk task [task-015.md](file:///Users/sagaino/Documents/Obsidian%20Vault/02-Projects/starter-app/tasks/task-015.md) telah selesai dikerjakan sesuai spesifikasi dan batasan `allowed_paths`.\n\n---\n\n### Ringkasan Perubahan\n\n1. **Import Toast Utility**: Menambahkan impor [`toast`](file:///Users/sagaino/ciniru/starter-app/src/components/ui/toast.tsx#L10-L10) dari `@/components/ui/toast` ke dalam [`useLogin.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts#L12-L12).\n2. **Trigger Notifikasi Sukses**: Memanggil `toast.add({ title: \"Login Berhasil\", description: res.message || \"Login berhasil!\", type: \"success\" })` pada callback `onSuccess` saat `accessToken` berhasil diperoleh sebelum navigasi ke `ROUTES.DASHBOARD`.\n\n---\n\n### Berkas yang Berubah (`allowed_paths`)\n\n- [`src/pages/Login/hooks/useLogin.ts`](file:///Users/sagaino/ciniru/starter-app/src/pages/Login/hooks/useLogin.ts)\n\n---\n\n### Verifikasi yang Disarankan (Orchestrator Verification)\n\n- `typecheck` (`npx tsc --noEmit`)\n- `build` (`npm run build`)\n\n---\n\n### Retrospective Knowledge Recommendation\n\n- **Klasifikasi**: `PROJECT_ONLY`\n- **Rasional**: Pola pemanggilan `toast.add` dari Base UI Toast manager sudah terdokumentasi dan konsisten dengan implementasi yang ada di proyek (seperti pada [`useLogout.ts`](file:///Users/sagaino/ciniru/starter-app/src/hooks/useLogout.ts#L24-L28)), sehingga tidak memerlukan konsep global baru di `01-Knowledge/`.\n",
+    "duration_seconds": 21.658681,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 58894,
+      "output_tokens": 4172,
+      "thinking_tokens": 2710,
+      "cache_read_tokens": 248500,
+      "total_tokens": 63066
+    }
+  },
+  "proposal": {
+    "classification": "PROJECT_ONLY",
+    "confidence": 0.98,
+    "title": "Wiring Toast Notifikasi Sukses pada useLogin (starter-app)",
+    "type": "snippet",
+    "targetPath": null,
+    "summary": "Menambahkan feedback visual berupa notifikasi toast sukses (toast.add) pada hook useLogin ketika access token berhasil diperoleh dari AuthServices.login, sebelum melakukan navigasi ke dashboard.",
+    "rationale": "Perubahan ini hanya mengintegrasikan utilitas toast UI lokal project (@/components/ui/toast) ke dalam hook fitur useLogin pada event onSuccess. Pola ini merupakan implementasi standar project-level yang selaras dengan panduan arsitektur global (State & Logic Separation dan API Service Data Flow) dan tidak menghasilkan durable knowledge baru yang dapat digeneralisasi ke repositori lain.",
+    "considerations": [
+      "Pemanggilan toast.add ditempatkan pada custom hook fitur (useLogin) di onSuccess callback, sesuai dengan prinsip arsitektur pemisahan UI/Service di mana service layer tetap murni tanpa efek samping UI.",
+      "Utilitas toast (@/components/ui/toast) merupakan implementasi UI manager lokal yang sudah ada di starter-app dan konsisten dengan komponen/hook lain (seperti useLogout.ts).",
+      "Tidak ada penambahan abstraction baru, library baru, atau modifikasi pattern global yang memerlukan update pada 01-Knowledge/."
+    ],
+    "relatedKnowledge": [
+      "01-Knowledge/concepts/architecture/api-service-data-flow.md",
+      "01-Knowledge/concepts/architecture/state-logic-separation.md"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-14T15:54:27.514Z",
+    "approvedBy": "user",
+    "classification": "PROJECT_ONLY",
+    "destination": "PROJECT",
+    "targetPath": null
+  }
+}

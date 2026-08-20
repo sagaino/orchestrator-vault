@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:37:08.669Z",
+  "harvestId": "harvest-1787110568549-448b547b",
+  "type": "codebase-harvest",
+  "domain": "mobile",
+  "repositoryPath": "/Users/sagaino/ciniru/mini_bank_app",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/mini_bank_app",
+    "packageName": "mini_bank_app",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "android/.kotlin/sessions",
+          "lib/features/auth",
+          "lib/features/auth/bindings",
+          "lib/features/auth/bindings/auth_binding.dart",
+          "lib/features/auth/data",
+          "lib/features/auth/data/datasource",
+          "lib/features/auth/data/model",
+          "lib/features/auth/data/repository",
+          "lib/features/auth/presentation",
+          "lib/features/auth/presentation/controller"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "ai-context/07_error_handling.md",
+          "lib/core/api/models/error.data.dart"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/.filecache",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/android_aot_bundle_release_android-arm64.stamp",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/android_aot_release_android-arm64.stamp",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/aot_android_asset_bundle.stamp",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/app.dill",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/arm64-v8a",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/arm64-v8a/app.so",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/dart_build.d",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/dart_build.stamp"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 418,
+        "sampleDirectories": [
+          ".dart_tool",
+          ".dart_tool/build_resolvers",
+          ".dart_tool/extension_discovery",
+          ".dart_tool/flutter_build",
+          ".dart_tool/flutter_build/644ab821ff1b298992a10ee89bb054c9",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8",
+          ".dart_tool/flutter_build/f55b2b7830db7bd78d3b67477d576dc8/arm64-v8a",
+          ".dart_tool/hooks_runner",
+          ".dart_tool/hooks_runner/objective_c",
+          ".dart_tool/hooks_runner/objective_c/5360af733d",
+          ".dart_tool/hooks_runner/objective_c/5360af733d/out",
+          ".dart_tool/hooks_runner/objective_c/cfde9bfc54",
+          ".dart_tool/hooks_runner/objective_c/cfde9bfc54/out",
+          ".dart_tool/hooks_runner/shared",
+          ".dart_tool/hooks_runner/shared/objective_c"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 998,
+      "linkCount": 1306
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "abstract class ConflictResolver<TLocal, TRemote, TCompanion> {\n  /// Resolves conflict between local and remote data.\n  /// Returns the companion to persist locally.\n  TCompanion resolve(TLocal local, TRemote remote);\n\n  /// Creates a companion from remote data when no local data exists.\n  TCompanion fromRemote(TRemote remote);\n}",
+          "description": "Generic ConflictResolver base class for reconciling local Drift SQLite data with remote API models",
+          "language": "dart"
+        },
+        {
+          "code": "Future<void> _syncPendingTransfers({int? specificId}) async {\n  final db = Get.find<LocalStorage>().db;\n  var query = db.select(db.pendingTransfers)\n    ..where((t) => t.status.equals('pending'));\n  if (specificId != null) {\n    query.where((t) => t.id.equals(specificId));\n  }\n  final pending = await query.get();\n  if (pending.isEmpty) return;\n  final api = Get.find<TransferApiDatasource>();\n\n  for (final item in pending) {\n    try {\n      final response = await api.submitTransfer(\n        TransferRequest(\n          fromAccountId: item.fromAccountId,\n          toContactId: item.toContactId,\n          amount: item.amount,\n          note: item.note ?? '',\n        ),\n      );\n      await (db.update(db.pendingTransfers)..where((t) => t.id.equals(item.id)))\n          .write(const PendingTransfersCompanion(status: Value('synced')));\n    } on ErrorData catch (e) {\n      final accLocal = Get.find<AccountLocalDatasource>();\n      final acc = await accLocal.getAccount(item.fromAccountId);\n      if (acc != null) {\n        await accLocal.updateBalance(acc.serverId, acc.balance + item.amount);\n      }\n      await (db.update(db.pendingTransfers)..where((t) => t.id.equals(item.id)))\n          .write(PendingTransfersCompanion(status: const Value('failed'), errorMessage: Value<String?>(e.message)));\n    }\n  }\n}",
+          "description": "Sync service pending queue processor with automatic rollback on error",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/core/service/sync_service.dart\nlib/core/storage/database.dart\nlib/core/storage/local_storage.dart\nlib/core/sync/conflict_resolver.dart\nlib/core/sync/account_conflict_resolver.dart\nlib/core/sync/transaction_conflict_resolver.dart\nlib/core/sync/contact_conflict_resolver.dart",
+      "confidence": 0.95,
+      "considerations": [
+        "Pending queue must be FIFO to maintain correct sequence of financial transactions",
+        "Balance compensation must rollback immediately when offline submission fails at remote backend",
+        "Connectivity stream must be disposed on service close to prevent memory leaks"
+      ],
+      "keyImplementationPoints": [
+        "Drift SQLite table for pending transfers acting as persistent offline queue",
+        "Reactive Connectivity listener triggers automatic sync when device transitions from offline to online",
+        "Server-Wins and timestamp-based conflict reconciliation via generic ConflictResolver abstraction",
+        "Optimistic balance mutation with automatic rollback on server rejection"
+      ],
+      "overview": "Pola arsitektur offline-first untuk transaksi finansial mobile menggunakan local SQLite queue, pendeteksi konektivitas reaktif, dan strategi rekonsiliasi data (conflict resolution) dengan rollback otomatis pada kegagalan.\n\n```text\n[User Action / Transfer] ────(Offline)────► [Insert PendingTransfers Table]\n        │                                             │\n     (Online)                                         ▼\n        │                                   [Optimistic Local Balance]\n        ▼                                             │\n[Submit Remote API] ◄──(Connectivity Resumed)─────────┘\n        ├─► (Success) ──► Mark 'synced' + Insert Transactions Table\n        └─► (Failure) ──► Mark 'failed' + Rollback Balance + Notify User\n```",
+      "purpose": "Memastikan aplikasi mobile tetap dapat melakukan transaksi dan perubahan data saat tidak ada koneksi internet, lalu secara otomatis menyinkronkan data dengan rekonsiliasi konflik saat online.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/offline-first-architecture.md",
+        "01-Knowledge/patterns/mobile/drift-sqlite-database.md"
+      ],
+      "summary": "Offline-First Synchronization & Queue Conflict Resolver pattern in Flutter with Drift SQLite and ConnectivityPlus.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "drift",
+        "sqlite",
+        "offline-first",
+        "sync",
+        "queue",
+        "conflict-resolution"
+      ],
+      "title": "Offline-First Synchronization & Queue Conflict Resolver"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class AccountRepository {\n  final AccountLocalDatasource _local;\n\n  AccountRepository(this._local);\n\n  Future<List<Account>> getAccounts() => _local.getAccounts();\n  Stream<List<Account>> watchAccounts() => _local.watchAccounts();\n  Future<Account?> getAccount(String serverId) => _local.getAccount(serverId);\n  Future<void> updateBalance(String serverId, double newBalance) =>\n      _local.updateBalance(serverId, newBalance);\n}",
+          "description": "Repository layer providing clean domain interface combining local drift stream and remote operations",
+          "language": "dart"
+        },
+        {
+          "code": "class AuthBinding extends Bindings {\n  @override\n  void dependencies() {\n    Get.lazyPut<AuthLocalDatasource>(() => AuthLocalDatasource(Get.find()));\n    Get.lazyPut<AuthController>(() => AuthController());\n  }\n}",
+          "description": "Feature binding using GetX lazyPut to instantiate dependencies on demand",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/app/app_binding.dart\nlib/app/routes/app_pages.dart\nlib/app/routes/app_routes.dart\nlib/features/<feature>/bindings/<feature>_binding.dart\nlib/features/<feature>/data/datasource/<feature>_local_datasource.dart\nlib/features/<feature>/data/datasource/<feature>_api_datasource.dart\nlib/features/<feature>/data/repository/<feature>_repository.dart\nlib/features/<feature>/presentation/controller/<feature>_controller.dart\nlib/features/<feature>/presentation/pages/<feature>_page.dart\nlib/features/<feature>/presentation/widgets/<feature>_widget.dart",
+      "confidence": 0.92,
+      "considerations": [
+        "Keep presentation layer decoupled from direct database or HTTP queries by using Repository as gateway",
+        "Use lazy bindings to avoid unnecessary memory overhead on app boot",
+        "Maintain unidirectional data flow from repository stream to controller to UI widget"
+      ],
+      "keyImplementationPoints": [
+        "Feature-first folder structure isolating data, presentation, and bindings per domain feature",
+        "GetX Bindings for lazy dependency injection on route navigation",
+        "Repository pattern acting as single source of truth mediating between local and remote datasources",
+        "Reactive streaming using Drift watch streams piped into GetX observables"
+      ],
+      "overview": "Pola modularitas codebase Flutter berbasis fitur (Feature-First) yang memisahkan tanggung jawab ke dalam layer Data (Datasource & Repository), Presentation (Controller & UI), dan Dependency Injection (Bindings).\n\n```text\n[Page / Widget View] ◄───(GetX Obx / Watch Stream)──── [Feature Controller]\n        │                                                      │\n        ▼ (UI Event)                                           ▼\n[Controller Method] ─────────(Calls)───────────► [Feature Repository]\n                                                               │\n                                       ┌───────────────────────┴───────────────────────┐\n                                       ▼                                               ▼\n                         [Local Datasource (Drift)]                       [Remote Datasource (Dio)]\n```",
+      "purpose": "Menyediakan struktur modular yang scalable dan mudah di-maintain untuk aplikasi mobile skala menengah hingga besar dengan isolasi dependensi per-fitur.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/clean-architecture.md",
+        "01-Knowledge/patterns/mobile/getx-state-management.md"
+      ],
+      "summary": "Feature-First Clean Modular Architecture with Reactive State Binding using GetX and Drift in Flutter.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "getx",
+        "clean-architecture",
+        "modularity",
+        "reactive",
+        "state-management"
+      ],
+      "title": "Feature-First Clean Modular Architecture with Reactive Bindings"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class AuthController extends GetxController {\n  final AuthLocalDatasource _authStorage = Get.find<AuthLocalDatasource>();\n  final LocalAuthentication _auth = LocalAuthentication();\n\n  final pin = ''.obs;\n  final confirmPin = ''.obs;\n  final pinError = RxnString();\n  final isCreating = false.obs;\n  final isConfirmStep = false.obs;\n  static const int pinLength = 6;\n\n  Future<bool> authenticateWithBiometrics() async {\n    try {\n      return await _auth.authenticate(\n        localizedReason: 'Verify your identity to access Mini Bank',\n        biometricOnly: true,\n        persistAcrossBackgrounding: true,\n      );\n    } catch (_) {\n      return false;\n    }\n  }\n\n  Future<void> _verifyPin() async {\n    final valid = await _authStorage.verifyPin(pin.value);\n    if (valid) {\n      await onAuthSuccess();\n    } else {\n      pin.value = '';\n      pinError.value = 'Wrong PIN';\n    }\n  }\n}",
+          "description": "Biometric authentication controller with PIN verification and session gate",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/features/auth/bindings/auth_binding.dart\nlib/features/auth/data/datasource/auth_local_datasource.dart\nlib/features/auth/presentation/controller/auth_controller.dart\nlib/features/auth/presentation/pages/auth_page.dart\nlib/features/auth/presentation/pages/pin_page.dart",
+      "confidence": 0.91,
+      "considerations": [
+        "Clear PIN buffer memory immediately after verification to avoid memory extraction risks",
+        "Configure persistAcrossBackgrounding to prevent race conditions when OS biometric dialog pops up",
+        "Ensure offAllNamed is used upon login to wipe the authentication route stack"
+      ],
+      "keyImplementationPoints": [
+        "Hardware biometric authentication via local_auth with biometricOnly policy",
+        "Custom 6-digit numeric PIN fallback with creation and 2-step confirmation validation",
+        "Persistent session authentication gate stored securely in local settings storage",
+        "Navigation offAllNamed to prevent user from popping back into auth screens"
+      ],
+      "overview": "Pola autentikasi lokal multi-tier untuk aplikasi perbankan/fintech yang memprioritaskan autentikasi biometrik perangkat keras (FaceID / Fingerprint) dengan fallback keypad PIN 6-digit terenkripsi dan proteksi backgrounding.\n\n```text\n[App Launch / Protected Route]\n             │\n             ▼\n   [Check Device Biometrics] ───(Supported & Enabled)───► [Prompt Biometric (Fingerprint/FaceID)]\n             │                                                          │\n      (Not Supported)                                      ┌────────────┴────────────┐\n             │                                             ▼ (Success)               ▼ (Fail / Cancel)\n             ▼                                      [Grant Session]           [Switch to PIN Fallback]\n   [6-Digit PIN Keypad] ◄────────────────────────────────────────────────────────────────┘\n```",
+      "purpose": "Memberikan keamanan otentikasi cepat (biometrik) dengan proteksi fallback andal (PIN 6-digit) untuk aplikasi finansial mobile.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/mobile-app-security.md",
+        "01-Knowledge/patterns/mobile/session-lifecycle.md"
+      ],
+      "summary": "Biometric-First Local Auth & Fallback PIN Session Gate pattern in Flutter.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "security",
+        "local-auth",
+        "biometrics",
+        "pin",
+        "session-management"
+      ],
+      "title": "Biometric-First Local Auth & Fallback PIN Session Gate"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class ApiClient {\n  late final Dio _dio;\n\n  ApiClient() {\n    _dio = Dio(\n      BaseOptions(\n        baseUrl: AppConfig.baseUrl,\n        connectTimeout: AppConfig.connectTimeout,\n        receiveTimeout: AppConfig.receiveTimeout,\n        headers: {\n          'Content-Type': 'application/json',\n          'Accept': 'application/json',\n        },\n      ),\n    );\n\n    _dio.interceptors.addAll([\n      LogInterceptor(request: true, requestBody: true, responseBody: true, error: true),\n      InterceptorsWrapper(\n        onError: (error, handler) {\n          handler.next(error);\n        },\n      ),\n    ]);\n  }\n}",
+          "description": "Centralized Dio HTTP client wrapper with configured interceptor pipeline and timeouts",
+          "language": "dart"
+        },
+        {
+          "code": "class ErrorData {\n  ErrorData({this.code, this.message});\n\n  ErrorData.fromJson(dynamic json) {\n    code = json['code'];\n    message = json['message'];\n  }\n  num? code;\n  String? message;\n\n  @override\n  String toString() => 'ErrorData(code: $code, message: $message)';\n}",
+          "description": "Standardized typed domain error data model",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/core/api/api_client.dart\nlib/core/api/api_endpoints.dart\nlib/core/api/models/api_response.dart\nlib/core/api/models/error.data.dart",
+      "confidence": 0.88,
+      "considerations": [
+        "Configure aggressive connect and receive timeouts to prevent hanging sockets on weak cellular networks",
+        "Normalize non-standard backend error bodies into consistent typed ErrorData"
+      ],
+      "keyImplementationPoints": [
+        "Centralized Dio client with standard headers and timeout configuration",
+        "Interceptors pipeline for logging and intercepting HTTP error responses",
+        "Typed domain error modeling (ErrorData) decoupling presentation from raw DioException"
+      ],
+      "overview": "Pola abstraksi klien HTTP menggunakan Dio dengan pipeline interceptors untuk logging, normalisasi respons error backend menjadi model domain ErrorData(code, message), dan isolasi kegagalan request.\n\n```text\n[Datasource HTTP Request] ──► [Dio BaseOptions] ──► [Interceptors Pipeline]\n                                                             │\n                                       ┌─────────────────────┴─────────────────────┐\n                                       ▼ (HTTP 2xx)                                ▼ (HTTP 4xx / 5xx)\n                              [Return Domain Model]                      [Map to Typed ErrorData]\n```",
+      "purpose": "Menyediakan lapisan komunikasi HTTP yang konsisten, terisolasi, dan aman dengan penanganan domain error yang terstandarisasi.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/rest-api-client-patterns.md"
+      ],
+      "summary": "Resilient HTTP Client & Domain Error Handling Architecture with Dio and ErrorData in Flutter.",
+      "tags": [
+        "candidate",
+        "mobile",
+        "flutter",
+        "dio",
+        "error-handling",
+        "interceptors",
+        "rest-api"
+      ],
+      "title": "Resilient HTTP Client & Domain Error Handling Architecture"
+    }
+  ]
+}

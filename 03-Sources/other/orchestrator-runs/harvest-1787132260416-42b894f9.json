@@ -1,0 +1,815 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T09:42:29.866Z",
+  "harvestId": "harvest-1787132260416-42b894f9",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/pam-ad-web",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/pam-ad-web",
+    "packageName": "pam-ad-web",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@cycjimmy/jsmpeg-player",
+      "@dnd-kit/core",
+      "@dnd-kit/modifiers",
+      "@dnd-kit/sortable",
+      "@dnd-kit/utilities",
+      "@hookform/resolvers",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-alert-dialog",
+      "@radix-ui/react-aspect-ratio",
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-checkbox",
+      "@radix-ui/react-collapsible",
+      "@radix-ui/react-context-menu",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-hover-card",
+      "@radix-ui/react-label",
+      "@radix-ui/react-menubar",
+      "@radix-ui/react-navigation-menu",
+      "@radix-ui/react-popover",
+      "@radix-ui/react-progress",
+      "@radix-ui/react-radio-group",
+      "@radix-ui/react-scroll-area",
+      "@radix-ui/react-select",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-switch",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-toggle",
+      "@radix-ui/react-toggle-group",
+      "@radix-ui/react-tooltip",
+      "@radix-ui/react-visually-hidden",
+      "@stomp/stompjs",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "d3",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-infinite-scroller",
+      "react-resizable-panels",
+      "react-router-dom",
+      "react-webcam",
+      "recharts",
+      "sonner",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "use-debounce",
+      "vaul",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/d3",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@types/react-infinite-scroller",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "build:dev",
+      "build:prod",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/components/common/auth",
+          "src/components/common/auth/moduleguard.tsx",
+          "src/components/common/auth/privateroute.tsx",
+          "src/components/common/auth/publicroute.tsx",
+          "src/services/auth.ts",
+          "src/types/response/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/config/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/pages/cctvmonitoring/schema",
+          "src/pages/digitalvisitor/meeting/schema",
+          "src/pages/login/schema",
+          "src/pages/login/schema/index.ts",
+          "src/pages/personaccess/schema",
+          "src/pages/personaccess/schema/addperson",
+          "src/pages/personaccess/schema/index.ts"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 614,
+        "sampleDirectories": [
+          "public",
+          "public/assets",
+          "public/assets/images",
+          "public/assets/vector",
+          "src",
+          "src/assets",
+          "src/assets/images",
+          "src/assets/vector",
+          "src/components",
+          "src/components/common",
+          "src/components/common/Auth",
+          "src/components/common/Video",
+          "src/components/common/select",
+          "src/components/common/toast",
+          "src/components/ui"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/components/common/Auth/PrivateRoute.tsx\nimport { LOCALSTORAGE_KEY } from '@/config/constant/localstorage'\nimport useLocalStorage from '@/hooks/useLocalStorage'\nimport React from 'react'\nimport { Navigate, useLocation } from 'react-router-dom'\n\ninterface IPrivateRoute {\n  children: React.ReactNode\n}\n\nconst PrivateRoute: React.FC<IPrivateRoute> = ({ children }) => {\n  const [token] = useLocalStorage<string | null>(LOCALSTORAGE_KEY.TOKEN, null, { encrypted: true })\n  const location = useLocation()\n\n  if (!token) {\n    return <Navigate to=\"/login\" state={{ from: location }} replace />;\n  }\n\n  return <>{children}</>;\n}\n\nexport default PrivateRoute;",
+          "description": "Level 1 Authentication Guard protecting root layout and redirecting unauthenticated users while preserving location state.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/components/common/Auth/ModuleGuard.tsx\nimport { ROUTES } from \"@/config/constant/routes\";\nimport { Navigate } from \"react-router-dom\";\nimport { getData } from \"@/hooks/useLocalStorage\";\nimport { LOCALSTORAGE_KEY } from \"@/config/constant/localstorage\";\nimport { defaultModules } from \"@/config/constant/DefaultModules\";\n\ninterface ModuleGuardProps {\n  children: React.ReactNode;\n  moduleKey: string;\n}\n\nconst ModuleGuard = ({ children, moduleKey }: ModuleGuardProps) => {\n  const userData = getData(LOCALSTORAGE_KEY.USER);\n  const userRole = userData?.role_code;\n  const modules = userData?.modules || [];\n\n  // SUPERADMIN bypass with exceptions\n  if (userRole === \"SUPERADMIN\") {\n    if (moduleKey === \"inventory\") {\n      return <Navigate to={ROUTES.DASHBOARD} replace />;\n    }\n    return <>{children}</>;\n  }\n\n  // Role ACL check against assigned and default modules\n  const hasAccess = defaultModules.includes(moduleKey) || modules.includes(moduleKey);\n\n  if (!hasAccess) {\n    return <Navigate to={ROUTES.DASHBOARD} replace />;\n  }\n\n  return <>{children}</>;\n};\n\nexport default ModuleGuard;",
+          "description": "Level 2 Module and Role-based Access Control (RBAC/ACL) Route Guard.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/routes/index.tsx\nexport const router = createBrowserRouter([\n  {\n    path: \"/\",\n    element: (\n      <PrivateRoute>\n        <PrivateLayout>\n          <Outlet />\n        </PrivateLayout>\n      </PrivateRoute>\n    ),\n    children: [\n      {\n        index: true,\n        element: <Navigate to={ROUTES.DASHBOARD} replace />,\n      },\n      {\n        path: ROUTES.CCTV_MONITORING,\n        element: (\n          <ModuleGuard moduleKey=\"cctv_monitoring\">\n            <CCTVMonitoringPage />\n          </ModuleGuard>\n        ),\n      },\n      {\n        path: ROUTES.PERSON_ACCESS.ROOT,\n        element: (\n          <ModuleGuard moduleKey=\"person_access\">\n            <PersonAccessPage />\n          </ModuleGuard>\n        ),\n      }\n    ],\n  },\n]);",
+          "description": "Declarative React Router v6 configuration composing nested layout and guards.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── routes/\n│   └── index.tsx                 # Central Router configuration (createBrowserRouter)\n├── components/common/Auth/\n│   ├── PrivateRoute.tsx          # Auth token guard with location preservation\n│   ├── PublicRoute.tsx           # Inverse auth guard for guest-only pages\n│   └── ModuleGuard.tsx           # RBAC / Feature module permission guard\n└── layout/\n    └── PrivateLayout.tsx         # Sidebar, Header, and Outlet wrapper",
+      "confidence": 0.95,
+      "considerations": [
+        "Decoupling authentication from authorization ensures separation of concerns.",
+        "State location preservation (`state={{ from: location }}`) enables seamless post-login redirect.",
+        "Route protection occurs at routing boundary before feature components mount, avoiding unauthorized network requests."
+      ],
+      "keyImplementationPoints": [
+        "Nested route architecture in React Router v6 using Outlet and Layout wrappers.",
+        "Encrypted session token verification before rendering child route elements.",
+        "Fine-grained module level authorization with SUPERADMIN privilege overrides and fallback redirects."
+      ],
+      "overview": "Pola otentikasi dan otorisasi dua tingkat (Two-Tier Route Access Control) yang memisahkan verifikasi token otentikasi global (Level 1 - PrivateRoute) dengan hak akses per modul/fitur berbasis Role dan Module ACL (Level 2 - ModuleGuard) dalam router deklaratif React Router v6.",
+      "purpose": "Mengamankan navigasi aplikasi web enterprise dan mencegah akses ilegal ke modul berbayar/terbatas dengan redirect presisi.",
+      "relatedKnowledge": [
+        "React Router v6 Protected Routes",
+        "Role-Based Access Control (RBAC)",
+        "Client-side Security Best Practices"
+      ],
+      "summary": "Two-Tier Route Access Control with Role & Dynamic Module Guards",
+      "tags": [
+        "routing",
+        "auth",
+        "rbac",
+        "react-router",
+        "security"
+      ],
+      "title": "Two-Tier Route Access Control with Role & Dynamic Module Guards"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/hooks/useLocalStorage.ts\nimport { useEffect, useState } from \"react\";\nimport CryptoJS from \"crypto-js\";\n\ntype SetValue<T> = T | ((val: T) => T);\ninterface UseLocalStorageOptions {\n  encrypted?: boolean;\n}\n\nconst SECRET_KEY = `${import.meta.env.VITE_SECRET_KEY}`;\n\nexport const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};",
+          "description": "AES-encrypted LocalStorage getter/setter with corrupted state auto-purge and reactive event dispatching.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/hooks/useLocalStorage.ts (Hook Implementation)\nfunction useLocalStorage<T>(\n  key: string,\n  initialValue: T,\n  options: UseLocalStorageOptions = {}\n): [T, (value: SetValue<T>) => void] {\n  const { encrypted = false } = options;\n\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    if (typeof window !== \"undefined\") {\n      try {\n        const item = encrypted ? getData(key) : JSON.parse(localStorage.getItem(key) || \"null\");\n        return item !== null ? item : initialValue;\n      } catch {\n        return initialValue;\n      }\n    }\n    return initialValue;\n  });\n\n  useEffect(() => {\n    const handleStorageChange = () => {\n      const newValue = encrypted ? getData(key) : JSON.parse(localStorage.getItem(key) || \"null\");\n      setStoredValue(newValue !== null ? newValue : initialValue);\n    };\n\n    window.addEventListener(\"storage\", handleStorageChange);\n    return () => window.removeEventListener(\"storage\", handleStorageChange);\n  }, [key, encrypted, initialValue]);\n\n  const setValue = (value: SetValue<T>) => {\n    const valueToStore = value instanceof Function ? value(storedValue) : value;\n    setStoredValue(valueToStore);\n    if (encrypted) {\n      setData(key, valueToStore);\n    } else {\n      localStorage.setItem(key, JSON.stringify(valueToStore));\n      window.dispatchEvent(new Event(\"storage\"));\n    }\n  };\n\n  return [storedValue, setValue];\n}",
+          "description": "Reactive useLocalStorage hook synchronizing local React state with browser storage across tabs.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── hooks/\n│   └── useLocalStorage.ts        # Encrypted storage utilities (getData, setData) and custom React hook\n├── config/constant/\n│   └── localstorage.ts           # Type-safe storage key dictionary constants",
+      "confidence": 0.94,
+      "considerations": [
+        "Browser-side AES keys mitigate casual inspection but are not impervious to reverse engineering; sensitive tokens should also rely on secure server-side TTL and refresh mechanisms.",
+        "Custom storage event dispatching (`window.dispatchEvent(new Event('storage'))`) is necessary because native storage events only fire across separate browser tabs/windows, not within the same document window."
+      ],
+      "keyImplementationPoints": [
+        "AES Encryption/Decryption pipeline using crypto-js.",
+        "Self-healing corrupted state handler with automatic invalidation and removal.",
+        "Dual synchronization: same-window custom event dispatch and cross-window native storage listener."
+      ],
+      "overview": "Pola manajemen state terenkripsi pada browser storage yang mengombinasikan utilitas stand-alone (bisa diakses di luar lifecycle React seperti pada Axios interceptors) dan custom hook reaktif dengan sinkronisasi multi-tab/multi-window.",
+      "purpose": "Menyimpan data credential, session token, dan preferences pengguna secara aman dan reaktif.",
+      "relatedKnowledge": [
+        "Web Cryptography & AES-256",
+        "Cross-tab React State Synchronization",
+        "Browser Storage Resiliency Patterns"
+      ],
+      "summary": "Secure Encrypted Persistent State Store with Cross-Tab Event Synchronization",
+      "tags": [
+        "state-management",
+        "localstorage",
+        "crypto",
+        "react-hook",
+        "security"
+      ],
+      "title": "Secure Encrypted Persistent State Store with Cross-Tab Event Synchronization"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/config/axios.ts (HMAC Request Signature & Interceptor)\naxios.interceptors.request.use(async (config) => {\n  const token = getData(LOCALSTORAGE_KEY.TOKEN);\n  const timestamp = getTimestamp();\n\n  if (token) {\n    config.headers.Authorization = `Bearer ${token}`;\n  }\n\n  const signature = makeSignature(\n    0,\n    timestamp,\n    config.data || {},\n    config.data instanceof FormData\n  );\n\n  config.headers[\"sig\"] = signature;\n  config.headers[\"timestamp\"] = timestamp.toString();\n  return config;\n});",
+          "description": "Axios request interceptor dynamically calculating request signature and injecting auth headers.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/services/doorAccessServices.ts\nexport const DoorAccessServices = {\n  getAccessCards: async (params: RequestAccessCardList): Promise<ResponseAccessCard> => {\n    const response = await axios.get<ResponseAccessCard>(\n      ENDPOINTS.DOOR_ACCESS.ACCESS_CARD_LIST,\n      { params }\n    );\n    return response.data;\n  },\n  createAccessCard: async (data: RequestAccessCardCreate): Promise<ResponseAccessCardCreate> => {\n    const response = await axios.post<ResponseAccessCardCreate>(\n      ENDPOINTS.DOOR_ACCESS.ACCESS_CARD_CREATE,\n      data\n    );\n    return response.data;\n  },\n};",
+          "description": "Typed API Service Layer encapsulating backend REST endpoints.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/pages/DoorAccess/hooks/useAccessCardQueries.ts\nexport const ACCESS_CARD_QUERY_KEYS = {\n  all: ['access-cards'] as const,\n  lists: () => [...ACCESS_CARD_QUERY_KEYS.all, 'list'] as const,\n  list: (params: RequestAccessCardList) => [...ACCESS_CARD_QUERY_KEYS.lists(), params] as const,\n  details: () => [...ACCESS_CARD_QUERY_KEYS.all, 'detail'] as const,\n  detail: (code: string) => [...ACCESS_CARD_QUERY_KEYS.details(), code] as const,\n};\n\nexport function useAccessCards(params: RequestAccessCardList) {\n  return useQuery({\n    queryKey: ACCESS_CARD_QUERY_KEYS.list(params),\n    queryFn: () => DoorAccessServices.getAccessCards(params),\n    staleTime: 5 * 60 * 1000,\n  });\n}\n\nexport function useCreateAccessCard() {\n  const queryClient = useQueryClient();\n  return useMutation({\n    mutationFn: (data: RequestAccessCardCreate) => DoorAccessServices.createAccessCard(data),\n    onSuccess: () => {\n      queryClient.invalidateQueries({ queryKey: ACCESS_CARD_QUERY_KEYS.lists() });\n      toast.success('Access card created successfully');\n    },\n    onError: (error: any) => {\n      toast.error(error.response?.data?.message || 'Failed to create access card');\n    },\n  });\n}",
+          "description": "Query Key Factory pattern and reactive mutation hooks managing server state.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   ├── axios.ts                  # Axios instance with Signature & Auth Interceptors\n│   └── constant/endpoint.ts      # REST API endpoint mapping\n├── services/\n│   └── doorAccessServices.ts     # Service layer functions returning typed DTOs\n└── pages/DoorAccess/\n    ├── hooks/\n    │   └── useAccessCardQueries.ts  # TanStack Query & Mutation hooks with Query Key Factory\n    └── types/\n        └── api.ts                # Request and response contract interfaces",
+      "confidence": 0.96,
+      "considerations": [
+        "Hierarchical query keys prevent accidental cache invalidation across unrelated query scopes.",
+        "Centralized API service isolation simplifies unit testing and mocking without component involvement.",
+        "Automatic toast feedback within mutation lifecycle reduces boilerplate in UI view layers."
+      ],
+      "keyImplementationPoints": [
+        "Deterministic Query Key Factory using TypeScript `as const` tuple arrays.",
+        "Separation of API transport (Services) from UI cache management (React Query hooks).",
+        "Unified error handling and automatic query invalidation upon successful mutation."
+      ],
+      "overview": "Arsitektur 3-lapis pengelolaan Server State: (1) HTTP Client & Request Signing Interceptors, (2) Pure Type-Safe Service Repositories, dan (3) TanStack React Query Hooks dengan Query Key Factory terstandarisasi.",
+      "purpose": "Mengelola siklus hidup data remote, caching, validasi cache, optimasi fetching, dan sinkronisasi server state secara efisien dan konsisten.",
+      "relatedKnowledge": [
+        "TanStack React Query v5 Best Practices",
+        "Query Key Factory Pattern",
+        "Repository & Service Pattern in Frontend"
+      ],
+      "summary": "Service-Repository & Query Key Factory Architecture for Server State Flow",
+      "tags": [
+        "react-query",
+        "state-management",
+        "service-layer",
+        "axios",
+        "api"
+      ],
+      "title": "Service-Repository & Query Key Factory Architecture for Server State Flow"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/pages/DoorAccess/hooks/useCardWebSocket.ts\nimport { useEffect, useRef, useState, useCallback } from 'react';\nimport { Client } from '@stomp/stompjs';\nimport type { WebSocketCardData } from '../types/api';\n\nexport interface UseCardWebSocketReturn {\n  isConnected: boolean;\n  isConnecting: boolean;\n  cardData: WebSocketCardData | null;\n  error: string | null;\n  resetCardData: () => void;\n  disconnect: () => void;\n}\n\nexport function useCardWebSocket(isEnabled: boolean = false): UseCardWebSocketReturn {\n  const [isConnected, setIsConnected] = useState(false);\n  const [isConnecting, setIsConnecting] = useState(false);\n  const [cardData, setCardData] = useState<WebSocketCardData | null>(null);\n  const [error, setError] = useState<string | null>(null);\n  const clientRef = useRef<Client | null>(null);\n\n  const resetCardData = useCallback(() => {\n    setCardData(null);\n    setError(null);\n  }, []);\n\n  const disconnect = useCallback(() => {\n    if (clientRef.current) {\n      clientRef.current.deactivate();\n      clientRef.current = null;\n    }\n    setIsConnected(false);\n    setIsConnecting(false);\n    setError(null);\n  }, []);\n\n  useEffect(() => {\n    if (!isEnabled) {\n      disconnect();\n      return;\n    }\n\n    if (clientRef.current) return;\n\n    setIsConnecting(true);\n    setError(null);\n\n    const client = new Client({\n      brokerURL: `${import.meta.env.VITE_WEBSOCKET_URL}/web-socket`,\n      reconnectDelay: 5000,\n      heartbeatIncoming: 4000,\n      heartbeatOutgoing: 4000,\n      onConnect: (frame) => {\n        setIsConnected(true);\n        setIsConnecting(false);\n        client.subscribe('/queue/access-card', (message) => {\n          try {\n            const data = JSON.parse(message.body) as WebSocketCardData;\n            setCardData(data);\n          } catch (parseError) {\n            setError('Failed to parse card data');\n          }\n        });\n      },\n      onStompError: (frame) => {\n        setError(frame.headers['message'] || 'WebSocket connection error');\n        setIsConnected(false);\n      },\n      onWebSocketClose: () => {\n        setIsConnected(false);\n      }\n    });\n\n    client.activate();\n    clientRef.current = client;\n\n    return () => {\n      disconnect();\n    };\n  }, [isEnabled, disconnect]);\n\n  return { isConnected, isConnecting, cardData, error, resetCardData, disconnect };\n}",
+          "description": "Lifecycle-aware STOMP WebSocket subscriber hook with auto-reconnect and heartbeat.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/pages/DoorAccess/\n├── hooks/\n│   └── useCardWebSocket.ts       # STOMP broker subscriber hook\n└── types/\n    └── api.ts                    # WebSocket message payload type definitions",
+      "confidence": 0.92,
+      "considerations": [
+        "Condition-driven activation (`isEnabled` flag) prevents idle WebSocket connection leaks when modals or pages are closed.",
+        "`useRef` holds the STOMP `Client` instance across re-renders without triggering unnecessary subscription resets.",
+        "Graceful deactivation in useEffect cleanup ensures socket resources are released during unmount."
+      ],
+      "keyImplementationPoints": [
+        "STOMP protocol management with configurable reconnect delay and bidirectional heartbeat intervals.",
+        "Reactive state exposure (`isConnected`, `isConnecting`, `cardData`, `error`).",
+        "Declarative lifecycle connection management driven by UI state."
+      ],
+      "overview": "Pola Real-Time State Controller berbasis STOMP WebSocket yang dikapsulkan ke dalam custom hook reaktif dengan proteksi kebocoran koneksi, auto-reconnection, dan sinkronisasi event queue.",
+      "purpose": "Menghubungkan aplikasi web dengan IoT/hardware backend (RFID/Door Access card reader) secara real-time.",
+      "relatedKnowledge": [
+        "STOMP Protocol over WebSockets",
+        "Real-time Event Streaming in React",
+        "Resource Lifecycle in Custom Hooks"
+      ],
+      "summary": "Lifecycle-Aware STOMP WebSocket Controller for Real-Time Event State",
+      "tags": [
+        "websocket",
+        "stomp",
+        "real-time",
+        "state-management",
+        "iot"
+      ],
+      "title": "Lifecycle-Aware STOMP WebSocket Controller for Real-Time Event State"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "function flattenObject(obj: any, prefix: string = \"\"): any {\n  let flattened: any = {};\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const prefixedKey = prefix === \"\" ? key : `${prefix}.${key}`;\n      if (\n        typeof value === \"object\" &&\n        value !== null &&\n        !Array.isArray(value)\n      ) {\n        const nested = flattenObject(value, prefixedKey);\n        flattened = { ...flattened, ...nested };\n      } else if (Array.isArray(value)) {\n        flattened[prefixedKey] = \"\";\n      } else {\n        flattened[prefixedKey] = value;\n      }\n    }\n  }\n  return flattened;\n}\n\nfunction formatObject(obj: any): string {\n  const flattened = flattenObject(obj);\n  let result = \"\";\n  Object.keys(flattened)\n    .sort()\n    .forEach((key) => {\n      const value = flattened[key];\n      result += `${key}${value}`;\n    });\n  return result;\n}\n\nexport const makeSignature = (\n  email: number,\n  timestamp: number,\n  data: any,\n  isFormData?: boolean\n) => {\n  const formDataObject: any = {\n    email,\n    timestamp,\n  };\n  if (isFormData) {\n    for (const pair of data.entries()) {\n      formDataObject[pair[0]] = pair[1];\n    }\n  }\n  const newPayload = {\n    email,\n    ...data,\n    timestamp,\n  };\n  const newData = isFormData ? formDataObject : newPayload;\n  const finalPayload = formatObject(newData);\n  return CryptoJS.SHA1(finalPayload);\n};",
+          "description": "Deterministic Canonical Request Signing & Payload Flattening with FormData Deconstruction",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/signature.ts (flattenObject, formatObject, makeSignature) -> src/config/axios.ts (axios request interceptor)",
+      "confidence": 0.95,
+      "considerations": [
+        "Nested array normalization: Array values are converted to empty strings in payload flattening to match backend signing conventions.",
+        "FormData iterator compatibility: Multi-part form data payloads are destructured using FormData.entries() to guarantee consistent key-value extraction prior to hashing.",
+        "Key sorting guarantee: Object.keys().sort() ensures strict canonical representation regardless of JSON key insertion order."
+      ],
+      "keyImplementationPoints": [
+        "Recursive dot-notation flattening for nested object hierarchies",
+        "Alphabetical key ordering before serializing into canonical string",
+        "Multi-part FormData entries iteration for binary/file upload payload signatures",
+        "SHA-1 hash calculation via CryptoJS integrated into HTTP client pipeline"
+      ],
+      "overview": "Pola arsitektur kriptografi untuk integritas request dan mitigasi replay attack melalui standardisasi kanonikal payload (JSON & FormData), dot-notation flattening, sorting kunci alfabetis, dan hashing SHA-1 otomatis sebelum request dikirimkan ke server.",
+      "purpose": "Menjamin integritas data saat transit (anti-tampering), validasi otentikasi request berbasis timestamp/signature, serta rekonsiliasi format payload multi-part dan JSON agar cocok dengan ekspektasi algoritma verifikasi backend.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/concepts/request-signing.md]]",
+        "[[01-Knowledge/patterns/frontend/http-interceptor-pipeline.md]]"
+      ],
+      "summary": "Deterministic Canonical Payload Flattening & SHA-1 Request Signing Pipeline",
+      "tags": [
+        "security",
+        "cryptography",
+        "request-signing",
+        "http-client",
+        "tamper-proofing"
+      ],
+      "title": "deterministic-canonical-payload-flattening-request-signing-pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// Add a response interceptor to handle errors\naxios.interceptors.response.use(\n  (response) => response,\n  async (error) => {\n    const status = error.response?.status;\n    const data = error.response?.data;\n\n    if (status === 401) {\n      const isLoginPage = window.location.pathname.includes(\"/login\") || window.location.hash.includes(\"/login\");\n\n      if (!isLoginPage) {\n        localStorage.removeItem(LOCALSTORAGE_KEY.TOKEN);\n        localStorage.removeItem(LOCALSTORAGE_KEY.USER);\n\n        let msg = \"Sesi telah kedaluwarsa.\";\n        if (data?.message) {\n          msg = typeof data.message === \"string\" ? data.message : (data.message.msg_ind || JSON.stringify(data.message));\n        }\n\n        await Swal.fire({\n          title: msg.split(\",\")[0],\n          text: \"Sesi telah kedaluwarsa.\",\n          icon: \"warning\",\n          confirmButtonText: \"Go to Login\",\n          allowOutsideClick: false,\n          allowEscapeKey: false,\n          confirmButtonColor: \"#FFD700\",\n        });\n\n        window.location.href = \"/login\";\n      }\n    } else {\n      console.error(\"API Error:\", data?.message || error.message || \"An error occurred\");\n    }\n\n    return Promise.reject(error);\n  }\n);",
+          "description": "Response Interceptor handling 401 Unauthorized with loop suppression and credential eviction",
+          "language": "typescript"
+        },
+        {
+          "code": "export const useLogout = () => {\n  const navigate = useNavigate();\n  const { t } = useTranslation();\n\n  const handleLogout = useCallback(() => {\n    // Clear the auth state from localStorage\n    localStorage.removeItem(LOCALSTORAGE_KEY.TOKEN);\n    localStorage.removeItem(LOCALSTORAGE_KEY.USER);\n    // Navigate to login page\n    navigate(\"/login\", { replace: true });\n\n    // Show success toast\n    CustomToast.success(t(\"general.youre_logout\"));\n  }, [navigate, t]);\n\n  return {\n    handleLogout,\n  };\n}",
+          "description": "Unified Session Purge Hook for User Actions and Interceptor Parity",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/axios.ts (response interceptor 401 handler) -> src/hooks/useLogout.ts (client session purge hook) -> src/components/common/UserDropdown.tsx (UI trigger)",
+      "confidence": 0.94,
+      "considerations": [
+        "Infinite loop guard: Checks current URL to prevent re-triggering 401 alerts when login attempt fails on /login route.",
+        "Modal lockdown: SweetAlert2 modal sets allowOutsideClick: false and allowEscapeKey: false, forcing explicit user acknowledgement before navigation.",
+        "Multi-lingual error fallback: Handles backend error messages whether returned as raw strings or localized objects (e.g. msg_ind)."
+      ],
+      "keyImplementationPoints": [
+        "Route-aware 401 suppression to isolate login failures from expired authenticated sessions",
+        "Atomic removal of security credentials (TOKEN & USER) upon unauthorized response",
+        "Blocking modal dialog requiring explicit user acknowledgement before redirection",
+        "Parity between programmatic interceptor session eviction and explicit user logout hooks"
+      ],
+      "overview": "Pola session management dan interceptor response untuk menangani 401 Unauthorized secara terpusat dengan pencegahan infinite alert loop, dialog penguncian interaksi (modal lock), pembersihan kredensial sesi secara atomik, dan pengalihan navigasi ke login.",
+      "purpose": "Mencegah kebocoran data saat sesi berakhir di sisi backend, mencegah cascade error pada aplikasi single-page, dan memberikan user experience yang jelas dan aman saat token kadaluwarsa.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/concepts/session-management.md]]",
+        "[[01-Knowledge/patterns/frontend/auth-flow.md]]"
+      ],
+      "summary": "Unified Session Expiration Guard & Interceptor-Driven Auth Eviction Flow",
+      "tags": [
+        "security",
+        "auth",
+        "session-management",
+        "http-interceptor",
+        "axios"
+      ],
+      "title": "unified-session-expiration-guard-interceptor-auth-eviction-flow"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export interface ApiError {\n  code: number;\n  message: string;\n  errors?: Record<string, string>;\n  result: null;\n}\n\nexport const formatErrorMessage = (error: unknown) => {\n  const axiosError = error as AxiosError<ApiError>;\n  const apiError = axiosError.response?.data;\n\n  if (!apiError) {\n    return [axiosError.message || \"An error occurred\"];\n  }\n\n  // If we have field-specific validation errors\n  if (apiError.errors && Object.keys(apiError.errors).length > 0) {\n    return Object.values(apiError.errors);\n  }\n\n  // If we have a general error message (like 404 not found)\n  if (apiError.message) {\n    const formattedMessage = apiError.message.charAt(0).toUpperCase() + apiError.message.slice(1);\n    return [formattedMessage];\n  }\n\n  // Fallback error message\n  return [\"An error occurred\"];\n};\n\nexport const showErrorToast = (error: AxiosError<ApiError>) => {\n  const errors = formatErrorMessage(error);\n  const errorList = errors.map(error => `• ${error}`).join('\\n');\n\n  toast.error(\"Error\", {\n    description: errorList,\n    style: { whiteSpace: 'pre-line' }\n  });\n};",
+          "description": "Two-tier Error Normalization & Structured Multi-Bullet Toast Notification Pipeline",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/error-utils.ts (formatErrorMessage, showErrorToast) -> TanStack Query useMutation onError handlers across feature hooks",
+      "confidence": 0.92,
+      "considerations": [
+        "Typed AxiosError unwrapping: Safely casts error to ApiError without runtime exceptions when response payload is malformed or absent.",
+        "Field validation vs general error precedence: Prioritizes field-specific validation errors over high-level error strings to provide granular feedback.",
+        "Multi-line toast styling: Explicitly applies style: { whiteSpace: 'pre-line' } to Sonner toast notifications for bulleted lists."
+      ],
+      "keyImplementationPoints": [
+        "Standardized ApiError interface mirroring backend validation error schemas",
+        "Hierarchical error fallback resolution (field errors -> message string -> network error -> generic fallback)",
+        "Automated bullet formatting (• item) for multi-field validation error displays",
+        "Direct integration with mutation hooks (useMutation onError: showErrorToast)"
+      ],
+      "overview": "Pola normalisasi error API berjenjang (field-specific validation map vs high-level message) yang memetakan error HTTP/AxiosError secara deterministik ke dalam visual notifikasi toast multi-baris yang rapi dan terstruktur.",
+      "purpose": "Memberikan feedback error yang konsisten, informatif, dan aman kepada pengguna tanpa membocorkan stack trace mentah atau merusak UI saat terjadi validasi gagal pada level API.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/error-handling.md]]",
+        "[[01-Knowledge/snippets/toast-notifications.md]]"
+      ],
+      "summary": "Two-Tier Typed Error Normalization & Multi-Line Toast Diagnostic Pipeline",
+      "tags": [
+        "error-handling",
+        "http-client",
+        "toast",
+        "validation",
+        "axios"
+      ],
+      "title": "two-tier-typed-error-normalization-toast-diagnostic-pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// Add a request interceptor to add auth token and signature\naxios.interceptors.request.use(\n  async (config) => {\n    const token = getData(LOCALSTORAGE_KEY.TOKEN);\n    const timestamp = getTimestamp();\n\n    if (token) {\n      config.headers.Authorization = `Bearer ${token}`;\n    }\n\n    const signature = makeSignature(\n      0,\n      timestamp,\n      config.data || {},\n      config.data instanceof FormData\n    );\n\n    // Add signature and timestamp to headers\n    config.headers[\"sig\"] = signature;\n    config.headers[\"email\"] = \"0\";\n    config.headers[\"timestamp\"] = timestamp.toString();\n\n    return config;\n  },\n  (error) => {\n    return Promise.reject(error);\n  }\n);",
+          "description": "Request Interceptor injecting Bearer JWT, dynamic cryptographic signature, timestamp, and metadata headers",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/axios.ts (request interceptor) -> src/hooks/useLocalStorage.ts (getData with AES decryption) -> src/config/signature.ts (makeSignature)",
+      "confidence": 0.94,
+      "considerations": [
+        "Decryption on the fly: Token retrieved using encrypted storage helper (getData) seamlessly decrypts AES cipher text before setting Authorization header.",
+        "Zero pollution in service layer: Individual API services only define endpoint and payload; headers, token, and cryptographic signatures are injected transparently.",
+        "Dynamic timestamp evaluation: Timestamp generated per-request rather than at client instantiation time, preventing replay window expiration."
+      ],
+      "keyImplementationPoints": [
+        "Transparent Bearer JWT injection from encrypted client-side storage",
+        "Per-request dynamic timestamping for replay-attack defense window",
+        "Unified header attachment pipeline (sig, email, timestamp, Authorization)",
+        "Seamless support for JSON body and FormData binary payloads"
+      ],
+      "overview": "Pola request interceptor pipeline yang menginjeksi kredensial otentikasi (Bearer token) dan metadata kriptografi (HMAC/SHA-1 signature, timestamp, identifier) secara transparan ke seluruh outbound HTTP request tanpa membebani domain service layer.",
+      "purpose": "Memisahkan concern bisnis (domain service) dari concern infrastruktur keamanan jaringan (security headers, token management, signature generation), serta memastikan seluruh request terotentikasi dan terlindungi integritasnya.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/concepts/jwt-authentication.md]]",
+        "[[01-Knowledge/patterns/frontend/http-pipeline.md]]"
+      ],
+      "summary": "Secure Dynamic Header Injection & Context-Aware Request Interception Pipeline",
+      "tags": [
+        "security",
+        "http-interceptor",
+        "jwt",
+        "headers",
+        "axios"
+      ],
+      "title": "secure-dynamic-header-injection-request-interception-pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import React, { useCallback, useRef, useState } from \"react\";\nimport Webcam from \"react-webcam\";\nimport { Dialog, DialogContent, DialogHeader, DialogTitle } from \"@/components/ui/dialog\";\nimport { Camera, Loader2 } from \"lucide-react\";\n\ninterface ICameraDialog {\n  open: boolean;\n  onClose: () => void;\n  onPhotoCapture?: (imageData: string) => void;\n}\n\nconst videoConstraints = {\n  width: 704,\n  facingMode: \"environment\",\n};\n\nexport const CameraDialog: React.FC<ICameraDialog> = ({ open, onClose, onPhotoCapture }) => {\n  const webcamRef = useRef<Webcam | null>(null);\n  const [url, setUrl] = useState<string | null>(null);\n  const [isProcessing, setIsProcessing] = useState(false);\n  const [isCameraReady, setIsCameraReady] = useState(false);\n\n  const capturePhoto = useCallback(() => {\n    if (webcamRef.current && !isProcessing) {\n      const imageSrc = webcamRef.current.getScreenshot();\n      if (imageSrc) {\n        setIsProcessing(true);\n        const base64Data = imageSrc.replace(/^data:image\\/[a-z]+;base64,/, \"\");\n\n        setTimeout(() => {\n          setUrl(base64Data);\n          setIsProcessing(false);\n          if (onPhotoCapture) onPhotoCapture(base64Data);\n        }, 2000);\n\n        setTimeout(() => {\n          onClose();\n        }, 2500);\n      }\n    }\n  }, [isProcessing, onPhotoCapture, onClose]);\n\n  const onUserMedia = () => {\n    setTimeout(() => {\n      setIsCameraReady(true);\n    }, 650);\n  };\n\n  return (\n    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>\n      <DialogContent className=\"w-[706px] p-0 gap-0\" onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>\n        <DialogHeader className=\"p-6\">\n          <DialogTitle className=\"text-lg font-semibold text-gray-900\">Face Recognition Camera</DialogTitle>\n        </DialogHeader>\n        <div className=\"flex flex-col items-center relative\">\n          {!url ? (\n            <div className=\"relative\">\n              <Webcam ref={webcamRef} audio={false} screenshotFormat=\"image/jpeg\" videoConstraints={videoConstraints} onUserMedia={onUserMedia} className=\"rounded\" />\n              {isCameraReady && (\n                <div className=\"absolute inset-0 flex items-center justify-center\">\n                  <div className=\"absolute inset-0 bg-black/60 mask-radial\" />\n                  <div className=\"w-52 h-52 rounded-full border-2 border-dashed border-white z-10\" />\n                </div>\n              )}\n            </div>\n          ) : (\n            <img src={`data:image/jpeg;base64,${url}`} alt=\"Captured\" className=\"rounded\" />\n          )}\n          <button className={`p-3.5 m-4 rounded-full text-white ${isProcessing ? \"bg-gray-700 cursor-not-allowed\" : \"bg-red-700 hover:bg-red-800\"}`} onClick={capturePhoto} disabled={isProcessing}>\n            {isProcessing ? <Loader2 size={24} className=\"animate-spin\" /> : <Camera size={24} />}\n          </button>\n        </div>\n      </DialogContent>\n    </Dialog>\n  );\n};",
+          "description": "Webcam media stream capture component with biometric guide overlay and base64 sanitization",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/pages/PersonAccess/components/Dialog/CameraDialog.tsx -> videoConstraints, onUserMedia readiness, biometric focus mask, capturePhoto and regex-based base64 normalization",
+      "confidence": 0.94,
+      "considerations": [
+        "Handle user media permission denial (NotAllowedError/NotFoundError) with informative UI",
+        "Ensure stream tracks are properly released when modal unmounts to free camera hardware"
+      ],
+      "keyImplementationPoints": [
+        "Configures environment/user video constraints and synchronizes readiness via onUserMedia stream event",
+        "Renders concentric biometric radial mask and dashed target circle over the video feed for face alignment",
+        "Strips MIME headers from canvas snapshot base64 URI using regex before payload submission",
+        "Guards modal dismissals during photo processing to prevent aborted capture operations"
+      ],
+      "overview": "Hardware camera media stream bridge using react-webcam with biometric guide overlays and async base64 photo capture pipeline.",
+      "purpose": "Capturing high-resolution face/biometric photos from client hardware camera with visual alignment aids and sanitized data delivery.",
+      "relatedKnowledge": [
+        "W3C Media Capture and Streams API (navigator.mediaDevices.getUserMedia)",
+        "HTML5 Canvas 2D image capture & toDataURL",
+        "Biometric face recognition intake workflows"
+      ],
+      "summary": "Hardware camera bridge managing device streams, biometric targeting UI, and base64 snapshot processing.",
+      "tags": [
+        "camera",
+        "media-stream",
+        "biometrics",
+        "hardware",
+        "react-webcam"
+      ],
+      "title": "Hardware Camera MediaStream Bridge with Biometric Focus Overlay & Async Base64 Ingestion"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import React, { useEffect, useRef, useState } from \"react\";\n\ninterface IPropsVideoMSE {\n  localCamera?: { ws?: string; cctvName?: string };\n}\n\nexport const VideoMSE: React.FC<IPropsVideoMSE> = ({ localCamera }) => {\n  const videoRef = useRef<HTMLVideoElement>(null);\n  const [loading, setLoading] = useState<boolean>(true);\n\n  useEffect(() => {\n    if (!localCamera?.ws) return;\n\n    let mseQueue: Uint8Array[] = [];\n    let mseSourceBuffer: SourceBuffer | null = null;\n    let mseStreamingStarted = false;\n    let ws: WebSocket | null = null;\n\n    const pushPacket = () => {\n      const videoEl = videoRef.current;\n      if (!videoEl || !mseSourceBuffer) return;\n\n      if (!mseSourceBuffer.updating) {\n        if (mseQueue.length > 0) {\n          const packet = mseQueue.shift();\n          if (packet) mseSourceBuffer.appendBuffer(packet);\n        } else {\n          mseStreamingStarted = false;\n        }\n      }\n\n      if (videoEl.buffered.length > 0 && typeof document.hidden !== \"undefined\" && document.hidden) {\n        videoEl.currentTime = videoEl.buffered.end(videoEl.buffered.length - 1) - 0.5;\n      }\n    };\n\n    const readPacket = (packet: Uint8Array) => {\n      if (!mseStreamingStarted && mseSourceBuffer) {\n        mseSourceBuffer.appendBuffer(packet);\n        mseStreamingStarted = true;\n        return;\n      }\n      mseQueue.push(packet);\n      if (mseSourceBuffer && !mseSourceBuffer.updating) {\n        pushPacket();\n      }\n    };\n\n    const startPlay = (videoEl: HTMLVideoElement, url: string) => {\n      const mse = new MediaSource();\n      videoEl.src = window.URL.createObjectURL(mse);\n\n      mse.addEventListener(\"sourceopen\", () => {\n        ws = new WebSocket(url);\n        ws.binaryType = \"arraybuffer\";\n        ws.onopen = () => setLoading(true);\n\n        ws.onmessage = (event) => {\n          setLoading(false);\n          const data = new Uint8Array(event.data);\n\n          if (data[0] === 9) {\n            const decodedArr = data.slice(1);\n            const mimeCodec = window.TextDecoder ? new TextDecoder(\"utf-8\").decode(decodedArr) : \"avc1.640029\";\n            mseSourceBuffer = mse.addSourceBuffer(`video/mp4; codecs=\"${mimeCodec}\"`);\n            mseSourceBuffer.mode = \"segments\";\n            mseSourceBuffer.addEventListener(\"updateend\", pushPacket);\n          } else {\n            readPacket(data);\n          }\n        };\n      }, false);\n    };\n\n    const videoEl = videoRef.current;\n    if (videoEl) startPlay(videoEl, localCamera.ws);\n\n    return () => {\n      if (ws) ws.close();\n    };\n  }, [localCamera?.ws]);\n\n  return (\n    <div className=\"relative w-full h-full bg-black rounded-lg\" style={{ aspectRatio: \"16/9\" }}>\n      <video ref={videoRef} autoPlay muted playsInline className=\"w-full h-full object-contain\" />\n    </div>\n  );\n};",
+          "description": "Media Source Extensions (MSE) pipeline receiving binary WebSocket CCTV stream with packet queue and codec negotiation",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/components/common/Video/videoMSE.tsx -> MediaSource creation, WebSocket arraybuffer binding, header codec decoding (byte 9), FIFO queue drain on updateend, drift compensation",
+      "confidence": 0.96,
+      "considerations": [
+        "Manage buffer memory limits with periodic SourceBuffer.remove for long-running continuous streams",
+        "Handle browser codec support variability between H.264 (AVC) and H.265 (HEVC)"
+      ],
+      "keyImplementationPoints": [
+        "Initializes MediaSource object URL and establishes raw binary WebSocket connection",
+        "Decodes packet type 9 as UTF-8 MIME codec descriptor to initialize SourceBuffer dynamically",
+        "Buffers binary video chunks in a FIFO queue and appends sequentially on updateend events",
+        "Corrects playback timestamp drift when tab is hidden to maintain real-time low-latency CCTV playback"
+      ],
+      "overview": "Low-latency real-time video streaming architecture utilizing W3C Media Source Extensions and binary WebSockets for CCTV camera feeds.",
+      "purpose": "Rendering live RTSP-relayed CCTV MP4 stream fragments in standard HTML5 video elements without third-party plugins.",
+      "relatedKnowledge": [
+        "W3C Media Source Extensions (MSE) Specification",
+        "WebSocket Binary Protocols (ArrayBuffer / Uint8Array)",
+        "Fragmented MP4 (fMP4) and ISOBMFF streaming"
+      ],
+      "summary": "MSE and binary WebSocket streaming pipeline for ultra-low latency real-time CCTV surveillance feeds.",
+      "tags": [
+        "video-streaming",
+        "mse",
+        "websocket",
+        "cctv",
+        "media-source"
+      ],
+      "title": "Low-Latency Binary WebSocket Media Source Extensions (MSE) Streaming Pipeline"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import React, { useEffect, useRef, useState } from \"react\";\nimport JSMpeg from \"@cycjimmy/jsmpeg-player\";\nimport { Loader2, Video, Expand } from \"lucide-react\";\n\nexport interface JsmpegPlayerRef {\n  play: () => void;\n  pause: () => void;\n  stop: () => void;\n  destroy: () => void;\n}\n\ninterface JsmpegPlayerProps {\n  videoUrl: string;\n  options?: object;\n  overlayOptions?: object;\n  onRef?: (ref: JsmpegPlayerRef) => void;\n  cameraName?: string;\n  onExpand?: () => void;\n}\n\nexport const JsmpegPlayer: React.FC<JsmpegPlayerProps> = ({ videoUrl, options, overlayOptions, onRef, cameraName, onExpand }) => {\n  const videoWrapperRef = useRef<HTMLDivElement | null>(null);\n  const [playing, setPlaying] = useState<boolean>(false);\n\n  useEffect(() => {\n    const wrapper = videoWrapperRef.current;\n    if (!wrapper) return;\n\n    wrapper.innerHTML = \"\";\n    const newVideo = new JSMpeg.VideoElement(\n      wrapper,\n      videoUrl,\n      { ...options, control: false },\n      {\n        ...overlayOptions,\n        onVideoDecode: (decoded: boolean) => setPlaying(Boolean(decoded)),\n      }\n    );\n\n    if (onRef) {\n      onRef({\n        play: () => newVideo.play(),\n        pause: () => newVideo.pause(),\n        stop: () => newVideo.stop(),\n        destroy: () => newVideo.destroy(),\n      });\n    }\n\n    const canvas = wrapper.querySelector(\"canvas\");\n    if (canvas) {\n      canvas.style.width = \"100%\";\n      canvas.style.height = \"100%\";\n      canvas.style.display = \"block\";\n      canvas.style.objectFit = \"contain\";\n    }\n\n    return () => {\n      try {\n        setPlaying(false);\n        newVideo.destroy();\n      } catch (error) {\n        console.error(\"Error destroying JSMpeg video:\", error);\n      }\n    };\n  }, [videoUrl, options, overlayOptions, onRef]);\n\n  return (\n    <div className=\"relative w-full\">\n      <div ref={videoWrapperRef} className=\"w-full h-full\" />\n      {!playing && (\n        <div className=\"absolute inset-0 flex justify-center items-center bg-black/20\">\n          <Loader2 className=\"animate-spin text-white\" />\n        </div>\n      )}\n      {cameraName && (\n        <div className=\"absolute bottom-1 left-1 flex items-center gap-1 text-white ml-3\">\n          <Video size={16} />\n          <p className=\"text-sm\">{cameraName}</p>\n        </div>\n      )}\n      {playing && onExpand && (\n        <button className=\"cursor-pointer absolute bottom-1 right-1 bg-white/90 rounded p-1 mr-3\" onClick={onExpand}>\n          <Expand size={16} />\n        </button>\n      )}\n    </div>\n  );\n};",
+          "description": "React wrapper component for JSMpeg software video player rendering on HTML5 canvas with imperative ref bridge",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/components/common/Video/jsmpegPlayer.tsx & jsmpeg-player.d.ts -> Ambient type declaration, JSMpeg.VideoElement wrapper, onVideoDecode state hook, onRef lifecycle bridge, canvas layout styling",
+      "confidence": 0.92,
+      "considerations": [
+        "Software decoding on CPU/WASM consumes higher resources than native GPU hardware decoding",
+        "Ensure canvas context and memory are destroyed when video stream changes or component unmounts"
+      ],
+      "keyImplementationPoints": [
+        "Defines ambient TypeScript declarations for the untyped @cycjimmy/jsmpeg-player module",
+        "Encapsulates imperative canvas video decoder instance inside a reactive React lifecycle container",
+        "Exposes imperative player methods (play, pause, stop, destroy) via an onRef callback interface",
+        "Tracks decode frames via onVideoDecode to control loading spinners and fullscreen expand actions"
+      ],
+      "overview": "Software-decoded video player bridge converting WebSocket MPEG-1 streams onto HTML5 canvas with an imperative ref handle pattern.",
+      "purpose": "Streaming RTSP/MPEG video over WebSockets using client-side software decoding for browsers lacking native container support.",
+      "relatedKnowledge": [
+        "JSMpeg WebAssembly & WebGL/Canvas Video Decoder",
+        "React Imperative Handle & Ref Bridge Pattern",
+        "HTML5 Canvas DOM Manipulation & Memory Management"
+      ],
+      "summary": "WASM and canvas-based software video player bridge with imperative lifecycle control for real-time camera streams.",
+      "tags": [
+        "jsmpeg",
+        "wasm",
+        "canvas",
+        "video-player",
+        "cctv"
+      ],
+      "title": "WASM/Canvas-Based Software Video Player Bridge with Imperative Handle Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import React, { useEffect, useState, useRef } from \"react\";\nimport { Printer, X } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { useBarcodeQuery } from \"../hooks/useBarcodeQuery\";\n\ninterface BarcodeModalProps {\n  isOpen: boolean;\n  onClose: () => void;\n  assetId: string;\n  assetName: string;\n}\n\nexport const BarcodeModal: React.FC<BarcodeModalProps> = ({ isOpen, onClose, assetId, assetName }) => {\n  const [barcodeUrl, setBarcodeUrl] = useState<string | null>(null);\n  const [isPrinting, setIsPrinting] = useState(false);\n  const iframeRef = useRef<HTMLIFrameElement>(null);\n\n  const { data: barcodeData, isLoading } = useBarcodeQuery(assetId, isOpen);\n\n  useEffect(() => {\n    if (barcodeData) {\n      const blob = new Blob([barcodeData], { type: \"application/pdf\" });\n      const url = URL.createObjectURL(blob);\n      setBarcodeUrl(url);\n\n      return () => {\n        if (url) {\n          URL.revokeObjectURL(url);\n        }\n      };\n    }\n  }, [barcodeData]);\n\n  useEffect(() => {\n    const handleEscape = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\" && isOpen && !isPrinting) {\n        onClose();\n      }\n    };\n\n    if (isOpen) {\n      document.addEventListener(\"keydown\", handleEscape);\n      document.body.style.overflow = \"hidden\";\n    }\n\n    return () => {\n      document.removeEventListener(\"keydown\", handleEscape);\n      document.body.style.overflow = \"unset\";\n    };\n  }, [isOpen, onClose, isPrinting]);\n\n  const handlePrint = () => {\n    if (iframeRef.current) {\n      setIsPrinting(true);\n      try {\n        const iframe = iframeRef.current;\n        iframe.contentWindow?.focus();\n        iframe.contentWindow?.print();\n      } catch (error) {\n        console.error(\"Hardware print trigger failed:\", error);\n      } finally {\n        setTimeout(() => setIsPrinting(false), 500);\n      }\n    }\n  };\n\n  if (!isOpen) return null;\n\n  return (\n    <div className=\"fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4\">\n      <div className=\"bg-white rounded-lg p-6 max-w-lg w-full\">\n        <h3 className=\"text-lg font-bold mb-4\">Barcode Preview - {assetName}</h3>\n        {barcodeUrl && (\n          <iframe ref={iframeRef} src={barcodeUrl} title=\"Barcode PDF\" className=\"w-full h-80 border rounded mb-4\" />\n        )}\n        <div className=\"flex justify-end gap-2\">\n          <Button variant=\"outline\" onClick={onClose} disabled={isPrinting}>Close</Button>\n          <Button onClick={handlePrint} disabled={isLoading || isPrinting || !barcodeUrl}>\n            <Printer className=\"mr-2 h-4 w-4\" /> Print Barcode\n          </Button>\n        </div>\n      </div>\n    </div>\n  );\n};",
+          "description": "PDF preview modal converting binary data to transient Blob URL and invoking OS print subsystem via isolated iframe",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/pages/Inventory/components/BarcodeModal.tsx -> useBarcodeQuery binary fetch, Blob URL generation & revocation cleanup, iframe embedding, iframe.contentWindow.print triggering",
+      "confidence": 0.93,
+      "considerations": [
+        "Ensure URL.revokeObjectURL is always executed in cleanup to prevent C++ runtime memory leaks",
+        "Be aware of cross-origin constraints when attempting to access iframe.contentWindow across origins"
+      ],
+      "keyImplementationPoints": [
+        "Transforms raw ArrayBuffer/binary server responses into MIME typed application/pdf Blobs",
+        "Allocates in-memory DOM URLs via URL.createObjectURL and deterministically revokes via URL.revokeObjectURL",
+        "Isolates document printing into an iframe and invokes contentWindow.print without affecting main window",
+        "Protects modal dismissal during active hardware print spooling via state guards"
+      ],
+      "overview": "In-memory Blob URL lifecycle and hardware print controller pattern using an isolated iframe bridge.",
+      "purpose": "Rendering dynamic server-generated PDF barcodes and routing directly to native OS printer dialogs with zero memory leaks.",
+      "relatedKnowledge": [
+        "W3C File API & URL Object Lifecycles",
+        "Browser Hardware Print Subsystem (window.print / iframe.print)",
+        "Binary Stream & ArrayBuffer handling in JavaScript"
+      ],
+      "summary": "In-memory Blob URL lifecycle management and isolated iframe hardware printer bridge.",
+      "tags": [
+        "blob-url",
+        "printing",
+        "pdf",
+        "hardware-printer",
+        "memory-management"
+      ],
+      "title": "In-Memory Blob URL Lifecycle & Headless IFrame Hardware Print Bridge"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// package.json\n\"scripts\": {\n  \"dev\": \"vite\",\n  \"build\": \"vite build\",\n  \"build:dev\": \"vite build --mode development\",\n  \"build:prod\": \"vite build --mode production\",\n  \"lint\": \"eslint .\",\n  \"preview\": \"vite preview\"\n}\n\n// vite.config.ts\nimport path from \"path\"\nimport tailwindcss from \"@tailwindcss/vite\"\nimport { defineConfig } from 'vite'\nimport react from '@vitejs/plugin-react'\n\nexport default defineConfig({\n  plugins: [react(), tailwindcss()],\n  resolve: {\n    alias: {\n      \"@\": path.resolve(__dirname, \"./src\"),\n    },\n  },\n})\n\n// src/config/axios.ts\nconst axiosInstance = axios.create({\n  baseURL: import.meta.env.VITE_API_URL || \"http://localhost:3000\",\n  timeout: 10000,\n});",
+          "description": "Vite Multi-Flavor build scripts, path resolution configuration, and runtime environment variable consumption with fallbacks.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/pages/Alert/hooks/useStompNotifications.ts\nconst WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;\n...\nif (import.meta.env.DEV) {\n  console.log(\"WebSocket connected successfully to:\", WEBSOCKET_URL);\n}",
+          "description": "Environment-gated debug logging and dynamic protocol endpoint resolution.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "package.json (Build script flavor declarations)\n├── vite.config.ts (Path aliasing & bundler plugin pipeline)\n├── src/config/axios.ts (Base URL environment resolution)\n└── src/pages/Alert/hooks/useStompNotifications.ts (import.meta.env.DEV debug guards)",
+      "confidence": 0.92,
+      "considerations": [
+        "Environment variables intended for client-side injection must be prefixed with `VITE_` to prevent leaking private host secrets.",
+        "Sensitive keys (e.g. VITE_SECRET_KEY) injected into the bundle remain visible to reverse-engineering; avoid storing unencrypted critical backend secrets.",
+        "Build scripts must explicitly set `--mode <env>` so Vite reads corresponding `.env.<mode>` files deterministically."
+      ],
+      "keyImplementationPoints": [
+        "Multi-flavor NPM build script matrix differentiating development and production bundle modes.",
+        "Modern bundler pipeline integrating `@vitejs/plugin-react` with `@tailwindcss/vite` and alias resolution `@/*`.",
+        "Defensive environment variable resolution using `import.meta.env` with fallback default values.",
+        "Tree-shakeable development debug logging guarded by `import.meta.env.DEV`."
+      ],
+      "overview": "Pola arsitektur konfigurasi build multi-flavor dan dynamic environment bootstrapping menggunakan Vite. Pola ini memisahkan konfigurasi target deployment (development vs production) melalui skrip build mode-aware, mengamankan resolusi base URL / broker URL secara runtime, serta mengaktifkan conditional debug diagnostics yang aman di level frontend.",
+      "purpose": "Memfasilitasi siklus DevOps yang fleksibel dan aman antara environment staging/development dan production tanpa perlu mengubah source code aplikasi.",
+      "relatedKnowledge": [
+        "Vite Environment Variables and Modes",
+        "Vite Tailwind v4 Bundler Plugin",
+        "Client-side Secret Isolation Patterns"
+      ],
+      "summary": "Pola konfigurasi bundler dan bootstrapping lingkungan multi-flavor Vite untuk pemisahan build target dan resolusi endpoint runtime yang aman.",
+      "tags": [
+        "devops",
+        "vite",
+        "environment",
+        "build-pipeline",
+        "typescript"
+      ],
+      "title": "dual-mode-multi-flavor-build-pipeline-vite-env-bootstrapping"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/pages/MasterData/types/response/responseMasterDataArea.ts\nexport interface ResponeseMasterDataArea {\n  code: number;\n  message: string;\n  result: PaginatedResult;\n}\n\nexport interface AreaItem {\n  code: string;\n  name: string;\n  description: string;\n  total_floor: number;\n  total_floor_created: number;\n  area_key: string;\n}\n\nexport interface PaginatedResult {\n  values: AreaItem[];\n  element_total: number;\n  page: number;\n  page_total: number;\n  empty: boolean;\n  first: boolean;\n  last: boolean;\n}",
+          "description": "Generic envelope and pagination response DTO contract definition.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/services/dropDown.ts\nexport const dropDownServices = {\n  getAllArea: async (\n    param: RequestDeviceConfigGetAllAreaOrFloorOrLocaltion\n  ): Promise<ResponseDeviceConfigAllAreaOrFloorOrLocation> => {\n    const response = await axios.get<ResponseDeviceConfigAllAreaOrFloorOrLocation>(\n      ENDPOINTS.DROPDOWN.AREA,\n      {\n        params: param,\n      }\n    );\n    return response.data;\n  },\n};",
+          "description": "Standardized service unboxing typed envelope responses.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/types/response/ (Global response contract declarations)\n├── src/pages/**/types/response/ (Domain-specific envelope & paginated models)\n└── src/services/ (Service layer methods typed against envelope DTOs)",
+      "confidence": 0.95,
+      "considerations": [
+        "Struktur envelope seragam (code, message, result) memudahkan abstraksi error handler dan notification toaster global.",
+        "Metadata pagination (`element_total`, `page_total`, `first`, `last`) harus selalu disinkronkan dengan pagination UI component.",
+        "Nullability guard pada field item result mencegah runtime crash saat backend mengembalikan null values."
+      ],
+      "keyImplementationPoints": [
+        "Standarisasi Envelope DTO yang konsisten pada seluruh endpoint API (`code`, `message`, `result`).",
+        "Struktur generic pagination cursor (`values`, `element_total`, `page_total`, `empty`, `first`, `last`).",
+        "Type contract decoupling antara domain payload item dengan pagination metadata.",
+        "Direct typed integration dengan Axios instance dan TanStack Query repository layer."
+      ],
+      "overview": "Pola arsitektur standarisasi kontrak respons data transfer object (DTO) dengan format generic envelope dan metadata pagination yang terpadu di seluruh domain service enterprise. Memastikan konsistensi penanganan data antara backend API, service repository, dan UI components.",
+      "purpose": "Menjamin standarisasi struktur data API di seluruh microservice client, memudahkan generic unboxing, error detection, serta sinkronisasi pagination komponen UI.",
+      "relatedKnowledge": [
+        "Data Transfer Object (DTO) Pattern",
+        "Envelope Response Pattern",
+        "Pagination Metadata Standards"
+      ],
+      "summary": "Standarisasi kontrak Generic Envelope DTO dan metadata pagination untuk unboxing respons API yang konsisten dan type-safe.",
+      "tags": [
+        "dto",
+        "envelope",
+        "pagination",
+        "api-contract",
+        "services"
+      ],
+      "title": "generic-envelope-dto-standardized-paginated-response-contract"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/lib/playAlarmSound.ts\nexport const playAlarmSound = () => {\n  try {\n    const audio = new Audio(\"/assets/alarm.mp3\");\n    audio.volume = 0.5;\n    audio.play().catch((error) => {\n      console.error(\"Failed to play alarm sound:\", error);\n    });\n  } catch (error) {\n    console.error(\"Error creating audio object:\", error);\n  }\n};",
+          "description": "Audio synthesis service with volume normalization and promise catch guard.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/components/common/Header.tsx\nconst Header: React.FC = () => {\n  const [isSoundOn, setIsSoundOn] = useState(false);\n\n  const handleNewNotification = useCallback(() => {\n    if (isSoundOn) {\n      playAlarmSound();\n    }\n  }, [isSoundOn]);\n\n  const { notifications, handleMarkAllRead } = useStompNotifications({\n    onNewNotification: handleNewNotification,\n  });\n\n  return (\n    <header ...>\n      <NotificationDropdown\n        notifications={notifications}\n        onMarkAllRead={handleMarkAllRead}\n        onSoundToggle={setIsSoundOn}\n        isSoundOn={isSoundOn}\n      />\n    </header>\n  );\n};",
+          "description": "Header component orchestrating audio playback based on user preference toggle upon real-time alert dispatch.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/playAlarmSound.ts (Audio synthesis utility & HTML5 Audio buffer lifecycle)\n├── src/components/common/Header.tsx (Audio dispatch orchestration & toggle state)\n├── src/pages/Alert/NotificationDropdown.tsx (Sound mute/unmute control UI)\n└── src/pages/Alert/hooks/useStompNotifications.ts (Real-time trigger source)",
+      "confidence": 0.94,
+      "considerations": [
+        "Browser Autoplay Policy memblokir pemutaran audio otomatis tanpa interaksi pengguna awal (user gesture). Penggunaan user toggle (`isSoundOn`) memenuhi syarat inisiasi gesture.",
+        "Audio instance dibuat on-demand untuk mencegah memory leak audio context yang tertahan lama di browser.",
+        "Volume audio dinormalisasi (0.5) untuk mencegah audio clipping pada speaker hardware client."
+      ],
+      "keyImplementationPoints": [
+        "Isolasi modul audio synthesizer mandiri dengan volume clamp dan error catch guard.",
+        "Koneksi decoupled antara push notification WebSocket listener dan audio trigger melalui callback hook (`onNewNotification`).",
+        "Kontrol preferensi suara pengguna via state toggle di header/dropdown notification.",
+        "Safe handling kegagalan browser autoplay tanpa merusak flow notifikasi data."
+      ],
+      "overview": "Pola arsitektur audio notification dispatcher terisolasi yang mengelola siklus hidup HTML5 Audio buffer, pembatasan volume, dan penanganan kebijakan autoplay browser. Pola ini terintegrasi secara reaktif dengan sistem notifikasi real-time WebSocket dan dikontrol oleh preferensi audio pengguna.",
+      "purpose": "Menyediakan umpan balik suara instan (auditory cue) untuk peringatan keamanan/insiden kritis secara aman tanpa melanggar browser autoplay restriction.",
+      "relatedKnowledge": [
+        "Web Audio API / HTML5 Audio Element",
+        "Browser Autoplay Policy Lifecycle",
+        "Real-time Audio Cue Dispatching"
+      ],
+      "summary": "Pola audio alert synthesizer mandiri dengan volume normalization dan user-toggled gesture compliance untuk notifikasi insiden real-time.",
+      "tags": [
+        "audio",
+        "media",
+        "notification",
+        "services",
+        "user-settings"
+      ],
+      "title": "declarative-web-audio-dispatcher-user-toggled-alert-synthesis-service"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/lib/i18n/i18n.ts\nimport i18next from \"i18next\";\nimport en from \"./locales/en.json\";\nimport id from \"./locales/id.json\";\nimport { initReactI18next } from \"react-i18next\";\n\ni18next\n  .use(initReactI18next)\n  .init({\n    resources: {\n      en: { translation: en },\n      id: { translation: id }\n    },\n    lng: \"en\",\n    fallbackLng: \"en\",\n    interpolation: {\n      escapeValue: false,\n    },\n  });\n\nexport default i18next;",
+          "description": "i18next instance configuration with multi-language catalogs and fallback resolution.",
+          "language": "typescript"
+        },
+        {
+          "code": "// src/lib/i18n/i18nProvider.tsx\nimport React, { useEffect } from \"react\";\nimport { I18nextProvider } from \"react-i18next\";\nimport i18next from \"./i18n\";\nimport useLocalStorage from \"../../hooks/useLocalStorage\";\n\nconst I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {\n  const [language] = useLocalStorage(\"language\", \"en\");\n\n  useEffect(() => {\n    i18next.changeLanguage(language);\n  }, [language]);\n\n  return <I18nextProvider i18n={i18next}>{children}</I18nextProvider>;\n};\n\nexport default I18nProvider;",
+          "description": "Reactive I18n Context Provider synchronized with encrypted persistent local storage.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/i18n/i18n.ts (i18next configuration & resource dictionary registration)\n├── src/lib/i18n/i18nProvider.tsx (React Provider syncing language state from LocalStorage)\n├── src/lib/i18n/locales/*.json (Multi-locale translation dictionaries)\n└── src/components/common/LanguagesDropdown.tsx (Language switcher UI component)",
+      "confidence": 0.93,
+      "considerations": [
+        "`escapeValue: false` aman digunakan karena React sudah menangani XSS protection secara native pada string rendering.",
+        "Sinkronisasi dengan `useLocalStorage` memastikan bahasa yang dipilih pengguna tetap aktif antar sesi dan antar tab browser.",
+        "Struktur kamus JSON modular memudahkan penambahan locale baru tanpa mengubah arsitektur inti."
+      ],
+      "keyImplementationPoints": [
+        "Inisialisasi `i18next` terpusat dengan dukungan fallback language (`fallbackLng: 'en'`).",
+        "Sinkronisasi reaktif antara state penyimpanan lokal (`useLocalStorage`) dan `i18next.changeLanguage` di level Provider.",
+        "Integrasi modular dengan kamus locale JSON statis (`en.json`, `id.json`).",
+        "Komponen switch bahasa yang dapat digunakan ulang (`LanguagesDropdown`) dengan feedback instan."
+      ],
+      "overview": "Pola arsitektur penyedia multi-bahasa reaktif (i18n) yang mengintegrasikan i18next dengan React Provider dan penyimpanan persistent state. Memungkinkan transisi bahasa secara real-time di seluruh komponen UI tanpa reload aplikasi.",
+      "purpose": "Menyediakan dukungan multibahasa (i18n) yang persisten, reaktif, dan mudah diperluas untuk aplikasi enterprise global.",
+      "relatedKnowledge": [
+        "i18next & react-i18next Architecture",
+        "Localization & Internationalization (L10n/I18n)",
+        "Persistent Locale Context Synchronization"
+      ],
+      "summary": "Arsitektur Reactive Multi-Locale Provider dengan sinkronisasi local storage persisten dan resolusi dynamic fallback.",
+      "tags": [
+        "i18n",
+        "localization",
+        "react-context",
+        "localstorage",
+        "services"
+      ],
+      "title": "reactive-multi-locale-provider-persistent-storage-sync-architecture"
+    }
+  ]
+}

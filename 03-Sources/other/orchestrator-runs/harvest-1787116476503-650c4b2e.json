@@ -1,0 +1,299 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T05:15:41.688Z",
+  "harvestId": "harvest-1787116476503-650c4b2e",
+  "type": "codebase-harvest",
+  "domain": "mobile",
+  "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+    "packageName": "lovlet-mobile",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "android/.kotlin/sessions",
+          "android/app/proguard-rules.pro",
+          "lib/data/api/service/auth",
+          "lib/data/repository/auth",
+          "lib/data/repository/auth/auth_repository.dart",
+          "lib/data/repository/auth/auth_repository_impl.dart",
+          "lib/data/repository/auth/auth_repository_impl.g.dart",
+          "lib/router/dashboard_route_guard.dart",
+          "lib/router/login_route_guard.dart"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "assets/icon/ic_error.svg",
+          "assets/image/image_error.png",
+          "lib/common/util/error_util.dart",
+          "lib/model/error_data.dart"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/.filecache",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/app.dill",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build_result.json",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/debug_android_application.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/flutter_assets.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_dart_plugin_registrant.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_localizations.stamp"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 945,
+        "sampleDirectories": [
+          ".dart_tool",
+          ".dart_tool/build_resolvers",
+          ".dart_tool/extension_discovery",
+          ".dart_tool/flutter_build",
+          ".dart_tool/flutter_build/46fa5a2ab69f2753f07f8421bd70e532",
+          ".dart_tool/flutter_build/5132091c9de2af21da5e205b6f85243d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/971675559299deef62949c0076419cfa",
+          ".dart_tool/flutter_build/aa02f16b76ccfcdf225307de8a0acb2c",
+          ".dart_tool/flutter_build/b1f05784000fe294765ca005ba0dc7d5",
+          ".dart_tool/hooks_runner",
+          ".dart_tool/hooks_runner/objective_c",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4/out",
+          ".dart_tool/hooks_runner/objective_c/7f969c740e"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "@riverpod\nclass MailboxNotifier extends _$MailboxNotifier {\n  late final MailboxRepository _mailboxRepository;\n  int offset = 1;\n  int limit = 50;\n  bool isMaxMailbox = false;\n  bool isFetching = false;\n  List<MailboxData> mailboxList = [];\n\n  @override\n  MailboxState build() {\n    _mailboxRepository = ref.watch(mailboxRepositoryProvider);\n    return MailboxState(\n      data: const AsyncValue.loading(),\n      totalData: 0,\n    );\n  }\n\n  Future<void> getMailboxList({bool isRefresh = false}) async {\n    try {\n      isFetching = true;\n      final result = await _mailboxRepository.mailboxList(limit: limit, offset: offset);\n      if ((result.dataSet ?? []).length < limit) {\n        isMaxMailbox = true;\n      } else {\n        offset++;\n      }\n      if (isRefresh) mailboxList.clear();\n      mailboxList.addAll(result.dataSet ?? []);\n      isFetching = false;\n      state = MailboxState(\n        data: AsyncValue.data(mailboxList),\n        totalData: result.meta?.totalData ?? 0,\n      );\n    } on ErrorData catch (e) {\n      isFetching = false;\n      state = MailboxState(\n        data: AsyncValue.error(e.message ?? '', StackTrace.current),\n        totalData: 0,\n      );\n    }\n  }\n}",
+          "description": "Penerapan Riverpod 2.0 Code-Gen Notifier dengan pagination dan AsyncValue state handling.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── presenter/\n│   └── mailbox/\n│       ├── component/\n│       ├── notifier/\n│       │   ├── mailbox_notifier.dart\n│       │   └── mailbox_notifier.g.dart\n│       ├── mailbox.dart\n│       └── page_mailbox.dart\n└── data/\n    └── repository/\n        └── mailbox/\n            ├── mailbox_repository.dart\n            └── mailbox_repository_impl.dart",
+      "confidence": 0.95,
+      "considerations": [
+        "Gunakan ref.watch pada build() untuk dependency injection repository.",
+        "Pisahkan state mutation asynchronous dari controller UI dan bungkus ke AsyncValue.data / AsyncValue.error.",
+        "Manajemen state loading/pagination menggunakan flag boolean isFetching dan isMaxMailbox untuk mencegah race conditions saat prefetching."
+      ],
+      "keyImplementationPoints": [
+        "Deklarasi Notifier dengan anotasi @riverpod dan generator _$Notifier.",
+        "Penggunaan AsyncValue untuk mengelola transisi state: loading, data, dan error secara deklaratif.",
+        "Prefetching / infinite scroll pagination logic terisolasi di notifier layer."
+      ],
+      "overview": "Pola manajemen state terstruktur berbasis Riverpod 2.0 dengan code-generation (build_runner). Notifier mengelola async lifecycle, pagination prefetching, dan data mutation secara reaktif tanpa tight coupling dengan UI Flutter.",
+      "purpose": "Menyediakan state management yang terstruktur, type-safe, mudah di-test, dan reaktif untuk seluruh layar dan fitur aplikasi Flutter.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/riverpod-state-management.md",
+        "01-Knowledge/patterns/mobile/async-value-pagination.md"
+      ],
+      "summary": "Manajemen state reaktif menggunakan Riverpod 2.0 code-gen Notifier dengan dukungan AsyncValue dan pagination prefetching.",
+      "tags": [
+        "flutter",
+        "mobile",
+        "riverpod",
+        "state-management",
+        "architecture"
+      ],
+      "title": "Riverpod 2.0 Code-Gen & Async State Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class LoginRouteGuard extends AutoRouteGuard {\n  @override\n  void onNavigation(NavigationResolver resolver, StackRouter router) async {\n    CacheUtil.getBoolean(Strings.keyIsLogin).then(\n      (isLogin) {\n        if (isLogin) {\n          CacheUtil.getBoolean(Strings.keyIsNewUser).then((isNewUser) {\n            if (isNewUser) {\n              router.push(const RouteNewAccount());\n            } else {\n              CacheUtil.getBoolean(Strings.keyIsVerified).then(\n                (isVerified) {\n                  if (isVerified) {\n                    router.push(RouteDashboard());\n                  } else {\n                    router.push(RouteEditProfile(isInitialPage: true));\n                  }\n                },\n              );\n            }\n          });\n        } else {\n          resolver.next(true);\n        }\n      },\n    );\n  }\n}",
+          "description": "Implementasi AutoRouteGuard bertingkat untuk mengevaluasi status onboarding dan autentikasi pengguna secara deklaratif.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── router/\n    ├── app_route.dart\n    ├── app_route.gr.dart\n    ├── dashboard_route_guard.dart\n    └── login_route_guard.dart",
+      "confidence": 0.93,
+      "considerations": [
+        "Semua pengecekan status kredensial session diambil secara asinkron dari Secure Storage/CacheUtil sebelum route resolver diizinkan lanjut.",
+        "Route guard terpasang secara deklaratif pada router configuration (@AutoRouterConfig) sehingga tidak ada bypass navigasi di tingkat widget."
+      ],
+      "keyImplementationPoints": [
+        "Implementasi subclass AutoRouteGuard yang meng-override method onNavigation.",
+        "Multi-level branching evaluation: isLogin -> isNewUser -> isVerified -> Destination.",
+        "Pengalihan navigasi otomatis ke flow registrasi/verifikasi profil bila syarat belum terpenuhi."
+      ],
+      "overview": "Pola proteksi rute navigasi bertingkat menggunakan AutoRouteGuard. Guard mengevaluasi state session, kelengkapan registrasi, dan verifikasi biometrik pengguna sebelum mengizinkan transisi antar layar.",
+      "purpose": "Mencegah akses rute tidak sah serta mengarahkan pengguna secara otomatis ke tahapan onboarding yang sesuai tanpa logika navigasi manual di setiap layar.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/autoroute-guards.md",
+        "01-Knowledge/patterns/mobile/declarative-navigation.md"
+      ],
+      "summary": "Proteksi navigasi deklaratif dengan AutoRouteGuard untuk routing bertingkat berdasarkan status autentikasi, akun baru, dan verifikasi user.",
+      "tags": [
+        "flutter",
+        "mobile",
+        "navigation",
+        "autoroute",
+        "guards",
+        "security"
+      ],
+      "title": "AutoRoute Multi-Stage Navigation & Onboarding Guard"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class RefreshTokenInterceptor extends Interceptor {\n  RefreshTokenInterceptor(this.baseHttpClient, this.parentContainer);\n  final BaseHttpClient baseHttpClient;\n  final ProviderContainer parentContainer;\n\n  @override\n  Future<void> onResponse(\n    Response<dynamic> response,\n    ResponseInterceptorHandler handler,\n  ) async {\n    try {\n      final header = response.requestOptions.headers;\n      if ((response.statusCode ?? 0) >= 400 && (response.statusCode ?? 0) < 500) {\n        if ((response.statusCode ?? 0) == 401) {\n          final SignUpData? value = await getRefreshToken();\n          if (value == null) {\n            handler.resolve(response);\n          } else {\n            header[\"Authorization\"] =\n                \"Bearer ${await CacheUtil.getString(Strings.keyAccessToken)}\";\n            dynamic newData = response.requestOptions.data;\n            if (newData is FormData) {\n              newData = await _remakeFormData(newData, response.requestOptions.extra);\n            }\n            final Response<dynamic> value = await baseHttpClient.client\n                .fetch<dynamic>(response.requestOptions\n                .copyWith(headers: header, data: newData));\n            handler.resolve(value);\n            return;\n          }\n        }\n      }\n      super.onResponse(response, handler);\n    } catch (e) {\n      return;\n    }\n  }\n}",
+          "description": "Interceptor Dio untuk mendeteksi HTTP 401, mengambil token baru via AuthRepository, me-remake FormData, dan me-replay request original secara otomatis.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── data/\n    └── api/\n        ├── api.dart\n        ├── base/\n        │   └── base_response.dart\n        ├── default_interceptor.dart\n        ├── http_client.dart\n        ├── http_routes.dart\n        └── refresh_token_interceptor.dart",
+      "confidence": 0.94,
+      "considerations": [
+        "Perlu me-reconstruct FormData saat me-replay request multipart (file/image upload) karena stream/buffer request original sudah terkonsumsi.",
+        "Gunakan session clearing dan trigger navigasi logout global (Util.logout) jika refresh token kadaluarsa atau invalid."
+      ],
+      "keyImplementationPoints": [
+        "Intersepsi onResponse untuk mendeteksi status code 401 atau token invalid.",
+        "Pengambilan token baru menggunakan RefreshTokenRequest yang disimpan di Secure Storage.",
+        "Rekonstruksi data payload request (termasuk FormData clone) dan eksekusi ulang (replay) fetch request dengan header Bearer baru."
+      ],
+      "overview": "Pola otomatisasi pembaruan token otentikasi di lapisan HTTP client Dio. Mengeliminasi kegagalan request user saat access token expired dengan me-refresh token di background dan me-replay request original secara transparan.",
+      "purpose": "Menjaga seamless user experience tanpa logout mendadak saat access token JWT kadaluarsa.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/dio-interceptors.md",
+        "01-Knowledge/patterns/network/token-refresh-replay.md"
+      ],
+      "summary": "Otomatisasi refresh token JWT dan request replay transparan pada Dio HTTP Client termasuk kloning multipart FormData.",
+      "tags": [
+        "flutter",
+        "mobile",
+        "dio",
+        "network",
+        "jwt",
+        "interceptor"
+      ],
+      "title": "Dio Interceptor Token Refresh & Request Replay Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class CacheUtil {\n  CacheUtil._();\n\n  static Future<void> putString(String key, String value) async {\n    await FlutterKeychain.put(key: key, value: value);\n  }\n\n  static Future<String> getString(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    return value ?? '';\n  }\n\n  static Future<bool> getBoolean(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    return value == 'true';\n  }\n\n  static Future<Uint8List?> getUint8List(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    if (value == null) return null;\n    List<String> stringList = value.replaceAll('[', '').replaceAll(']', '').split(', ');\n    List<int> intList = stringList.map(int.parse).toList();\n    return Uint8List.fromList(intList);\n  }\n\n  static Future<void> clear() async {\n    await FlutterKeychain.clear();\n  }\n}",
+          "description": "Enkapsulasi penyimpanan kredensial dan flag otentikasi menggunakan secure hardware-backed keychain/keystore.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── common/\n    ├── resource/\n    │   └── strings.dart\n    └── util/\n        └── cache_util.dart",
+      "confidence": 0.92,
+      "considerations": [
+        "Menyimpan data sensitif seperti access token, refresh token, dan status sesi ke Keychain (iOS) & KeyStore (Android) alih-alih SharedPreferences plaintext.",
+        "Menyediakan helper deserialisasi untuk tipe data boolean, int, dan byte array (Uint8List) untuk kebutuhan kriptografi/biometrik."
+      ],
+      "keyImplementationPoints": [
+        "Enkapsulasi seluruh operasi baca/tulis/hapus hardware keychain di satu utility class CacheUtil.",
+        "Dukungan type conversion untuk primitive types dan binary data.",
+        "Operasi atomic clear() untuk membersihkan seluruh data sensitif saat user logout."
+      ],
+      "overview": "Pola persistensi lokal aman menggunakan hardware-backed secure storage (iOS Keychain & Android KeyStore) yang dienkapsulasi ke dalam antarmuka CacheUtil statis.",
+      "purpose": "Menyimpan token autentikasi, status biometrik, dan key enkripsi lokal dengan tingkat keamanan tinggi terhadap ekstraksi fisik / rooted devices.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/secure-storage-keychain.md",
+        "01-Knowledge/snippets/mobile/cache-util.md"
+      ],
+      "summary": "Persistensi token dan data sensitif menggunakan enkapsulasi hardware-backed keychain (iOS Keychain / Android KeyStore).",
+      "tags": [
+        "flutter",
+        "mobile",
+        "security",
+        "keychain",
+        "persistence"
+      ],
+      "title": "Secure Hardware-Backed Persistence with Keychain"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class ErrorData implements Exception {\n  final int? code;\n  final String? message;\n\n  ErrorData({this.code, this.message});\n}\n\nclass ErrorUtil {\n  static const int codeRefreshTokenExpiredError = 401;\n  static const int codeTokenInvalidError = 403;\n  static const int codeUserNotFoundError = 404;\n\n  static void showToast(ErrorData error) {\n    if ((error.code ?? 0) < 500) {\n      toast(error.message ?? 'Terjadi kesalahan');\n    } else {\n      toast('Terjadi gangguan pada sistem. Silakan coba lagi.');\n    }\n  }\n}",
+          "description": "Definisi model exception terstandar dan mapping respon error server ke notifikasi UI user-friendly.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── common/\n│   └── util/\n│       └── error_util.dart\n├── data/\n│   └── api/\n│       └── base/\n│           ├── base_data.dart\n│           └── base_response.dart\n└── model/\n    └── error_data.dart",
+      "confidence": 0.91,
+      "considerations": [
+        "Repository mengubah DioException / HttpError menjadi domain-level ErrorData sebelum diteruskan ke layer UI/Presenter.",
+        "Error dengan kode status >= 500 disamarkan dengan pesan generik untuk mencegah kebocoran informasi teknis server ke user."
+      ],
+      "keyImplementationPoints": [
+        "Generic response envelope BaseResponse<T> untuk deserialisasi JSON response backend yang konsisten.",
+        "Typed exception class ErrorData pembungkus kode error dan pesan.",
+        "Sentralisasi penanganan error di repository layer dan UI feedback mapping di ErrorUtil."
+      ],
+      "overview": "Arsitektur penanganan error terpadu yang memetakan response network dan exception server menjadi format domain model ErrorData yang konsisten untuk konsumsi UI.",
+      "purpose": "Menyeragamkan representasi error di seluruh lapisan repository dan menyederhanakan feedback toast/dialog bagi pengguna.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/error-handling-architecture.md",
+        "01-Knowledge/patterns/network/api-envelope-parsing.md"
+      ],
+      "summary": "Standarisasi parsing error response backend menjadi typed ErrorData domain model dengan centralized user feedback.",
+      "tags": [
+        "flutter",
+        "mobile",
+        "error-handling",
+        "network",
+        "clean-architecture"
+      ],
+      "title": "Unified Error Handling & BaseResponse Mapping Pattern"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class NotificationService {\n  static final NotificationService _instance = NotificationService._internal();\n  factory NotificationService() => _instance;\n  NotificationService._internal();\n\n  final FirebaseMessaging _fcm = FirebaseMessaging.instance;\n  final FlutterLocalNotificationsPlugin _localNotification = FlutterLocalNotificationsPlugin();\n\n  Future<void> initialize() async {\n    await _fcm.requestPermission(alert: true, badge: true, sound: true);\n    FirebaseMessaging.onMessage.listen((RemoteMessage message) {\n      _showLocalNotification(message);\n    });\n    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {\n      _handleNotificationClick(message);\n    });\n  }\n\n  void _showLocalNotification(RemoteMessage message) {\n    // Tampilkan local notification banner saat aplikasi di foreground\n  }\n  \n  void _handleNotificationClick(RemoteMessage message) {\n    // Deep linking routing berdasarkan payload data notification\n  }\n}",
+          "description": "Singleton service untuk mengelola inisialisasi FCM, listening event foreground/background, dan deep link routing.",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── common/\n    ├── notifier/\n    │   ├── notification_notifier.dart\n    │   └── premium_user_notifier.dart\n    └── service/\n        ├── billing_service.dart\n        └── notification_service.dart",
+      "confidence": 0.9,
+      "considerations": [
+        "Inisialisasi permission FCM dan notification channel Android harus dikonfigurasi saat bootstrap aplikasi di main.dart.",
+        "Integrasikan push token lifecycle dengan user session (sinkronisasi FCM token ke backend via AuthRepository saat login / refresh token)."
+      ],
+      "keyImplementationPoints": [
+        "Singleton pattern untuk manajemen lifecycle push notification dan in-app purchase.",
+        "Penanganan notifikasi baik dalam kondisi foreground, background, maupun terminated state.",
+        "Integrasi bridge antara service layer dan Riverpod Notifier untuk reaktivitas UI."
+      ],
+      "overview": "Pola modularisasi integrasi layanan native (Firebase Cloud Messaging dan In-App Purchases) dalam service class mandiri yang terpisah dari logic presentation.",
+      "purpose": "Memastikan manajemen push notifications dan in-app billing terorganisir dengan rapi, teruji, dan tidak mengotori lifecycle widget/screen.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/mobile/fcm-push-notifications.md",
+        "01-Knowledge/patterns/mobile/in-app-billing.md"
+      ],
+      "summary": "Integrasi modular untuk Firebase Push Notifications dan In-App Purchase dengan decoupled singleton services.",
+      "tags": [
+        "flutter",
+        "mobile",
+        "fcm",
+        "notifications",
+        "in-app-purchase",
+        "native-integration"
+      ],
+      "title": "Decoupled Native Push Notification & In-App Purchase Pattern"
+    }
+  ]
+}

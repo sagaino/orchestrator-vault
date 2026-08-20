@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:21:00.249Z",
+  "harvestId": "harvest-1787109583565-5ff8f29f",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/identity-kit-source-code",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/identity-kit-source-code",
+    "packageName": "identify-verification-kit",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@base-ui/react",
+      "@electron-toolkit/preload",
+      "@electron-toolkit/utils",
+      "@hookform/resolvers",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@tiptap/extension-image",
+      "@tiptap/extension-link",
+      "@tiptap/extension-underline",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "iconsax-reactjs",
+      "input-otp",
+      "leaflet",
+      "leaflet-draw",
+      "leaflet.fullscreen",
+      "leaflet.markercluster",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "pako",
+      "radix-ui",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-leaflet",
+      "react-leaflet-markercluster",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "sonner",
+      "tailwind-merge",
+      "tailwindcss",
+      "vaul",
+      "ws",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/geojson",
+      "@types/leaflet",
+      "@types/leaflet-draw",
+      "@types/leaflet.markercluster",
+      "@types/node",
+      "@types/pako",
+      "@types/react",
+      "@types/react-dom",
+      "@types/ws",
+      "@vitejs/plugin-react",
+      "electron",
+      "electron-builder",
+      "electron-vite",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "shadcn",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "dev:renderer",
+      "start",
+      "build",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/main/handlers/auth.handler.ts",
+          "src/main/ipc/auth.ipc.ts",
+          "src/main/services/auth.service.ts",
+          "src/preload/modules/auth.ts",
+          "src/renderer/src/assets/ic_passport.png",
+          "src/renderer/src/lib/clear-auth-session.ts",
+          "src/renderer/src/lib/invoke-ipc-with-auth-handling.ts",
+          "src/shared/auth",
+          "src/shared/auth/channels.ts",
+          "src/shared/auth/roles.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/main/handlers",
+          "src/main/handlers/admin.handler.ts",
+          "src/main/handlers/auth.handler.ts",
+          "src/main/handlers/broadcast.handler.ts",
+          "src/main/handlers/device.handler.ts",
+          "src/main/handlers/division.handler.ts",
+          "src/main/handlers/history.handler.ts",
+          "src/main/handlers/license.handler.ts",
+          "src/main/handlers/log-activity.handler.ts",
+          "src/main/handlers/operator.handler.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/shared/auth/schema.ts"
+        ]
+      },
+      "structure": {
+        "style": "Modular Architecture",
+        "totalFilesScanned": 196,
+        "sampleDirectories": [
+          "public",
+          "src",
+          "src/main",
+          "src/main/handlers",
+          "src/main/ipc",
+          "src/main/services",
+          "src/main/utils",
+          "src/preload",
+          "src/preload/modules",
+          "src/renderer",
+          "src/renderer/public",
+          "src/renderer/src",
+          "src/renderer/src/assets",
+          "src/renderer/src/components",
+          "src/renderer/src/components/common"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// 1. Channel Constants (src/shared/auth/channels.ts)\nexport const AUTH_IPC_CHANNELS = {\n  LOGIN: 'auth:login',\n} as const;\n\n// 2. Preload Exposure (src/preload/modules/auth.ts)\nexport const authApi = {\n  login: (payload: LoginFormData): Promise<LoginResponse> =>\n    ipcRenderer.invoke(AUTH_IPC_CHANNELS.LOGIN, payload),\n};\n\n// 3. Main IPC Registry (src/main/ipc/auth.ipc.ts)\nexport function registerAuthIpcHandlers(): void {\n  ipcMain.handle(AUTH_IPC_CHANNELS.LOGIN, AuthHandler.login);\n}",
+          "description": "Modular separation of IPC definitions across Shared, Preload, and Main layers",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/shared/<module>/{channels,types,schema}.ts -> src/preload/modules/<module>.ts -> src/main/ipc/<module>.ipc.ts -> src/main/handlers/<module>.handler.ts",
+      "confidence": 0.95,
+      "considerations": [
+        "Maintains strict context isolation by preventing direct Node.js API access from the Renderer.",
+        "Eliminates magic strings through shared channel constant definitions.",
+        "Pairs handler registration with unregistration to avoid IPC listener memory leaks."
+      ],
+      "keyImplementationPoints": [
+        "Single source of truth for IPC channel strings and payload types under src/shared/",
+        "Modular preload modules exposed via contextBridge.exposeInMainWorld",
+        "Decoupled handler and service logic in the Main process"
+      ],
+      "overview": "A 3-tier architecture ensuring strict Electron security boundaries, type safety, and modularity between Main, Preload, and Renderer processes.",
+      "purpose": "Provide secure, structured, and type-safe cross-process communication for desktop applications.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/electron-ipc-security-bridge.md]]",
+        "Electron Context Isolation Best Practices"
+      ],
+      "summary": "Modular 3-Tier IPC Bridge Architecture enforcing type safety and boundary isolation in Electron applications.",
+      "tags": [
+        "electron",
+        "ipc",
+        "architecture",
+        "modularity",
+        "typescript"
+      ],
+      "title": "Modular 3-Tier IPC Bridge Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const invokeIpcWithAuthHandling = async <T>(\n  action: () => Promise<T>,\n  options: InvokeIpcWithAuthHandlingOptions\n): Promise<T> => {\n  try {\n    return await action();\n  } catch (error) {\n    const statusCode = extractIpcErrorStatusCode(error, { methodName: options.methodName });\n    const shouldHandle401AsSessionExpired = options.treatUnauthorizedAsSessionExpired ?? true;\n\n    if (statusCode === 401 && shouldHandle401AsSessionExpired) {\n      clearAuthSession();\n      const now = Date.now();\n      if (now - lastSessionExpiredToastAt > SESSION_EXPIRED_TOAST_COOLDOWN_MS) {\n        lastSessionExpiredToastAt = now;\n        toast.error(SESSION_EXPIRED_MESSAGE);\n      }\n      throw new IpcServiceError(SESSION_EXPIRED_MESSAGE, 401);\n    }\n\n    throw new IpcServiceError(\n      normalizeIpcErrorMessage(error, {\n        methodName: options.methodName,\n        fallbackMessage: options.fallbackMessage,\n      }),\n      statusCode ?? undefined\n    );\n  }\n};",
+          "description": "IPC action wrapper intercepting 401 status and normalizing serialized errors",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/lib/invoke-ipc-with-auth-handling.ts -> src/renderer/src/lib/normalize-ipc-error-message.ts -> src/renderer/src/lib/clear-auth-session.ts",
+      "confidence": 0.95,
+      "considerations": [
+        "Debounced toast triggers prevent notification spam on bulk 401 failures.",
+        "Configurable treatUnauthorizedAsSessionExpired flag supports form login errors where 401 means invalid credentials rather than session expiry."
+      ],
+      "keyImplementationPoints": [
+        "Main process encodes HTTP statuses into error messages as HTTP_STATUS_${code}::${message}",
+        "Renderer extracts HTTP status and strips internal Electron IPC method prefix strings",
+        "Centralized session invalidation and debounced toast notifications"
+      ],
+      "overview": "Encapsulated error normalization and session expiration interceptor bridging the Electron IPC serialization boundary.",
+      "purpose": "Normalize serialized IPC errors and handle global 401 unauthorized session expiry reliably.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/ipc-error-boundary-interceptor.md]]",
+        "Axios / IPC error bridging"
+      ],
+      "summary": "Centralized IPC error normalization with automatic 401 session expiration interceptor and toast rate-limiting.",
+      "tags": [
+        "error-handling",
+        "authentication",
+        "ipc",
+        "session-management",
+        "toast"
+      ],
+      "title": "IPC Error Normalization & 401 Session Interceptor"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};",
+          "description": "AES encrypted storage helper with event dispatching for cross-component sync",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/hooks/useLocalStorage.ts",
+      "confidence": 0.92,
+      "considerations": [
+        "Symmetric encryption key is bundled client-side and protects against passive snooping, not determined local root attacks.",
+        "Automatic corruption pruning prevents runtime parsing crashes."
+      ],
+      "keyImplementationPoints": [
+        "AES encryption/decryption using CryptoJS",
+        "Custom window storage event dispatch for instant intra-window reactivity",
+        "Automatic cleanup of corrupted or unparseable entries"
+      ],
+      "overview": "A reactive React hook wrapping localStorage with transparent AES encryption, corruption resilience, and intra-window state synchronization.",
+      "purpose": "Persist sensitive client data locally with reactive synchronization and encryption.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/encrypted-reactive-localstorage.md]]",
+        "Web Storage API and Cryptography"
+      ],
+      "summary": "Reactive client-side local storage hook with transparent AES encryption and event-driven state synchronization.",
+      "tags": [
+        "react-hook",
+        "storage",
+        "encryption",
+        "crypto-js",
+        "state-management"
+      ],
+      "title": "Client-Side Encrypted Reactive Local Storage"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "const mapBodyToSignatureString = (body: unknown, parentKey = ''): string => {\n  if (!body || typeof body !== 'object' || Array.isArray(body)) return '';\n\n  const entries = Object.entries(body as Record<string, unknown>)\n    .sort(([a], [b]) => a.localeCompare(b));\n\n  let keys = '';\n  for (const [key, value] of entries) {\n    const finalKey = parentKey ? `${parentKey}.${key}` : key;\n    if (Array.isArray(value)) {\n      keys += finalKey;\n      continue;\n    }\n    if (value && typeof value === 'object') {\n      keys += mapBodyToSignatureString(value, finalKey);\n      continue;\n    }\n    keys += `${finalKey}${String(value ?? '')}`;\n  }\n  return keys;\n};",
+          "description": "Deterministic sorted key-value tree traversal for cryptographic payload signing",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/main/utils/request-signature.ts -> src/main/services/auth.service.ts",
+      "confidence": 0.88,
+      "considerations": [
+        "Relies on SHA-1 hashing, which should ideally be upgraded to HMAC-SHA256 for stricter modern compliance.",
+        "Candidate status retained due to backend contract specificity."
+      ],
+      "keyImplementationPoints": [
+        "Alphabetical sorting of object keys at all nesting levels",
+        "Timestamp injection to prevent replay attacks",
+        "Outbound header injection in the Main process prior to HTTP transmission"
+      ],
+      "overview": "Deterministic canonicalization of outbound API request bodies combined with cryptographic hashing for tamper-proof API communication.",
+      "purpose": "Verify API payload integrity and prevent request tampering between desktop client and server.",
+      "relatedKnowledge": [
+        "[[05-Knowledge-Candidates/deterministic-payload-request-signing.md]]",
+        "API Request Signing and Anti-Replay Mechanisms"
+      ],
+      "summary": "Main-process outbound request signing using recursive key sorting and cryptographic hashing.",
+      "tags": [
+        "security",
+        "hashing",
+        "request-signing",
+        "main-process",
+        "crypto"
+      ],
+      "title": "Deterministic Payload Canonicalization & Cryptographic Request Signing"
+    }
+  ]
+}

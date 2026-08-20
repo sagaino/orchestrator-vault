@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:45:10.683Z",
+  "harvestId": "harvest-1787111041173-fb05651c",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+    "packageName": "video-generator",
+    "packageVersion": "0.0.1",
+    "dependencies": [
+      "@base-ui/react",
+      "@fontsource-variable/geist",
+      "@hookform/resolvers",
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "@shadcn/react",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@types/crypto-js",
+      "@types/culori",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "culori",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "shadcn",
+      "sonner",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "tw-animate-css",
+      "use-debounce",
+      "zod",
+      "zustand"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "prettier",
+      "prettier-plugin-tailwindcss",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "lint",
+      "format",
+      "typecheck",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/config/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/storage/indexeddb-adapter.ts"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 263,
+        "sampleDirectories": [
+          ".opencode",
+          ".opencode/commands",
+          ".opencode/plugins",
+          ".opencode/skills",
+          ".opencode/skills/graphify",
+          ".opencode/skills/graphify/references",
+          "public",
+          "src",
+          "src/assets",
+          "src/components",
+          "src/components/common",
+          "src/components/ui",
+          "src/config",
+          "src/config/constant",
+          "src/editor"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 1510,
+      "linkCount": 2595
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "class StorageService {\n  private getProjectMediaAdapters({ projectId }: { projectId: string }) {\n    const mediaMetadataAdapter = new IndexedDBAdapter<MediaAssetData>({\n      dbName: `${this.config.mediaDb}-${projectId}`,\n      storeName: \"media-metadata\",\n    });\n    const mediaAssetsAdapter = new OPFSAdapter(`media-files-${projectId}`);\n    return { mediaMetadataAdapter, mediaAssetsAdapter };\n  }\n\n  async saveMediaAsset({\n    projectId,\n    mediaAsset,\n  }: {\n    projectId: string;\n    mediaAsset: MediaAsset;\n  }): Promise<void> {\n    const { mediaMetadataAdapter, mediaAssetsAdapter } =\n      this.getProjectMediaAdapters({ projectId });\n\n    const metadata: MediaAssetData = {\n      id: mediaAsset.id,\n      name: mediaAsset.name,\n      type: mediaAsset.type,\n      size: mediaAsset.file.size,\n      width: mediaAsset.width,\n      height: mediaAsset.height,\n      thumbnailUrl: mediaAsset.thumbnailUrl,\n    };\n\n    try {\n      await mediaAssetsAdapter.set({\n        key: mediaAsset.id,\n        value: mediaAsset.file,\n      });\n      await mediaMetadataAdapter.set({\n        key: mediaAsset.id,\n        value: metadata,\n      });\n    } catch (error) {\n      try {\n        await mediaAssetsAdapter.remove(mediaAsset.id);\n      } catch {\n        // Ignore cleanup failures so original error is preserved\n      }\n      if (this.isQuotaExceededError({ error })) {\n        throw new StorageQuotaExceededError({\n          requiredBytes: mediaAsset.file.size,\n        });\n      }\n      throw error;\n    }\n  }\n}",
+          "description": "StorageService coordinating dual persistence to OPFS and IndexedDB with quota detection and rollback",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/services/storage/types.ts (StorageAdapter interface) -> src/services/storage/indexeddb-adapter.ts & opfs-adapter.ts (Implementations) -> src/services/storage/quota.ts (Quota classification) -> src/services/storage/services.ts (StorageService orchestrator)",
+      "confidence": 0.95,
+      "considerations": [
+        "OPFS is supported in modern browsers (Chrome, Safari 15.2+, Firefox 111+); fallback strategy needed for legacy environments.",
+        "Object URLs created from OPFS files must be revoked when no longer needed to prevent memory leaks.",
+        "IndexedDB database names are partitioned by project ID to allow clean atomic project deletion."
+      ],
+      "keyImplementationPoints": [
+        "Implement generic StorageAdapter<T> interface defining get, set, remove, list, and clear methods.",
+        "Store binary files directly in OPFS via FileSystemDirectoryHandle with streaming writers.",
+        "Store asset metadata (dimensions, size, mime type, thumbnail) in IndexedDB for fast indexing.",
+        "Perform atomic compensation/rollback if saving to one adapter fails.",
+        "Provide quota detection via StorageQuotaExceededError with byte requirements."
+      ],
+      "overview": "A dual-layer client persistence architecture that offloads large binary assets (blobs, images, audio, video) to the Origin Private File System (OPFS) while maintaining queryable structured metadata and project manifests in IndexedDB.",
+      "purpose": "Prevents IndexedDB memory bloat and structured serialization bottlenecks during heavy media operations while maintaining fast metadata queries and transactional integrity.",
+      "relatedKnowledge": [
+        "StorageAdapter Pattern",
+        "Browser Storage Quota Management",
+        "Object URL Lifecycle Management"
+      ],
+      "summary": "A hybrid client persistence pattern combining IndexedDB for structured JSON metadata queries and OPFS for zero-overhead binary media blobs with quota guards and rollback.",
+      "tags": [
+        "storage",
+        "indexeddb",
+        "opfs",
+        "offline-first",
+        "media-storage",
+        "frontend"
+      ],
+      "title": "Hybrid Client Storage (IndexedDB Metadata + OPFS Binary Assets)"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const TICKS_PER_SECOND = 120_000;\n\ndeclare const MediaTimeBrand: unique symbol;\nexport type MediaTime = number & { [MediaTimeBrand]?: never };\n\nexport function mediaTime({ ticks }: { ticks: number }): MediaTime {\n  if (!Number.isInteger(ticks)) {\n    throw new Error(`mediaTime: expected integer ticks, got ${ticks}`);\n  }\n  return ticks as MediaTime;\n}\n\nexport function mediaTimeFromSeconds({ seconds }: { seconds: number }): MediaTime {\n  return mediaTime({ ticks: Math.round(seconds * TICKS_PER_SECOND) });\n}\n\nexport function mediaTimeToSeconds({ time }: { time: MediaTime }): number {\n  return time / TICKS_PER_SECOND;\n}\n\nexport function addMediaTime({ a, b }: { a: MediaTime; b: MediaTime }): MediaTime {\n  return (a + b) as MediaTime;\n}",
+          "description": "Branded MediaTime type with integer ticks arithmetic and second conversions",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/media-time.ts (Branded MediaTime type, constructor, arithmetic, conversions) -> src/lib/math.ts (Fractional frame math) -> src/editor/editor-store.ts (Timeline state consumption)",
+      "confidence": 0.94,
+      "considerations": [
+        "Ensure all arithmetic is performed with integer ticks before converting to seconds for UI display.",
+        "Serializing to JSON should convert MediaTime to integer ticks or seconds based on contract."
+      ],
+      "keyImplementationPoints": [
+        "Use TypeScript branded type (number & { [MediaTimeBrand]?: never }) to prevent raw number assignment bugs.",
+        "Define TICKS_PER_SECOND = 120,000 as a common multiple for 24, 25, 30, 48, and 60 FPS.",
+        "Enforce integer assertions at constructor boundaries.",
+        "Implement pure integer arithmetic functions (addMediaTime, subtractMediaTime, roundMediaTime)."
+      ],
+      "overview": "A pure TypeScript rational time representation using branded integer ticks to eliminate floating-point drift and rounding errors across audio/video timeline calculations.",
+      "purpose": "Eliminates frame drift, sub-pixel rendering misalignment, and precision loss caused by IEEE 754 floating-point arithmetic when positioning clips and playheads across varied frame rates.",
+      "relatedKnowledge": [
+        "Branded Types in TypeScript",
+        "SMPTE Timecode Representation",
+        "Fixed-Point Arithmetic"
+      ],
+      "summary": "Integer-ticks-based media time representation using TypeScript branded types to eliminate floating-point inaccuracies in audio/video timeline editing.",
+      "tags": [
+        "media-time",
+        "video-editor",
+        "branded-types",
+        "rational-arithmetic",
+        "timeline",
+        "frontend"
+      ],
+      "title": "High-Precision Rational Media Time & Ticks Arithmetic"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const useEditorStore = create<EditorState>((set, get) => ({\n  project: null,\n  isLoading: true,\n  error: null,\n  selectedElementIds: [],\n  mediaUrls: {},\n  isPlaying: false,\n\n  loadProject: async (id) => {\n    set({ isLoading: true, error: null });\n    try {\n      const result = await storageService.loadProject({ id });\n      if (!result) {\n        set({ isLoading: false, error: `Project \"${id}\" not found` });\n        return;\n      }\n      const urls: Record<string, string> = {};\n      const elements = result.project.scenes.tracks.elements;\n      for (const el of elements) {\n        if ('mediaId' in el && el.mediaId) {\n          try {\n            const asset = await storageService.loadMediaAsset({\n              projectId: result.project.metadata.id,\n              id: el.mediaId,\n            });\n            if (asset?.url) urls[el.mediaId] = asset.url;\n          } catch {}\n        }\n      }\n      set({ project: result.project, mediaUrls: urls, isLoading: false });\n    } catch (err) {\n      set({ isLoading: false, error: (err as Error).message });\n    }\n  },\n}));",
+          "description": "Zustand store handling project loading, media URL hydration, and timeline state",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/editor/editor-store.ts (Zustand state store and actions) -> src/editor/use-editor.ts (Hook interface) -> src/pages/Editor/* (UI canvas and timeline views)",
+      "confidence": 0.94,
+      "considerations": [
+        "Revoke existing object URLs when loading a different project or deleting elements.",
+        "Keep scene hierarchy modifications immutable for predictable rendering."
+      ],
+      "keyImplementationPoints": [
+        "Separate persistent project hierarchy from transient runtime UI state (mediaUrls, isPlaying).",
+        "Asynchronously hydrate media asset IDs into active memory Object URLs on project load.",
+        "Provide granular actions for element additions, deletions, track muting, and selection.",
+        "Centralize timeline view state (zoomLevel, scrollLeft, playheadTime)."
+      ],
+      "overview": "A centralized Zustand store managing multi-track scene hierarchies, multi-element selection, playback state, and dynamic asset URL hydration.",
+      "purpose": "Coordinates complex UI interactions across multi-track timeline canvases while keeping UI state updates decoupled from async persistence.",
+      "relatedKnowledge": [
+        "Zustand State Architecture",
+        "Non-Linear Editor (NLE) Data Structures",
+        "Object URL Hydration"
+      ],
+      "summary": "Hierarchical Zustand-based state store for multi-track non-linear media editing with asynchronous blob hydration, multi-selection, and debounced persistence.",
+      "tags": [
+        "state-management",
+        "zustand",
+        "video-editor",
+        "timeline",
+        "react",
+        "frontend"
+      ],
+      "title": "Non-Linear Timeline & Multi-Track Editor State Management"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "function useCheckStatus(promptId: string | null) {\n  return useQuery<CheckStatusResponse>({\n    queryKey: ['generate-status', promptId],\n    queryFn: () => GenerateService.checkStatus(promptId!),\n    enabled: !!promptId,\n    refetchInterval: (query) => {\n      const data = query.state.data;\n      if (data?.status === 'completed' || data?.status === 'failed') return false;\n      return 2000;\n    },\n  });\n}\n\nexport function useGenerateVideo() {\n  const generate = useGenerate();\n  const [promptId, setPromptId] = useState<string | null>(null);\n  const statusQuery = useCheckStatus(promptId);\n\n  const handleGenerate = async (project: TProject) => {\n    const { metadata } = buildMetadata(project);\n    const images = await loadImages(project);\n    const result = await generate.mutateAsync({ metadata, images });\n    setPromptId(result.prompt_id);\n  };\n\n  return { handleGenerate, isGenerating: generate.isPending || !!promptId };\n}",
+          "description": "React Query polling pattern with conditional refetch interval and mutation trigger",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/services/generate.ts (API endpoints) -> src/services/hooks/useGenerate.tsx (TanStack Query hooks & toast orchestration)",
+      "confidence": 0.92,
+      "considerations": [
+        "Clear promptId on network errors or component unmounting.",
+        "Handle browser tab backgrounding throttling polling intervals gracefully."
+      ],
+      "keyImplementationPoints": [
+        "Use useMutation for initiating multipart async jobs and useQuery for polling job status.",
+        "Conditionally terminate refetchInterval when job status reaches terminal states.",
+        "Expose an imperative jumpTo100 API from toast progress component via ref callback.",
+        "Trigger automatic file download upon successful job completion using blob URLs."
+      ],
+      "overview": "A two-phase async workflow coordinating multipart job submission via TanStack Query mutation with polling query status checks, interactive progress toast, and automatic file download.",
+      "purpose": "Manages long-running server-side generation jobs with smooth progress feedback, automatic polling termination, error recovery, and automated download triggers.",
+      "relatedKnowledge": [
+        "TanStack Query Polling Strategies",
+        "Sonner Custom Toast Components",
+        "Programmatic Blob Downloads"
+      ],
+      "summary": "An async orchestration pattern combining TanStack Query mutations and polling queries with interactive toast progress and automated artifact downloading.",
+      "tags": [
+        "react-query",
+        "polling",
+        "async-job",
+        "toast-notifications",
+        "file-download",
+        "frontend"
+      ],
+      "title": "Async Multi-Stage Job Polling & UI Progress Orchestration"
+    }
+  ]
+}

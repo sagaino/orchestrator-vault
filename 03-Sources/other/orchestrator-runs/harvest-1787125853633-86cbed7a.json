@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T07:53:49.183Z",
+  "harvestId": "harvest-1787125853633-86cbed7a",
+  "type": "codebase-harvest",
+  "domain": "mobile",
+  "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/lovlet/lovlet-mobile",
+    "packageName": "lovlet-mobile",
+    "packageVersion": "0.0.0",
+    "dependencies": [],
+    "devDependencies": [],
+    "scripts": [],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "android/.kotlin/sessions",
+          "android/app/proguard-rules.pro",
+          "lib/data/api/service/auth",
+          "lib/data/repository/auth",
+          "lib/data/repository/auth/auth_repository.dart",
+          "lib/data/repository/auth/auth_repository_impl.dart",
+          "lib/data/repository/auth/auth_repository_impl.g.dart",
+          "lib/router/dashboard_route_guard.dart",
+          "lib/router/login_route_guard.dart"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "assets/icon/ic_error.svg",
+          "assets/image/image_error.png",
+          "lib/common/util/error_util.dart",
+          "lib/model/error_data.dart"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/.filecache",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/app.dill",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/dart_build_result.json",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/debug_android_application.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/flutter_assets.d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_dart_plugin_registrant.stamp",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54/gen_localizations.stamp"
+        ]
+      },
+      "structure": {
+        "style": "Clean / Hexagonal Architecture",
+        "totalFilesScanned": 945,
+        "sampleDirectories": [
+          ".dart_tool",
+          ".dart_tool/build_resolvers",
+          ".dart_tool/extension_discovery",
+          ".dart_tool/flutter_build",
+          ".dart_tool/flutter_build/46fa5a2ab69f2753f07f8421bd70e532",
+          ".dart_tool/flutter_build/5132091c9de2af21da5e205b6f85243d",
+          ".dart_tool/flutter_build/69a60441ec6482e04622762ffa25db54",
+          ".dart_tool/flutter_build/971675559299deef62949c0076419cfa",
+          ".dart_tool/flutter_build/aa02f16b76ccfcdf225307de8a0acb2c",
+          ".dart_tool/flutter_build/b1f05784000fe294765ca005ba0dc7d5",
+          ".dart_tool/hooks_runner",
+          ".dart_tool/hooks_runner/objective_c",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4",
+          ".dart_tool/hooks_runner/objective_c/17f40df7d4/out",
+          ".dart_tool/hooks_runner/objective_c/7f969c740e"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "@riverpod\nclass CardNotifier extends _$CardNotifier {\n  late final MatchRepository _matchRepository;\n  late final MailboxRepository _mailboxRepository;\n  bool isMatch = false;\n  bool? isLike;\n  bool isLoadingMailbox = false;\n  bool isMailboxSent = false;\n\n  @override\n  CardState build(String targetUserId) {\n    _matchRepository = ref.watch(matchRepositoryProvider);\n    _mailboxRepository = ref.watch(mailboxRepositoryProvider);\n    return CardState(\n        isMatch: isMatch,\n        isLoadingMailbox: isLoadingMailbox,\n        isMailboxSent: isMailboxSent);\n  }\n\n  void dislike(String content) async {\n    try {\n      final result = await _matchRepository.dislike(targetUserId: targetUserId);\n      isMatch = result?.isMatched ?? false;\n      isLike = false;\n      state = CardState(\n          isMatch: isMatch,\n          isLike: isLike,\n          isLoadingMailbox: isLoadingMailbox,\n          isMailboxSent: isMailboxSent);\n    } on ErrorData catch (e) {\n      isLike = null;\n      isMatch = false;\n      state = CardState(\n          isMatch: isMatch,\n          isLike: isLike,\n          isLoadingMailbox: isLoadingMailbox,\n          isMailboxSent: isMailboxSent);\n    }\n  }\n}",
+          "description": "Riverpod Notifier with code generation, repository injection in build(), and immutable state transitions",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── data/\n│   ├── api/service/<feature>/<feature>_service.dart\n│   └── repository/<feature>/<feature>_repository_impl.dart\n└── presenter/<feature>/\n    ├── notifier/<feature>_notifier.dart\n    ├── component/\n    └── screen_<feature>.dart",
+      "confidence": 0.98,
+      "considerations": [
+        "Selalu jalankan build_runner saat menambahkan atau memperbarui provider anotasi @riverpod",
+        "Gunakan auto-dispose untuk presenter screen agar memori terbebas saat navigasi pop"
+      ],
+      "keyImplementationPoints": [
+        "Dependency Injection satu arah: BaseHttpClient -> Service -> Repository -> Notifier -> UI Widget",
+        "Anotasi @riverpod dengan dynamic family argument via method build(String id)",
+        "Penggunaan state immutable untuk memicu re-render widget secara presisi"
+      ],
+      "overview": "Arsitektur state management layered berbasis Riverpod 2.x dengan code-generation (@riverpod) yang memisahkan UI Presentation, Business Logic Notifiers, dan Data Repositories secara type-safe.",
+      "purpose": "Menyediakan manajemen state terisolasi, testable, reaktif, dan bebas boilerplate dengan dependency injection otomatis.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/feature-first-clean-modular-architecture-with-reactive-bindings.md",
+        "01-Knowledge/concepts/mobile/state-management.md"
+      ],
+      "summary": "Pola implementasi state management Riverpod 2.x berbasis code generation (@riverpod) dengan pemisahan immutable state dan dependency injection otomatis antar layer.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "riverpod",
+        "state-management",
+        "clean-architecture"
+      ],
+      "title": "Riverpod 2.x CodeGen Layered State Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "final httpProvider = Provider<BaseHttpClient>((ref) {\n  final httpClient = BaseHttpClient(\n    interceptor: <Interceptor>[\n      DefaultInterceptor(),\n      if (kDebugMode || !EnvConfig.getInstance().isProduction())\n        HttpFormatter(\n          logger: Logger(\n            printer: PrettyPrinter(\n              methodCount: 0,\n              colors: false,\n              printTime: false,\n              printEmojis: false,\n            ),\n          ),\n        ),\n    ],\n    option: BaseOptions(\n      baseUrl: EnvValue.read().baseUrl,\n      followRedirects: true,\n      validateStatus: (int? status) => status == null ? false : status < 502,\n      sendTimeout: const Duration(seconds: 60),\n      contentType: Headers.formUrlEncodedContentType,\n      connectTimeout: const Duration(seconds: 60),\n      receiveTimeout: const Duration(seconds: 60),\n    ),\n  );\n\n  final RefreshTokenInterceptor refreshTokenInterceptor =\n      RefreshTokenInterceptor(httpClient, ref.container);\n  httpClient.addInterceptor(refreshTokenInterceptor);\n  if (kDebugMode || !EnvConfig.getInstance().isProduction()) {\n    httpClient.addInterceptor(ref.read(aliceProvider).getDioInterceptor());\n  }\n\n  return httpClient;\n});",
+          "description": "Dual BaseHttpClient configuration with environment conditional logging and Alice inspector",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── data/\n    └── api/\n        ├── api.dart\n        ├── http_client.dart\n        ├── default_interceptor.dart\n        └── refresh_token_interceptor.dart",
+      "confidence": 0.96,
+      "considerations": [
+        "Pastikan Alice Inspector dan HttpFormatter tidak aktif pada build release production untuk keamanan dan performa",
+        "Gunakan BaseHttpClient wrapper untuk sentralisasi konfigurasi timeout dan SSL certificate bypass pada dev flavor"
+      ],
+      "keyImplementationPoints": [
+        "Pemisahan httpProvider (Core API) dan httpExternalProvider (AI/LLM microservice)",
+        "Injeksi Alice Inspector dengan shake-to-inspect di debug/non-production",
+        "Custom validateStatus < 502 agar error 4xx/500 dapat diproses interceptor tanpa uncaught exception awal"
+      ],
+      "overview": "Pola konfigurasi networking terpusat dengan segregasi endpoint Core API dan External AI API, dilengkapi interceptor inspeksi Alice dan Pretty Logging terkondisi.",
+      "purpose": "Mengisolasi network layer, memastikan konfigurasi SSL/timeout seragam, dan mempermudah debugging traffic HTTP di development.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/dio-interceptor-token-refresh-request-replay-pattern.md"
+      ],
+      "summary": "Pola arsitektur dual HTTP client Dio dengan environment-aware interceptor untuk logging, inspeksi Alice, dan validasi status response.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "dio",
+        "networking",
+        "alice",
+        "logging"
+      ],
+      "title": "Dual BaseHttpClient Architecture with Alice & Logger Interception"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class RefreshTokenInterceptor extends Interceptor {\n  RefreshTokenInterceptor(this.baseHttpClient, this.parentContainer);\n  final BaseHttpClient baseHttpClient;\n  final ProviderContainer parentContainer;\n\n  @override\n  Future<void> onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {\n    try {\n      final header = response.requestOptions.headers;\n      if ((response.statusCode ?? 0) >= 400 && (response.statusCode ?? 0) < 500) {\n        final baseResponse = BaseResponse.fromJson(json: response.data);\n        if (baseResponse.status == ErrorUtil.codeRefreshTokenExpiredError ||\n            baseResponse.status == ErrorUtil.codeRefreshTokenCredentialError ||\n            baseResponse.status == ErrorUtil.codeTokenInvalidError ||\n            baseResponse.status == ErrorUtil.codeUserNotFoundError) {\n          Util.logout(context: appRouter.navigatorKey.currentContext);\n          return;\n        }\n        if ((response.statusCode ?? 0) == 401) {\n          final SignUpData? value = await getRefreshToken();\n          if (value == null) {\n            handler.resolve(response);\n          } else {\n            header[\"Authorization\"] = \"Bearer ${await CacheUtil.getString(Strings.keyAccessToken)}\";\n            dynamic newData = response.requestOptions.data;\n            if (newData is FormData) {\n              newData = await _remakeFormData(newData, response.requestOptions.extra);\n            }\n            final Response<dynamic> value = await baseHttpClient.client\n                .fetch<dynamic>(response.requestOptions.copyWith(headers: header, data: newData));\n            handler.resolve(value);\n            return;\n          }\n        }\n      }\n      super.onResponse(response, handler);\n    } catch (e) {\n      return;\n    }\n  }\n\n  Future<FormData> _remakeFormData(FormData oldData, Map<String, dynamic> requestExtra) async {\n    final Map<String, dynamic> newFormData = Map.fromEntries(oldData.fields);\n    for (var file in oldData.files) {\n      newFormData.putIfAbsent(file.key, () => file.value.clone());\n    }\n    return FormData.fromMap(newFormData);\n  }\n}",
+          "description": "Resilient refresh token interceptor with FormData multipart cloning and automatic logout on expired session",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── data/\n    └── api/\n        ├── default_interceptor.dart\n        └── refresh_token_interceptor.dart",
+      "confidence": 0.99,
+      "considerations": [
+        "FormData yang sudah dikonsumsi pada request awal tidak dapat dibaca ulang tanpa diclone via _remakeFormData",
+        "Deteksi error code kadaluarsa harus memicu auto-logout ke login page secara reaktif"
+      ],
+      "keyImplementationPoints": [
+        "Intersepsi 401 dan pemanggilan silent refresh token menggunakan platform/device id",
+        "Cloning stream multipart file pada FormData saat mereplay request upload yang gagal karena 401",
+        "Pembersihan session dan navigasi logout otomatis saat refresh token expired"
+      ],
+      "overview": "Interceptor Dio yang secara transparan menangani perpanjangan token OAuth/JWT saat menerima response 401, serta melakukan cloning FormData untuk replay request upload.",
+      "purpose": "Mencegah user terputus dari sesi aplikasi dan menjamin request upload multipart tetap berhasil setelah refresh token.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/resilient-token-refresh-interceptor-multipart-rebuilder.md"
+      ],
+      "summary": "Pola interceptor refresh token tangguh dengan kemampuan cloning multipart FormData untuk replay request tanpa kehilangan payload biner.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "jwt",
+        "refresh-token",
+        "dio",
+        "multipart-upload"
+      ],
+      "title": "Replay-Capable Refresh Token Interceptor with FormData Multipart Cloning"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "@DotEnvGen(\n  filename: \".env.target\",\n)\nabstract class EnvValue {\n  const EnvValue._();\n\n  static EnvValue read() {\n    env ??= const _$EnvValue();\n    return env!;\n  }\n\n  @FieldKey(name: 'TIBqWL92V0', defaultValue: '')\n  String get baseUrl;\n\n  @FieldKey(name: 'TiB208Ah4j', defaultValue: '')\n  String get baseUrlExternal;\n\n  @FieldKey(name: 'rI3R6dbE2Y', defaultValue: '')\n  String get messageCollection;\n}",
+          "description": "Compile-time encrypted environment values generated from .env.target",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── env/\n│   ├── env_config.dart\n│   ├── env_type.dart\n│   ├── env_values.dart\n│   └── env_values.g.dart\n├── .env.development\n├── .env.uat\n├── .env.production\n└── Makefile",
+      "confidence": 0.95,
+      "considerations": [
+        "Selalu gitignore file .env.target dan plaintext .env.* yang berisi kredensial rahasia",
+        "Eksekusi Makefile generate-build atau build-*-app untuk menyalin env flavor sebelum build runner"
+      ],
+      "keyImplementationPoints": [
+        "Pengacakan dan enkripsi key/value environment saat compile-time via secure_dotenv generator",
+        "Konfigurasi singleton EnvConfig untuk startup lifecycle dan flavor identification (Dev/UAT/Prod)",
+        "Makefile automation untuk sinkronisasi .env flavor ke .env.target sebelum build runner dieksekusi"
+      ],
+      "overview": "Pola enkripsi environment variables saat compile-time menggunakan secure_dotenv generator untuk mengamankan URL endpoint dan secret credentials dari reverse engineering.",
+      "purpose": "Melindungi konfigurasi sensitif aplikasi mobile dari ekstraksi string plaintext pada dekompilasi APK/IPA.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/secure-hardware-backed-persistence-with-keychain.md"
+      ],
+      "summary": "Pola konfigurasi environment terenkripsi berbasis compile-time code generator untuk keamanan endpoint dan kredensial mobile.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "security",
+        "dotenv",
+        "environment-flavors"
+      ],
+      "title": "Encrypted Compile-Time Secure DotEnv Configuration"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class LoginRouteGuard extends AutoRouteGuard {\n  @override\n  void onNavigation(NavigationResolver resolver, StackRouter router) async {\n    CacheUtil.getBoolean(Strings.keyIsLogin).then(\n      (isLogin) {\n        if (isLogin) {\n          CacheUtil.getBoolean(Strings.keyIsNewUser).then((isNewUser) {\n            if (isNewUser) {\n              router.push(const RouteNewAccount());\n            } else {\n              CacheUtil.getBoolean(Strings.keyIsVerified).then(\n                (isVerified) {\n                  if (isVerified) {\n                    router.push(RouteDashboard());\n                  } else {\n                    router.push(RouteEditProfile(isInitialPage: true));\n                  }\n                },\n              );\n            }\n          });\n        } else {\n          resolver.next(true);\n        }\n      },\n    );\n  }\n}",
+          "description": "AutoRoute multi-stage onboarding and authentication guard",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── router/\n    ├── app_route.dart\n    ├── app_route.gr.dart\n    ├── login_route_guard.dart\n    └── dashboard_route_guard.dart",
+      "confidence": 0.97,
+      "considerations": [
+        "Guard async harus cepat agar tidak menghambat initial render aplikasi pada cold start",
+        "Pastikan state keychain diupdate secara konsisten saat user menyelesaikan tahapan registrasi/verifikasi"
+      ],
+      "keyImplementationPoints": [
+        "Evaluasi berjenjang: isLogin -> isNewUser -> isVerified -> RouteDashboard / RouteEditProfile / RouteNewAccount",
+        "Penyederhanaan routing deklaratif AutoRoute 8 dengan integrasi resolver.next(true) dan router.push()"
+      ],
+      "overview": "Pola penjagaan rute bertingkat (multi-stage navigation guard) yang memvalidasi otentikasi, status new user onboarding, dan status verifikasi profil sebelum user masuk ke dashboard.",
+      "purpose": "Memastikan user diarahkan ke onboarding atau profile setup yang tepat sesuai status akun mereka tanpa celah navigasi ilegal.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/autoroute-multi-stage-navigation-onboarding-guard.md",
+        "01-Knowledge/patterns/mobile/declarative-multi-tier-route-guarding.md"
+      ],
+      "summary": "Pola navigasi berjenjang menggunakan AutoRoute Guard untuk validasi autentikasi, onboarding, dan verifikasi biometrik.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "autoroute",
+        "navigation",
+        "route-guard",
+        "onboarding"
+      ],
+      "title": "Multi-Stage Declarative Route Guarding with AutoRoute"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "static void _handleClickAction(_notificationType notificationType, NotificationDataModel notificationData) {\n  switch (notificationType) {\n    case _notificationType.FLUTTER_NOTIFICATION_CLICK_CHAT:\n      {\n        final roomId = notificationData.additionalData?.roomId;\n        appRouter.navigate(RouteMessage(\n            userData: MessageUserModel(\n                targetUserId: notificationData.actorId,\n                roomId: roomId,\n                isFetchRoom: true)));\n      }\n    case _notificationType.FLUTTER_NOTIFICATION_CLICK_DAILY_LIKE:\n      {\n        appRouter.navigate(RouteDashboard(initialIndex: 1));\n        ProviderScope.containerOf(appRouter.navigatorKey.currentContext!)\n            .read(dashboardNotifierProvider.notifier)\n            .changeIndexPage(1);\n      }\n    case _notificationType.FLUTTER_NOTIFICATION_CLICK_MAILBOX:\n      {\n        appRouter.navigate(RouteDashboard(initialIndex: 0));\n        ProviderScope.containerOf(appRouter.navigatorKey.currentContext!)\n            .read(dashboardNotifierProvider.notifier)\n            .changeIndexPage(0);\n      }\n    default: {}\n  }\n}",
+          "description": "Push notification click action resolver routing to nested AutoRoute screens and changing dashboard tabs",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── common/\n│   ├── service/notification_service.dart\n│   └── notifier/notification_notifier.dart\n└── model/notification_data_model.dart",
+      "confidence": 0.96,
+      "considerations": [
+        "Background handler memerlukan anotasi @pragma('vm:entry-point') agar dikenali engine Flutter saat app terminated",
+        "Cold-start navigation membutuhkan slight delay agar navigator stack terpasang sempurna"
+      ],
+      "keyImplementationPoints": [
+        "Mapping payload JSON notificationData.clickAction ke typed enum _notificationType",
+        "Direct deep-navigation menggunakan appRouter.navigate dan manipulasi index dashboardNotifierProvider",
+        "Sentralisasi penanganan notifikasi foreground, background, dan terminated app state"
+      ],
+      "overview": "Pola dispatch aksi notifikasi terpusat yang memetakan payload FCM ke enum tipe aksi dan menavigasikan user ke halaman spesifik atau tab dashboard secara mulus.",
+      "purpose": "Menghubungkan push notifications dengan alur navigasi internal aplikasi secara konsisten di semua status lifecycle (foreground, background, terminated).",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/decoupled-native-push-notification-in-app-purchase-pattern.md"
+      ],
+      "summary": "Pola arsitektur push notification FCM dengan mapping aksi bertipe enum untuk deep-linking dan pergantian tab dashboard otomatis.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "fcm",
+        "firebase",
+        "notifications",
+        "deep-linking"
+      ],
+      "title": "Push Notification Action-to-Route Dispatch Matrix"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class CacheUtil {\n  CacheUtil._();\n  static Future<void> putString(String key, String value) async =>\n      await FlutterKeychain.put(key: key, value: value);\n\n  static Future<void> putBoolean(String key, bool value) async =>\n      await FlutterKeychain.put(key: key, value: value.toString());\n\n  static Future<String> getString(String key) async =>\n      (await FlutterKeychain.get(key: key)) ?? '';\n\n  static Future<bool> getBoolean(String key) async =>\n      (await FlutterKeychain.get(key: key)) == 'true';\n\n  static Future<Uint8List?> getUint8List(String key) async {\n    final value = await FlutterKeychain.get(key: key);\n    if (value == null) return null;\n    List<String> stringList = value.replaceAll('[', '').replaceAll(']', '').split(', ');\n    List<int> intList = stringList.map(int.parse).toList();\n    return Uint8List.fromList(intList);\n  }\n\n  static Future<void> clear() async => FlutterKeychain.clear();\n}",
+          "description": "Hardware-backed secure cache utility using FlutterKeychain with Uint8List template serialization",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n└── common/\n    └── util/cache_util.dart",
+      "confidence": 0.96,
+      "considerations": [
+        "Gunakan untuk data sensitif, token, dan biometrics template; hindari menyimpan data biner berukuran besar (gambar penuh) di Keychain"
+      ],
+      "keyImplementationPoints": [
+        "Abstraksi penyimpanan hardware-backed iOS Keychain Services dan Android KeyStore via flutter_keychain",
+        "Serialisasi dan deserialisasi array biner Uint8List untuk face biometric embeddings",
+        "Metode atomic clear() untuk menjamin seluruh data sesi terhapus bersih saat user logout"
+      ],
+      "overview": "Wrapper penyimpanan lokal aman berbasis hardware security module (KeyStore di Android dan Keychain di iOS) untuk menyimpan token otentikasi, flag sesi, dan template biometrik.",
+      "purpose": "Mencegah penyimpanan data kredensial dan vektor biometrik dalam bentuk plaintext pada database SQLite atau SharedPreferences yang rentan.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/keychain-backed-secure-session-persistence.md"
+      ],
+      "summary": "Pola penyimpanan lokal aman menggunakan hardware keychain untuk kredensial, token sesi, dan serialisasi data biner biometrik.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "security",
+        "keychain",
+        "keystore",
+        "cache"
+      ],
+      "title": "Hardware-Backed Secure Keychain Persistence Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "@riverpod\nclass MessageNotifier extends _$MessageNotifier {\n  late final MessageRepository _messageRepository;\n\n  @override\n  Stream<List<MessageData>> build(String roomId) {\n    _messageRepository = ref.watch(messageRepositoryProvider);\n    final stream = _messageRepository.fetchMessages(roomId);\n    return stream.map<List<MessageData>>((event) {\n      final List<MessageData> allMessage = List.empty(growable: true);\n      int currentTimeEpoch = 0;\n      for (final element in event.docs) {\n        final message = MessageData.fromJson(element.data());\n        if (currentTimeEpoch == 0) currentTimeEpoch = message.timeStamp!;\n        final isSameDay = DateUtil.isToday(\n            DateTime.fromMillisecondsSinceEpoch(currentTimeEpoch),\n            DateTime.fromMillisecondsSinceEpoch(message.timeStamp!));\n        if (!isSameDay) {\n          allMessage.add(MessageData(\n              messageId: '',\n              senderId: '',\n              type: MessageType.dateSeparator,\n              content: DateUtil.getStringDateFromEpoch(currentTimeEpoch,\n                  outputFormat: DateUtil.clientDateFormat3)));\n          currentTimeEpoch = message.timeStamp!;\n        }\n        allMessage.add(message);\n      }\n      return allMessage;\n    });\n  }\n\n  void sendMessage(String content) {\n    CacheUtil.getString(Strings.keyUserId).then((userId) {\n      _messageRepository.sendMessage(\n          MessageData(\n            content: content,\n            messageId: const Uuid().v4(),\n            type: MessageType.text,\n            timeStamp: DateUtil.timeStamp(),\n            senderId: userId,\n          ),\n          roomId,\n          ref.read(roomNotifierProvider.call(roomId).notifier).targetUserId);\n    });\n  }\n}",
+          "description": "Hybrid Firestore reactive stream with in-memory date separators and REST notification trigger on send",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── data/\n│   ├── api/service/message/message_service.dart\n│   └── repository/message/message_repository_impl.dart\n└── presenter/message/\n    ├── notifier/message_notifier.dart\n    ├── notifier/room_notifier.dart\n    └── screen_message.dart",
+      "confidence": 0.98,
+      "considerations": [
+        "Query Firestore subcollection harus di-index berdasarkan time_stamp descending untuk performa tinggi",
+        "Batalkan stream listener saat screen didispose untuk menghemat baterai dan konsumsi kuota Firestore"
+      ],
+      "keyImplementationPoints": [
+        "Listening realtime snapshot dokumen Firestore menggunakan StreamTransformer untuk injeksi date separator otomatis",
+        "Operasi kirim pesan dwifungsi: menulis ke Firestore subcollection dan memanggil REST endpoint untuk audit & push notification",
+        "Dukungan gamification polymorphic message types (text, voice, match-off game, tarot cards)"
+      ],
+      "overview": "Arsitektur chat realtime hibrida yang mengombinasikan Cloud Firestore Stream untuk syncing pesan instan tanpa WebSocket server terpisah, dengan REST API untuk audit dan notifikasi.",
+      "purpose": "Menyediakan fitur percakapan instan dengan latensi minimal, sinkronisasi reaktif multi-device, dan injeksi date grouping dinamis di sisi client.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/offline-first-synchronization-queue-conflict-resolver.md"
+      ],
+      "summary": "Pola arsitektur chat realtime hibrida menggunakan Cloud Firestore reactive streams dan REST API untuk push notification dan audit logging.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "firestore",
+        "realtime-chat",
+        "firebase",
+        "streams"
+      ],
+      "title": "Hybrid Realtime Firestore Stream & REST Chat Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "@riverpod\nclass ForYouPageNotifier extends _$ForYouPageNotifier {\n  late final FeedRepository _feedRepository;\n  final List<FeedUserData> _listUserData = List.empty(growable: true);\n  bool _isFullLoaded = false;\n  int _limit = 10;\n  int _offSet = 1;\n\n  void loadMore(int newPage) {\n    if (_isFullLoaded) return;\n    if ((_listUserData.length - newPage) < 3) {\n      _offSet++;\n      getForYouPageData();\n    }\n  }\n\n  void removeUserFeed(String targetUserId) {\n    int tempLength = _listUserData.length;\n    _listUserData.removeWhere((data) => data.id == targetUserId);\n    if (tempLength != _listUserData.length) {\n      state = AsyncValue.data(ForYouPageState(\n          listFeedUser: _listUserData,\n          isFullLoaded: _isFullLoaded,\n          isMaxSeen: false,\n          page: _offSet));\n    }\n  }\n}",
+          "description": "Preemptive buffer pagination with buffer < 3 prefetch trigger and optimistic item removal",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── data/repository/feed/feed_repository_impl.dart\n└── presenter/home/\n    ├── notifier/for_you_page_notifier.dart\n    ├── notifier/card_notifier.dart\n    └── component/page_for_you.dart",
+      "confidence": 0.97,
+      "considerations": [
+        "Pastikan flag _isFullLoaded aktif saat API mengembalikan data lebih sedikit dari limit untuk mencegah request berulang saat data habis",
+        "Reset offset dan clear list secara bersih pada aksi refresh pull-to-refresh"
+      ],
+      "keyImplementationPoints": [
+        "Preemptive background fetching ketika selisih buffer kartu tersisa < 3 item",
+        "Optimistic UI update: kartu langsung dihapus dari deck saat swipe dilakukan tanpa menunggu respon backend",
+        "Deteksi batas data (isFullLoaded) untuk menghentikan pemanggilan pagination yang tidak diperlukan"
+      ],
+      "overview": "Pola pagination swipeable cards dengan prefetching otomatis ketika jumlah buffer kartu mendekati ambang batas tertentu (< 3 kartu), mencegah layar kosong saat user melakukan swipe cepat.",
+      "purpose": "Memberikan pengalaman pengguna yang mulus tanpa jeda loading kartu berikutnya pada antarmuka dating swipe.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/riverpod-2-0-code-gen-async-state-pattern.md"
+      ],
+      "summary": "Pola pagination infinite card dengan sistem lookahead buffer prefetching dan optimistik penghapusan item kartu pada aksi swipe.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "pagination",
+        "infinite-scroll",
+        "swipeable-cards",
+        "performance"
+      ],
+      "title": "Preemptive Buffer Infinite Card Pagination Machine"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "Future<FilesMeta> calculateSimilarity({\n  required List<FaceModel> faceModel,\n  PickPhotoModel? pickPhotoModel,\n  PickPhotoProfileModel? pickPhotoProfileModel,\n  int? key,\n}) async {\n  List<FilesMeta> listFilesMeta = List.empty(growable: true);\n  final Uint8List? templateSelfie =\n      await CacheUtil.getUint8List(Strings.keyTemplateSelfie);\n\n  if (templateSelfie == null) {\n    return FilesMeta(\n      filename: pickPhotoModel?.photo.name ?? pickPhotoProfileModel?.photo?.name,\n      order: key,\n      similarity: 0.1,\n    );\n  }\n\n  for (var el in faceModel) {\n    double similarity = (await _facesdkPlugin.similarityCalculation(\n      el.templates!,\n      templateSelfie,\n    )) ?? 0.1;\n    listFilesMeta.add(FilesMeta(\n      filename: pickPhotoModel?.photo.name ?? pickPhotoProfileModel?.photo?.name,\n      order: key,\n      similarity: similarity,\n      meta: MetaKBY.fromJson(el.toJson()),\n    ));\n  }\n\n  final highestValue = listFilesMeta.reduce((value, element) =>\n      (value.similarity ?? 0.1) > (element.similarity ?? 0.1) ? value : element);\n  return highestValue;\n}",
+          "description": "Facial similarity calculation engine matching candidate face templates against verified selfie template",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "facesdk_plugin/\nlib/\n├── presenter/face_recognition/\n│   ├── notifier/face_recognition_notifier.dart\n│   └── screen_face_recognition.dart\n└── model/face_model.dart",
+      "confidence": 0.98,
+      "considerations": [
+        "Orientasi gambar harus dinormalisasi dengan FlutterExifRotation sebelum diekstraksi template wajahnya untuk mencegah rotasi gambar miring pada sensor kamera Android/iOS tertentu"
+      ],
+      "keyImplementationPoints": [
+        "Inisialisasi dan aktivasi native face SDK per-platform (Android/iOS license keys)",
+        "Rotasi otomatis EXIF gambar sebelum ekstraksi feature landmarks wajah",
+        "Penyimpanan vector embedding selfie ke secure keychain dan komparasi cosine similarity dengan foto profil galeri"
+      ],
+      "overview": "Pola integrasi SDK biometrik native untuk deteksi liveness wajah, ekstraksi landmark template, dan penghitungan skor kesamaan (similarity) antara foto selfie dan foto profil.",
+      "purpose": "Memverifikasi keaslian identitas pengguna secara lokal di perangkat dan mencegah spoofing atau penggunaan foto orang lain.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/biometric-first-local-auth-fallback-pin-session-gate.md"
+      ],
+      "summary": "Pola integrasi native face biometrics dan kalkulasi skor kemiripan wajah dengan normalisasi orientasi EXIF kamera.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "biometrics",
+        "face-recognition",
+        "liveness",
+        "native-sdk"
+      ],
+      "title": "Biometric Face Liveness & EXIF Similarity Engine"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class BillingService {\n  late final InAppPurchase _inAppPurchase;\n  late final Stream<List<PurchaseDetails>> _stream;\n\n  BillingService() {\n    _inAppPurchase = InAppPurchase.instance;\n    _stream = _inAppPurchase.purchaseStream;\n  }\n\n  void initPayment({\n    required Future<void> Function(PurchaseDetails) onVerifyPurchase,\n    required Future<void> Function() onPendingCompletePurchase,\n    required Future<void> Function(IAPError, PurchaseDetails) onStatusError,\n  }) async {\n    _stream.listen((purchaseDetailsList) async {\n      for (var purchaseDetails in purchaseDetailsList) {\n        if (purchaseDetails.status == PurchaseStatus.purchased) {\n          await onVerifyPurchase(purchaseDetails);\n        } else if (purchaseDetails.status == PurchaseStatus.error) {\n          onStatusError(purchaseDetails.error!, purchaseDetails);\n        }\n        if (purchaseDetails.pendingCompletePurchase) {\n          onPendingCompletePurchase();\n          _inAppPurchase.completePurchase(purchaseDetails);\n        }\n      }\n    });\n\n    if (Platform.isIOS) {\n      var iosAddition = _inAppPurchase\n          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();\n      await iosAddition.setDelegate(IosPaymentQueueDelegate());\n    }\n  }\n}",
+          "description": "Unified In-App Purchase service with iOS StoreKit payment queue delegate and purchase stream lifecycle",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── common/service/billing_service.dart\n├── presenter/priority_pass/\n│   ├── notifier/ios_payment_queue_delegate.dart\n│   └── notifier/priority_pass_notifier.dart\n└── model/purchasable_product_model.dart",
+      "confidence": 0.96,
+      "considerations": [
+        "Panggilan completePurchase() wajib dilakukan setelah verifikasi backend berhasil untuk menghindari auto-refund oleh Google Play / App Store",
+        "Bersihkan antrean transaksi iOS dengan finishTransaction saat dispose service"
+      ],
+      "keyImplementationPoints": [
+        "Wrapper stream-based lintas platform Google Play Billing dan Apple StoreKit",
+        "Implementasi IosPaymentQueueDelegate untuk mengelola antrean transaksi pembayaran iOS StoreKit",
+        "Siklus lengkap verifikasi status (pending, purchased, error, restored, canceled) dan acknowledgment transaksi"
+      ],
+      "overview": "Pola integrasi In-App Purchase terpadu untuk iOS dan Android dengan penanganan reactive stream, delegate antrean StoreKit, dan verifikasi receipt backend.",
+      "purpose": "Memproses transaksi langganan digital dan in-app products secara andal tanpa resiko transaksi menggantung atau kehilangan status pembayaran.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/decoupled-native-push-notification-in-app-purchase-pattern.md"
+      ],
+      "summary": "Pola integrasi in-app purchase lintas platform dengan manajemen antrean transaksi StoreKit iOS dan siklus konfirmasi pembelian.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "iap",
+        "in-app-purchase",
+        "storekit",
+        "google-play-billing"
+      ],
+      "title": "Cross-Platform Native Billing & StoreKit Queue Delegate"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class StringOrIntConverterNum implements JsonConverter<num?, dynamic> {\n  const StringOrIntConverterNum();\n\n  @override\n  num? fromJson(dynamic json) {\n    if (json is int) return json;\n    if (json is String) return int.tryParse(json);\n    return null;\n  }\n\n  @override\n  toJson(num? object) => object;\n}\n\nclass ArrayIntOrIntConverter implements JsonConverter<num?, dynamic> {\n  const ArrayIntOrIntConverter();\n\n  @override\n  num? fromJson(dynamic json) {\n    if (json is num) return json;\n    if (json is List) {\n      final list = (json).map<int>((e) => e).toList();\n      if (list.isEmpty) return null;\n      return list[0];\n    }\n    return null;\n  }\n\n  @override\n  toJson(num? object) => object;\n}",
+          "description": "Polymorphic JSON converters parsing numbers, strings, or arrays with zero crash guarantee",
+          "language": "dart"
+        }
+      ],
+      "codeStructure": "lib/\n├── model/\n│   └── converter.dart\n├── data/api/\n│   ├── base/base_response.dart\n│   └── dto/",
+      "confidence": 0.95,
+      "considerations": [
+        "Gunakan converter khusus pada field API yang memiliki riwayat inkonsistensi tipe data antar microservice backend"
+      ],
+      "keyImplementationPoints": [
+        "Custom JsonConverter untuk konversi String <-> int/num tanpa fatal parse error",
+        "Penanganan anomali server yang mengembalikan array tunggal alih-alih nilai skalar via ArrayIntOrIntConverter",
+        "Generic BaseResponse<T> untuk parsing aman single data, dataset list, dan pagination metadata"
+      ],
+      "overview": "Pola serialisasi DTO defensif yang menggabungkan Freezed dengan custom JsonConverter untuk menjamin parsing payload JSON backend tidak memicu runtime crash pada tipe data polimorfik.",
+      "purpose": "Mencegah crash aplikasi client akibat inkonsistensi tipe data respons backend API.",
+      "relatedKnowledge": [
+        "01-Knowledge/patterns/mobile/generic-dto-envelope-domain-error-normalization.md",
+        "01-Knowledge/patterns/mobile/unified-error-handling-baseresponse-mapping-pattern.md"
+      ],
+      "summary": "Pola serialisasi DTO polimorfik dengan custom fallback JsonConverter untuk ketahanan parsing respons backend.",
+      "tags": [
+        "mobile",
+        "flutter",
+        "freezed",
+        "json-serializable",
+        "dto",
+        "type-safety"
+      ],
+      "title": "Polymorphic DTO Serializer with Fallback Type Converters"
+    }
+  ]
+}

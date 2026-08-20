@@ -1,0 +1,757 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T08:27:59.721Z",
+  "harvestId": "harvest-1787127791371-cc78a949",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/video-generator",
+    "packageName": "video-generator",
+    "packageVersion": "0.0.1",
+    "dependencies": [
+      "@base-ui/react",
+      "@fontsource-variable/geist",
+      "@hookform/resolvers",
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
+      "@shadcn/react",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@types/crypto-js",
+      "@types/culori",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "culori",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "shadcn",
+      "sonner",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "tw-animate-css",
+      "use-debounce",
+      "zod",
+      "zustand"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "prettier",
+      "prettier-plugin-tailwindcss",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "lint",
+      "format",
+      "typecheck",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/config/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/storage/indexeddb-adapter.ts"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 263,
+        "sampleDirectories": [
+          ".opencode",
+          ".opencode/commands",
+          ".opencode/plugins",
+          ".opencode/skills",
+          ".opencode/skills/graphify",
+          ".opencode/skills/graphify/references",
+          "public",
+          "src",
+          "src/assets",
+          "src/components",
+          "src/components/common",
+          "src/components/ui",
+          "src/config",
+          "src/config/constant",
+          "src/editor"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 1510,
+      "linkCount": 2595
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "import { Sonner } from \"@/components/ui/sonner\";\nimport { QueryClient, QueryClientProvider } from \"@tanstack/react-query\";\nimport { RouterProvider } from \"react-router-dom\";\nimport { TooltipProvider } from \"./components/ui/tooltip\";\nimport I18nProvider from \"./lib/i18n/i18nProvider\";\nimport { router } from \"./routes\";\n\nconst queryClient = new QueryClient();\n\nexport function App() {\n  return (\n    <I18nProvider>\n      <QueryClientProvider client={queryClient}>\n        <TooltipProvider>\n          <Sonner position=\"top-right\" richColors />\n          <RouterProvider router={router} />\n        </TooltipProvider>\n      </QueryClientProvider>\n    </I18nProvider>\n  );\n}\n\nexport default App;",
+          "description": "Top-level declarative compound provider tree hierarchy",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/main.tsx: Root DOM renderer & ThemeProvider wrapper\n- src/App.tsx: Top-level Provider orchestration (I18n, QueryClient, Tooltip, Sonner, Router)\n- src/config/constant/routes.ts: Centralized route constants contract",
+      "confidence": 0.95,
+      "considerations": [
+        "Data providers (I18n, QueryClient) must wrap UI feature providers (Tooltip, Router)",
+        "Single QueryClient instance declared outside render cycle to avoid recreation"
+      ],
+      "keyImplementationPoints": [
+        "Separation of Global Theme Provider in main.tsx from application context tree in App.tsx",
+        "Single global QueryClient instance outside React lifecycle",
+        "Compound provider nesting ensuring global access to Sonner toast and Tooltip systems"
+      ],
+      "overview": "Deterministic, hierarchical context provider tree composition separating global theme bootstrapping from feature providers and declarative routing.",
+      "purpose": "Establish a reliable, flicker-free foundation skeleton for react applications with centralized provider hierarchy.",
+      "relatedKnowledge": [
+        "frontend/project-skeleton-template",
+        "tanstack-query/provider-lifecycle",
+        "react-router/data-router-composition"
+      ],
+      "summary": "Hierarchical Layered Provider Composition & Project Foundation Skeleton for React + Vite apps.",
+      "tags": [
+        "architecture",
+        "foundation",
+        "react",
+        "providers"
+      ],
+      "title": "Hierarchical Layered Provider Composition & Foundation Skeleton"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const useEditorStore = create<EditorState>((set, get) => ({\n  project: null,\n  isLoading: true,\n  error: null,\n  selectedElementIds: [],\n  mediaUrls: {},\n  isPlaying: false,\n\n  loadProject: async (id) => {\n    set({ isLoading: true, error: null });\n    try {\n      const result = await storageService.loadProject({ id });\n      if (!result) {\n        set({ isLoading: false, error: `Project \"${id}\" not found` });\n        return;\n      }\n      const urls: Record<string, string> = {};\n      for (const el of result.project.scenes.tracks.elements) {\n        if ('mediaId' in el && el.mediaId) {\n          const asset = await storageService.loadMediaAsset({\n            projectId: id,\n            id: (el as { mediaId: string }).mediaId,\n          });\n          if (asset?.url) urls[el.id] = asset.url;\n        }\n      }\n      set({ project: result.project, isLoading: false, mediaUrls: urls });\n    } catch (error) {\n      set({ isLoading: false, error: error instanceof Error ? error.message : String(error) });\n    }\n  },\n\n  updateScene: (patch) => {\n    const { project } = get();\n    if (!project) return;\n    const updated: TProject = {\n      ...project,\n      scenes: { ...project.scenes, ...patch, updatedAt: new Date() },\n    };\n    set({ project: updated });\n    storageService.saveProject({ project: updated });\n  },\n}));",
+          "description": "Zustand store with async storage sidecar synchronization",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/editor/editor-store.ts: Central Zustand store with state, actions, and sidecar sync\n- src/services/storage/services.ts: Multi-tier storage persistence service\n- src/types/project.ts & src/types/scene.ts: Domain model types",
+      "confidence": 0.94,
+      "considerations": [
+        "High-frequency mutations (e.g. playhead scrub) should be debounced before storage persist",
+        "Object URLs created during asset loading must be revoked on cleanup"
+      ],
+      "keyImplementationPoints": [
+        "In-memory state updated immutably and rendered immediately (optimistic UI)",
+        "Persistence calls to storageService executed asynchronously without blocking the UI thread",
+        "Automatic cleanup of orphaned media assets when elements are deleted"
+      ],
+      "overview": "Zustand domain store managing complex project tree models while orchestrating asynchronous persistence to underlying storage engines in the background.",
+      "purpose": "Provide reactive, instant UI responsiveness while ensuring durable state persistence to IndexedDB/OPFS.",
+      "relatedKnowledge": [
+        "state/zustand-async-persistence",
+        "storage/opfs-indexeddb-coordination"
+      ],
+      "summary": "Centralized Zustand domain store with asynchronous storage sidecar synchronization.",
+      "tags": [
+        "state",
+        "zustand",
+        "reactive",
+        "sidecar-sync"
+      ],
+      "title": "Centralized Domain Store with Asynchronous Storage Sidecar Sync"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { useSyncExternalStore } from 'react'\nimport { useEditorStore } from './editor-store'\nimport type { EditorState } from './editor-store'\n\nconst subscribeNone = () => () => {}\n\nexport function useEditor(): EditorState\nexport function useEditor<T>(selector: (state: EditorState) => T): T\nexport function useEditor<T>(\n  selector?: (state: EditorState) => T,\n): EditorState | T {\n  const subscribe = (onChange: () => void) =>\n    useEditorStore.subscribe(onChange)\n\n  const getSnapshot = (): EditorState | T => {\n    const state = useEditorStore.getState()\n    return selector ? selector(state) : state\n  }\n\n  return useSyncExternalStore(\n    selector ? subscribe : subscribeNone,\n    getSnapshot,\n    getSnapshot,\n  ) as EditorState | T\n}",
+          "description": "useSyncExternalStore wrapper hook for Zustand store",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/editor/use-editor.ts: Custom useSyncExternalStore bridge hook\n- src/editor/editor-store.ts: External Zustand store instance",
+      "confidence": 0.93,
+      "considerations": [
+        "Selector functions must return stable or primitive values to prevent infinite render loops"
+      ],
+      "keyImplementationPoints": [
+        "Uses React 18 useSyncExternalStore for tearing-free concurrent rendering",
+        "TypeScript function overloads provide exact type inference for slice selectors",
+        "Conditional subscription optimization when selector is provided"
+      ],
+      "overview": "React 18 useSyncExternalStore integration bridging an external Zustand store to guarantee tearing-free state reads and selective component re-renders.",
+      "purpose": "Guarantee concurrent-safe state reads and fine-grained slice re-renders.",
+      "relatedKnowledge": [
+        "react/use-sync-external-store",
+        "state/fine-grained-reactivity"
+      ],
+      "summary": "Tearing-Free Subscription State Bridge with useSyncExternalStore.",
+      "tags": [
+        "react",
+        "useSyncExternalStore",
+        "state-bridge",
+        "concurrency"
+      ],
+      "title": "Tearing-Free Subscription State Bridge with useSyncExternalStore"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};",
+          "description": "Encrypted localStorage helper with storage event dispatching",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/hooks/useLocalStorage.ts: AES encrypted storage hook with custom storage event dispatcher\n- src/config/constant/localstorage.ts: Storage key constants",
+      "confidence": 0.92,
+      "considerations": [
+        "Client-side AES encryption is an obfuscation and integrity measure, not a replacement for backend security"
+      ],
+      "keyImplementationPoints": [
+        "AES encryption/decryption on read and write with auto-purge on corruption",
+        "Manual window.dispatchEvent(new Event('storage')) for same-tab reactive propagation",
+        "Native storage event listener for automatic cross-tab synchronization"
+      ],
+      "overview": "Custom reactive localStorage hook with AES encryption, corrupted payload self-healing, and unified same-tab/cross-tab state synchronization.",
+      "purpose": "Provide secure, reactive, and synchronized local storage state across components and browser tabs.",
+      "relatedKnowledge": [
+        "security/client-side-storage-encryption",
+        "react/storage-event-cross-tab-sync"
+      ],
+      "summary": "Encrypted Cross-Tab Reactive Storage Hook with Event Dispatching.",
+      "tags": [
+        "localstorage",
+        "encryption",
+        "cross-tab-sync",
+        "react-hook"
+      ],
+      "title": "Encrypted Cross-Tab Reactive Storage Hook with Event Dispatching"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/routes/index.tsx\nexport const router = createBrowserRouter([\n  {\n    path: \"/\",\n    element: (\n      <PrivateRoute>\n        <Outlet />\n      </PrivateRoute>\n    ),\n    children: [\n      {\n        index: true,\n        element: <Navigate to={ROUTES.PROJECT} replace />\n      },\n      {\n        path: ROUTES.EDITOR,\n        element: <EditorPage />\n      },\n      {\n        path: ROUTES.PROJECT,\n        element: <ProjectPage />\n      }\n    ]\n  },\n  {\n    path: ROUTES.LOGIN,\n    element: (\n      <PublicRoute>\n        <LoginPage />\n      </PublicRoute>\n    ),\n  },\n  {\n    path: \"*\",\n    element: <NotFound />,\n  },\n]);\n\n// src/routes/PrivateRoute.tsx\nconst PrivateRoute: React.FC<IPrivateRoute> = ({ children }: IPrivateRoute) => {\n  const [token] = useLocalStorage<string | null>(LOCALSTORAGE_KEY.TOKEN, null, { encrypted: true });\n  const location = useLocation();\n\n  if (!token) {\n    return <Navigate to=\"/login\" state={{ from: location }} replace />;\n  }\n\n  return <>{children}</>;\n};",
+          "description": "Declarative Route tree with PrivateRoute and PublicRoute guards",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "- src/routes/index.tsx: Declarative route definition with createBrowserRouter\n- src/routes/PrivateRoute.tsx: Authentication guard with deep-link state preservation\n- src/routes/PublicRoute.tsx: Guest-only route guard\n- src/config/constant/routes.ts: Centralized route constants",
+      "confidence": 0.94,
+      "considerations": [
+        "Post-login redirects must check location.state?.from before falling back to default route"
+      ],
+      "keyImplementationPoints": [
+        "Encapsulated layout nesting via Outlet inside PrivateRoute",
+        "Deep-link preservation using state: { from: location } in Navigate",
+        "PublicRoute redirection preventing logged-in users from accessing login page"
+      ],
+      "overview": "Declarative React Router v6 architecture with encapsulated authentication guards, guest route redirection, and deep-link target restoration.",
+      "purpose": "Secure private routes, manage authentication flow, and preserve user navigation intent across login redirects.",
+      "relatedKnowledge": [
+        "react-router/protected-routes",
+        "auth/deep-link-redirection"
+      ],
+      "summary": "Declarative Navigation with Deep-Link State Preservation Guards.",
+      "tags": [
+        "routing",
+        "react-router",
+        "guards",
+        "deep-linking"
+      ],
+      "title": "Declarative Navigation with Deep-Link State Preservation Guards"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import CryptoJS from \"crypto-js\";\n\nexport const getTimestamp = () => {\n  return new Date().getTime();\n};\n\nfunction flattenObject(obj: any, prefix: string = \"\"): any {\n  let flattened: any = {};\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const prefixedKey = prefix === \"\" ? key : `${prefix}.${key}`;\n      if (\n        typeof value === \"object\" &&\n        value !== null &&\n        !Array.isArray(value)\n      ) {\n        const nested = flattenObject(value, prefixedKey);\n        flattened = { ...flattened, ...nested };\n      } else if (Array.isArray(value)) {\n        flattened[prefixedKey] = \"\";\n      } else {\n        flattened[prefixedKey] = value;\n      }\n    }\n  }\n  return flattened;\n}\n\nfunction formatObject(obj: any): string {\n  const flattened = flattenObject(obj);\n  let result = \"\";\n  Object.keys(flattened)\n    .sort()\n    .forEach((key) => {\n      const value = flattened[key];\n      result += `${key}${value}`;\n    });\n  return result;\n}\n\nexport const makeSignature = (\n  email: number | string,\n  timestamp: number,\n  data: any,\n  isFormData?: boolean\n) => {\n  const formDataObject: any = {\n    email,\n    timestamp,\n  };\n  if (isFormData && data instanceof FormData) {\n    for (const pair of data.entries()) {\n      formDataObject[pair[0]] = pair[1];\n    }\n  }\n  const newPayload = {\n    email,\n    ...data,\n    timestamp,\n  };\n  const newData = isFormData ? formDataObject : newPayload;\n  const finalPayload = formatObject(newData);\n  return CryptoJS.SHA1(finalPayload).toString();\n};",
+          "description": "Deterministic payload flattener, key sorter, and cryptographic signature digest generator",
+          "language": "typescript"
+        },
+        {
+          "code": "import Axios from \"axios\";\nimport { getTimestamp, makeSignature } from \"./signature\";\nimport { getData } from \"@/hooks/useLocalStorage\";\nimport { LOCALSTORAGE_KEY } from \"./constant/localstorage\";\n\nexport const axios = Axios.create({\n  baseURL: import.meta.env.VITE_API_URL || \"http://localhost:3000\",\n});\n\naxios.interceptors.request.use(\n  async (config) => {\n    const token = getData(LOCALSTORAGE_KEY.TOKEN);\n    const timestamp = getTimestamp();\n\n    if (token) {\n      config.headers.Authorization = `Bearer ${token}`;\n    }\n\n    const isFormData = config.data instanceof FormData;\n    const signature = makeSignature(\n      0, // client identifier / user context\n      timestamp,\n      config.data || {},\n      isFormData\n    );\n\n    config.headers[\"sig\"] = signature;\n    config.headers[\"email\"] = \"0\";\n    config.headers[\"timestamp\"] = timestamp.toString();\n\n    return config;\n  },\n  (error) => Promise.reject(error)\n);",
+          "description": "Axios request interceptor integrating canonical signature generation with authentication headers",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   ├── signature.ts         # flattenObject(), formatObject(), makeSignature()\n│   ├── axios.ts             # Axios client instance with request signing interceptor\n│   └── constant/\n│       └── localstorage.ts  # Token and identity storage keys",
+      "confidence": 0.95,
+      "considerations": [
+        "Array elements are mapped to empty strings during flattening in this implementation; complex nested arrays require consistent backend protocol alignment.",
+        "Large file uploads inside FormData may incur performance overhead if serialized entirely into the hash calculation; consider hashing only metadata and file sizes rather than streaming raw blob contents.",
+        "SHA1 is vulnerable to collision attacks in adversarial threat models; upgrading to HMAC-SHA256 with a client-side rotating secret or nonce is recommended for sensitive environments."
+      ],
+      "keyImplementationPoints": [
+        "Recursive dot-notation object traversal (`prefix.key`) flattening arbitrarily deep payload structures.",
+        "Lexicographical key sorting (`Object.keys().sort()`) eliminating JSON key order nondeterminism across network serializers.",
+        "Polymorphic FormData extraction converting multipart form entries into a uniform key-value dictionary.",
+        "Nonce and timestamp header injection (`timestamp`, `sig`, `email`) enabling server-side replay attack rejection."
+      ],
+      "overview": "A deterministic client-side request signature generation pattern that flattens nested JSON payloads and FormData multipart streams into an alphabetically ordered canonical string before computing a cryptographic hash (SHA1/HMAC). This protects backend APIs against payload tampering, parameter pollution, and replay attacks across asynchronous network hops.",
+      "purpose": "Ensure HTTP request integrity, non-repudiation, and anti-replay protection by signing serialized request payloads with identity context and timestamps before transmission.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/encrypted-cross-tab-reactive-storage-hook-with-event-dispatching.md]]",
+        "[[01-Knowledge/concepts/security/anti-replay-mechanisms.md]]",
+        "[[01-Knowledge/patterns/backend/hmac-request-verification.md]]"
+      ],
+      "summary": "Deterministic Canonical Payload Signature Generator with Lexicographical Key Sorting & Multipart Flattening for request integrity and anti-tampering.",
+      "tags": [
+        "security",
+        "cryptography",
+        "api-signature",
+        "anti-tampering",
+        "request-signing"
+      ],
+      "title": "Deterministic Canonical Payload Signature Generator with Lexicographical Key Sorting & Multipart Flattening"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import Axios from \"axios\";\nimport Swal from \"sweetalert2\";\nimport { LOCALSTORAGE_KEY } from \"./constant/localstorage\";\n\nexport const axios = Axios.create({\n  baseURL: import.meta.env.VITE_API_URL || \"http://localhost:3000\",\n});\n\naxios.interceptors.response.use(\n  (response) => response,\n  async (error) => {\n    const status = error.response?.status;\n    const data = error.response?.data;\n\n    if (status === 401) {\n      const isLoginPage =\n        window.location.pathname.includes(\"/login\") ||\n        window.location.hash.includes(\"/login\");\n\n      if (!isLoginPage) {\n        // 1. Atomically purge expired session credentials\n        localStorage.removeItem(LOCALSTORAGE_KEY.TOKEN);\n        localStorage.removeItem(LOCALSTORAGE_KEY.USER);\n\n        // 2. Extract polymorphic error message\n        let msg = \"Sesi telah kedaluwarsa.\";\n        if (data?.message) {\n          msg =\n            typeof data.message === \"string\"\n              ? data.message\n              : data.message.msg_ind || JSON.stringify(data.message);\n        }\n\n        // 3. Render blocking interactive modal barrier\n        await Swal.fire({\n          title: msg.split(\",\")[0],\n          text: \"Sesi telah kedaluwarsa.\",\n          icon: \"warning\",\n          confirmButtonText: \"Go to Login\",\n          allowOutsideClick: false,\n          allowEscapeKey: false,\n          confirmButtonColor: \"#FFD700\",\n        });\n\n        // 4. Force hard eviction redirect to clean up application state\n        window.location.href = \"/login\";\n      }\n    } else {\n      console.error(\"API Error:\", data?.message || error.message || \"An error occurred\");\n    }\n\n    return Promise.reject(error);\n  }\n);\n\nexport default axios;",
+          "description": "Route-aware 401 response interceptor with SweetAlert modal barrier and atomic cache clearance",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── config/\n│   ├── axios.ts             # Axios response interceptor with 401 eviction logic\n│   └── constant/\n│       └── localstorage.ts  # Session token & user metadata keys",
+      "confidence": 0.94,
+      "considerations": [
+        "Multiple concurrent API requests failing with 401 simultaneously could trigger duplicate alert modals if not debounced with an active lock flag.",
+        "Using `window.location.href` forces a full page reload, purging in-memory React state; this is safer for security than soft router push but loses transient form states.",
+        "For seamless user experiences, an automatic token refresh queue (401 -> refreshToken -> retry original request) should be placed ahead of the hard eviction barrier."
+      ],
+      "keyImplementationPoints": [
+        "Route-aware suppression guard detecting `/login` via pathname and hash to eliminate infinite reload loops.",
+        "Atomic credential removal across token and user profile storage keys.",
+        "Polymorphic response message parsing handling localized backend error objects (`msg_ind`) and raw strings.",
+        "Modal barrier with outside-click and escape-key locks preventing user interaction with stale protected views.",
+        "Hard window redirect ensuring memory sandbox and WebSocket connections are completely reset."
+      ],
+      "overview": "An HTTP response interceptor pipeline that intercepts 401 Unauthorized responses, guards against infinite redirect loops by inspecting current location state, atomically purges authentication credentials from local storage, and displays a user-blocking modal barrier before evicting the session to the login page.",
+      "purpose": "Prevent unauthorized access and infinite redirection loops upon session expiration while ensuring secure teardown of client credentials and clear user feedback.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/declarative-navigation-with-deep-link-state-preservation-guards.md]]",
+        "[[01-Knowledge/concepts/security/session-lifecycle-and-token-eviction.md]]"
+      ],
+      "summary": "Route-Aware Session Eviction Interceptor with Interactive Modal Barrier and Atomic Credential Purge.",
+      "tags": [
+        "auth",
+        "security",
+        "axios-interceptor",
+        "session-management",
+        "error-handling"
+      ],
+      "title": "Route-Aware Session Eviction Interceptor with Interactive Modal Barrier and Atomic Credential Purge"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { z } from \"zod\";\n\nexport const loginSchema = z.object({\n  email: z.string().email(\"Email tidak valid\").min(1, \"Email wajib diisi\"),\n  password: z.string().min(6, \"Password minimal 6 karakter\"),\n});\n\nexport type LoginFormData = z.infer<typeof loginSchema>;",
+          "description": "Zod schema definition for type-safe credentials validation",
+          "language": "typescript"
+        },
+        {
+          "code": "import { useMutation } from \"@tanstack/react-query\";\nimport type { LoginFormData } from \"../types/request\";\nimport { AuthServices } from \"@/services/auth\";\nimport { setData } from \"@/hooks/useLocalStorage\";\nimport { LOCALSTORAGE_KEY } from \"@/config/constant/localstorage\";\nimport { toast } from \"sonner\";\nimport type { LoginData, LoginResponse } from \"../types/response\";\n\nconst validateLoginResponse = (response: LoginResponse): { token: string; user: LoginData } => {\n  const token = response.result?.token;\n\n  if (!token) {\n    throw new Error(response.message || \"Token tidak ditemukan pada response login\");\n  }\n\n  if (response.code && response.code !== 200) {\n    throw new Error(response.message || \"Login gagal\");\n  }\n\n  return {\n    token,\n    user: response.result?.user ?? {},\n  };\n};\n\nexport const useLogin = () => {\n  const mutation = useMutation({\n    mutationFn: async (payload: LoginFormData) => {\n      const response = await AuthServices.login(payload);\n      const { token, user } = validateLoginResponse(response);\n\n      // Atomic encrypted persistence\n      setData(LOCALSTORAGE_KEY.TOKEN, token);\n      setData(LOCALSTORAGE_KEY.USER, user);\n\n      return { response, user };\n    },\n    onSuccess: ({ user }) => {\n      const userName = user?.name || user?.username || \"Pengguna\";\n      toast.success(`Login berhasil. Selamat datang, ${userName}.`);\n    },\n    onError: (error: unknown) => {\n      const message = error instanceof Error ? error.message : \"Terjadi kesalahan saat login\";\n      toast.error(message);\n    },\n  });\n\n  return {\n    login: mutation.mutateAsync,\n    isLoggingIn: mutation.isPending,\n  };\n};",
+          "description": "React Query mutation hook orchestrating validation, API execution, and encrypted storage sync",
+          "language": "typescript"
+        },
+        {
+          "code": "import React from 'react'\nimport { useForm } from 'react-hook-form'\nimport { zodResolver } from '@hookform/resolvers/zod'\nimport { Button } from '@/components/ui/button'\nimport { Input } from '@/components/ui/input'\nimport { Field, FieldError } from '@/components/ui/field'\nimport { useTranslation } from 'react-i18next'\nimport { loginSchema, type LoginFormData } from './types/request'\nimport { useLogin } from './hooks/useLogin'\n\nconst LoginPage: React.FC = () => {\n  const { t } = useTranslation()\n  const { login, isLoggingIn } = useLogin()\n  const {\n    register,\n    handleSubmit,\n    formState: { errors, isSubmitting },\n  } = useForm<LoginFormData>({\n    resolver: zodResolver(loginSchema),\n    defaultValues: { email: '', password: '' },\n  })\n\n  const onSubmit = async (data: LoginFormData) => {\n    await login(data)\n  }\n\n  return (\n    <form onSubmit={handleSubmit(onSubmit)}>\n      <Field>\n        <Input placeholder={t('auth.email_placeholder')} {...register('email')} />\n        {errors.email && <FieldError errors={[{ message: errors.email.message }]} />}\n      </Field>\n      <Field>\n        <Input type=\"password\" placeholder={t('auth.password_placeholder')} {...register('password')} />\n        {errors.password && <FieldError errors={[{ message: errors.password.message }]} />}\n      </Field>\n      <Button type=\"submit\" disabled={isSubmitting || isLoggingIn}>\n        {t('auth.login')}\n      </Button>\n    </form>\n  )\n}\n\nexport default LoginPage",
+          "description": "Login form integration with React Hook Form, Zod resolver, and mutation hook",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── pages/\n│   └── Login/\n│       ├── index.tsx              # Form UI bound to useLogin\n│       ├── hooks/\n│       │   └── useLogin.ts        # TanStack Query mutation & response validator\n│       └── types/\n│           ├── request.ts         # Zod schema and inferred TypeScript types\n│           └── response.ts        # API response contracts\n├── services/\n│   └── auth.ts                    # AuthServices.login API client\n└── hooks/\n    └── useLocalStorage.ts         # setData encrypted dispatcher",
+      "confidence": 0.92,
+      "considerations": [
+        "Client-side Zod validation provides immediate UI feedback but must be mirrored by strict server-side validation.",
+        "Sensitive tokens are encrypted before persistence in localStorage; however, client-side encryption keys in frontend bundles are susceptible to extraction in high-security requirements (consider HttpOnly cookies for enterprise apps).",
+        "Ensure mutateAsync rejections are handled in the component if additional navigation transitions depend on completion."
+      ],
+      "keyImplementationPoints": [
+        "Schema-driven type safety with Zod (`zodResolver`) binding seamless client-side validation into React Hook Form.",
+        "Response assertion boundary (`validateLoginResponse`) ensuring only valid payloads with non-empty tokens proceed to storage.",
+        "Atomic dual-key encrypted credential dispatch (`setData`) synchronizing token and user data simultaneously.",
+        "Decoupled async mutation state (`isLoggingIn`, `isPending`) providing reactive UI loading feedback."
+      ],
+      "overview": "An end-to-end type-safe authentication mutation pattern that links form handling (React Hook Form + Zod), backend service contracts, strict response verification, and atomic encrypted local storage persistence with decoupled toast feedback and async lifecycle tracking via TanStack Query.",
+      "purpose": "Orchestrate the complete user authentication lifecycle with compile-time type safety, runtime schema validation, strict token integrity verification, and synchronized encrypted storage persistence.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/encrypted-cross-tab-reactive-storage-hook-with-event-dispatching.md]]",
+        "[[01-Knowledge/concepts/state/tanstack-query-mutations.md]]"
+      ],
+      "summary": "Mutation-Driven Synchronized Auth Lifecycle with Schema Validation and Multi-Key Encrypted Credential Dispatch.",
+      "tags": [
+        "auth",
+        "react-query",
+        "mutation",
+        "validation",
+        "session-lifecycle"
+      ],
+      "title": "Mutation-Driven Synchronized Auth Lifecycle with Schema Validation and Multi-Key Encrypted Credential Dispatch"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import type { TProject } from \"@/types/project\";\nimport { IndexedDBAdapter, deleteDatabase } from \"./indexeddb-adapter\";\nimport type { MediaAsset, MediaAssetData, SerializedProject, StorageConfig } from \"./types\";\nimport { OPFSAdapter } from \"./opfs-adapter\";\nimport { isStorageQuotaExceededError, StorageQuotaExceededError } from \"./quota\";\n\nclass StorageService {\n  private projectsAdapter: IndexedDBAdapter<SerializedProject>;\n  private config: StorageConfig;\n\n  constructor() {\n    this.config = {\n      projectsDb: \"video-generator-projects\",\n      mediaDb: \"video-generator-media\",\n    };\n\n    this.projectsAdapter = new IndexedDBAdapter<SerializedProject>({\n      dbName: this.config.projectsDb,\n      storeName: \"projects\",\n      version: 1,\n    });\n  }\n\n  // Factory providing project-partitioned storage adapters\n  private getProjectMediaAdapters({ projectId }: { projectId: string }) {\n    const mediaMetadataAdapter = new IndexedDBAdapter<MediaAssetData>({\n      dbName: `${this.config.mediaDb}-${projectId}`,\n      storeName: \"media-metadata\",\n    });\n\n    const mediaAssetsAdapter = new OPFSAdapter(`media-files-${projectId}`);\n\n    return { mediaMetadataAdapter, mediaAssetsAdapter };\n  }\n\n  isQuotaExceededError({ error }: { error: unknown }): boolean {\n    return isStorageQuotaExceededError({ error });\n  }\n\n  async saveMediaAsset({\n    projectId,\n    mediaAsset,\n  }: {\n    projectId: string;\n    mediaAsset: MediaAsset;\n  }): Promise<void> {\n    const { mediaMetadataAdapter, mediaAssetsAdapter } =\n      this.getProjectMediaAdapters({ projectId });\n\n    const metadata: MediaAssetData = {\n      id: mediaAsset.id,\n      name: mediaAsset.name,\n      type: mediaAsset.type,\n      size: mediaAsset.file.size,\n      width: mediaAsset.width,\n      height: mediaAsset.height,\n      thumbnailUrl: mediaAsset.thumbnailUrl,\n    };\n\n    try {\n      // Step 1: Write raw blob to Origin Private File System\n      await mediaAssetsAdapter.set({\n        key: mediaAsset.id,\n        value: mediaAsset.file,\n      });\n\n      // Step 2: Write structured metadata to project-scoped IndexedDB\n      await mediaMetadataAdapter.set({\n        key: mediaAsset.id,\n        value: metadata,\n      });\n    } catch (error) {\n      // Rollback: delete orphaned binary file on failure\n      try {\n        await mediaAssetsAdapter.remove(mediaAsset.id);\n      } catch {\n        // Ignore cleanup failures to preserve original error\n      }\n\n      if (this.isQuotaExceededError({ error })) {\n        throw new StorageQuotaExceededError({\n          requiredBytes: mediaAsset.file.size,\n        });\n      }\n\n      throw error;\n    }\n  }\n\n  async deleteProject({ id }: { id: string }): Promise<void> {\n    await this.projectsAdapter.remove(id);\n    await deleteDatabase({ dbName: `${this.config.mediaDb}-${id}` });\n  }\n}\n\nexport const storageService = new StorageService();",
+          "description": "StorageService implementing project-partitioned IndexedDB & OPFS adapters with quota rollback",
+          "language": "typescript"
+        },
+        {
+          "code": "export class StorageQuotaExceededError extends Error {\n  readonly requiredBytes?: number;\n\n  constructor({ requiredBytes }: { requiredBytes?: number } = {}) {\n    super(\"Storage quota exceeded. Please free up space.\");\n    this.name = \"StorageQuotaExceededError\";\n    this.requiredBytes = requiredBytes;\n  }\n}\n\nexport const isStorageQuotaExceededError = ({ error }: { error: unknown }): boolean => {\n  if (error instanceof StorageQuotaExceededError) return true;\n  if (error instanceof DOMException && (error.name === \"QuotaExceededError\" || error.code === 22)) {\n    return true;\n  }\n  return false;\n};",
+          "description": "Storage quota error classifier and domain exception definition",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n└── services/\n    └── storage/\n        ├── services.ts            # StorageService facade coordinating partitioned stores\n        ├── indexeddb-adapter.ts   # IndexedDB key-value metadata store\n        ├── opfs-adapter.ts        # Origin Private File System binary asset adapter\n        ├── quota.ts               # StorageQuotaExceededError and quota detector\n        └── types.ts               # Storage interfaces and serialization schemas",
+      "confidence": 0.93,
+      "considerations": [
+        "OPFS is only supported in modern secure contexts (HTTPS/localhost); fallback strategies (IndexedDB blobs or memory) should be provided for legacy browsers.",
+        "Deleting a project requires deleting both the IndexedDB database instance and purging the OPFS folder hierarchy to prevent orphaned storage leaks.",
+        "Concurrent writes to the same project asset must handle OPFS file handle locks carefully."
+      ],
+      "keyImplementationPoints": [
+        "Project-partitioned namespacing (`mediaDb-${projectId}` and `media-files-${projectId}`) providing complete tenant isolation within client storage.",
+        "Dual-tier storage segregation separating high-speed raw file binary streams (OPFS) from queryable JSON metadata (IndexedDB).",
+        "Defensive compensating rollback removing partial binary writes when downstream metadata persistence fails.",
+        "Browser DOMException mapping (`QuotaExceededError`) converting low-level storage limits into actionable domain exceptions with byte calculation.",
+        "Atomic project lifecycle eviction destroying metadata catalogs and database connections upon project deletion."
+      ],
+      "overview": "A partitioned client-side multi-tier storage isolation architecture that pairs fast binary media storage in the Origin Private File System (OPFS) with structured metadata in project-namespaced IndexedDB databases. Includes defensive write-rollback compensation and domain-level storage quota error classification.",
+      "purpose": "Provide multi-project data isolation, prevent browser storage pollution, optimize media I/O throughput, and ensure robust rollback upon storage quota exhaustion.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/centralized-domain-store-with-asynchronous-storage-sidecar-sync.md]]",
+        "[[01-Knowledge/concepts/storage/opfs-vs-indexeddb.md]]",
+        "[[01-Knowledge/patterns/storage/compensating-transactions.md]]"
+      ],
+      "summary": "Project-Partitioned Multi-Tier Local Storage Isolation with Rollback-Guarded Quota Resilience.",
+      "tags": [
+        "security",
+        "storage-isolation",
+        "opfs",
+        "indexeddb",
+        "quota-management"
+      ],
+      "title": "Project-Partitioned Multi-Tier Local Storage Isolation with Rollback-Guarded Quota Resilience"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export class OPFSAdapter implements StorageAdapter<File> {\n  private directoryName: string;\n\n  constructor(directoryName = \"media\") {\n    this.directoryName = directoryName;\n  }\n\n  private async getDirectory(): Promise<FileSystemDirectoryHandle> {\n    const opfsRoot = await navigator.storage.getDirectory();\n    return await opfsRoot.getDirectoryHandle(this.directoryName, {\n      create: true,\n    });\n  }\n\n  async get(key: string): Promise<File | null> {\n    try {\n      const directory = await this.getDirectory();\n      const fileHandle = await directory.getFileHandle(key);\n      return await fileHandle.getFile();\n    } catch (error) {\n      if ((error as Error).name === \"NotFoundError\") {\n        return null;\n      }\n      throw error;\n    }\n  }\n\n  async set({ key, value: file }: { key: string; value: File }): Promise<void> {\n    const directory = await this.getDirectory();\n    const fileHandle = await directory.getFileHandle(key, { create: true });\n    const writable = await fileHandle.createWritable();\n\n    await writable.write(file);\n    await writable.close();\n  }\n\n  async remove(key: string): Promise<void> {\n    try {\n      const directory = await this.getDirectory();\n      await directory.removeEntry(key);\n    } catch (error) {\n      if ((error as Error).name !== \"NotFoundError\") {\n        throw error;\n      }\n    }\n  }\n\n  static isSupported(): boolean {\n    return \"storage\" in navigator && \"getDirectory\" in navigator.storage;\n  }\n}",
+          "description": "OPFS direct stream file adapter implementation",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "OPFSAdapter implements StorageAdapter<File> with getDirectory, get, set, remove, list, clear, and isSupported static checker.",
+      "confidence": 0.95,
+      "considerations": [
+        "OPFS is bound to the browser origin and sandboxed private directory.",
+        "Exclusive write lock exists during FileSystemWritableFileStream usage until close() is invoked."
+      ],
+      "keyImplementationPoints": [
+        "Direct stream pipeline via createWritable() to write binary files directly to disk without main-thread blocking.",
+        "Safe feature detection via isSupported() to check navigator.storage.getDirectory availability.",
+        "Resilient error handling mapping NotFoundError DOMException to null or safe no-op."
+      ],
+      "overview": "Provides direct streaming access to the Origin Private File System (OPFS) for zero-copy binary blob/media file storage, avoiding IndexedDB/localStorage memory overhead.",
+      "purpose": "High-throughput local binary file persistence with isolated sandboxing and hardware quota awareness.",
+      "relatedKnowledge": [
+        "W3C File System Access API & OPFS specification",
+        "Storage Quota Exceeded error handling and rollback semantics"
+      ],
+      "summary": "Origin Private File System (OPFS) Direct Stream Adapter Pattern with Storage Quota Isolation",
+      "tags": [
+        "storage",
+        "opfs",
+        "file-system",
+        "native-integration",
+        "binary-stream"
+      ],
+      "title": "Origin Private File System (OPFS) Direct Stream Adapter"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "let ctx: AudioContext | null = null;\n\nfunction getContext(): AudioContext {\n  if (!ctx) {\n    ctx = new AudioContext();\n  }\n  if (ctx.state === \"suspended\") {\n    ctx.resume();\n  }\n  return ctx;\n}\n\nconst decodedBuffers = new Map<string, AudioBuffer>();\nconst activeSources = new Map<string, { source: AudioBufferSourceNode; gain: GainNode }>();\n\nexport async function decodeAudio(mediaId: string, file: File): Promise<void> {\n  const c = getContext();\n  const arrayBuffer = await file.arrayBuffer();\n  const buffer = await c.decodeAudioData(arrayBuffer);\n  decodedBuffers.set(mediaId, buffer);\n}\n\nexport function playAudio({\n  mediaId,\n  offsetSec,\n  muted,\n  trimStartSec = 0,\n}: {\n  mediaId: string;\n  offsetSec: number;\n  muted: boolean;\n  trimStartSec?: number;\n}): void {\n  const existing = activeSources.get(mediaId);\n  if (existing) {\n    existing.source.onended = null;\n    try { existing.source.stop(); } catch { /* no-op */ }\n  }\n\n  const buffer = decodedBuffers.get(mediaId);\n  if (!buffer) return;\n\n  const c = getContext();\n  const source = c.createBufferSource();\n  source.buffer = buffer;\n\n  const gain = c.createGain();\n  gain.gain.value = muted ? 0 : 1;\n\n  source.connect(gain);\n  gain.connect(c.destination);\n\n  const effectiveOffset = Math.max(0, offsetSec + trimStartSec);\n  const clampedOffset = Math.max(0, Math.min(effectiveOffset, buffer.duration - 0.01));\n  source.start(0, clampedOffset);\n\n  source.onended = () => {\n    activeSources.delete(mediaId);\n  };\n  activeSources.set(mediaId, { source, gain });\n}\n\nexport function scrubAudio({ mediaId, offsetSec, muted, trimStartSec = 0 }: any): void {\n  const buffer = decodedBuffers.get(mediaId);\n  if (!buffer) return;\n\n  const c = getContext();\n  const source = c.createBufferSource();\n  source.buffer = buffer;\n  const gain = c.createGain();\n  gain.gain.value = muted ? 0 : 1;\n\n  source.connect(gain);\n  gain.connect(c.destination);\n\n  const effectiveOffset = Math.max(0, offsetSec + trimStartSec);\n  const clampedOffset = Math.max(0, Math.min(effectiveOffset, buffer.duration - 0.01));\n  source.start(0, clampedOffset);\n  source.stop(c.currentTime + 0.3);\n\n  source.onended = () => { scrubNode = null; };\n  scrubNode = { source, gain };\n}",
+          "description": "Web Audio API hardware graph manager with PCM decoding, gain routing, and micro-burst scrubbing",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "Audio Context Singleton -> In-Memory Decoded Buffer Map -> Active Node Pool (Source + Gain) -> Routing to AudioContext.destination.",
+      "confidence": 0.94,
+      "considerations": [
+        "AudioBufferSourceNodes are single-use; new nodes must be instantiated on playback restarts or seeks.",
+        "Large uncompressed audio buffers consume memory; explicit disposeAudio() lifecycle cleanup is required."
+      ],
+      "keyImplementationPoints": [
+        "Autoplay policy resolution by auto-resuming suspended AudioContext on user action.",
+        "Dynamic gain routing allowing instantaneous volume/mute toggles without resetting audio buffers.",
+        "300ms micro-burst scrubbing loop for low-latency interactive timeline preview."
+      ],
+      "overview": "Manages the Web Audio API hardware audio graph lifecycle with in-memory decoded PCM buffer caching, user-gesture autoplay suspension recovery, and dynamic gain routing.",
+      "purpose": "Low-latency multi-track audio playback and micro-scrubbing for interactive media editors.",
+      "relatedKnowledge": [
+        "Web Audio API node graphs (AudioBufferSourceNode, GainNode, AudioContext)",
+        "Browser User-Activation Autoplay policies"
+      ],
+      "summary": "Web Audio API Hardware Buffer Graph Orchestrator with Micro-Scrubbing Burst",
+      "tags": [
+        "web-audio",
+        "audio-dsp",
+        "hardware-bridge",
+        "native-api"
+      ],
+      "title": "Web Audio API Hardware Buffer Graph Orchestrator"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "useEffect(() => {\n  if (!isPlaying) return;\n\n  resumeAudioContext();\n  const wallStartRef = { current: performance.now() };\n  const playheadStartRef = { current: playheadTimeRef.current };\n  let rafId: number;\n\n  const tick = () => {\n    if (!isPlayingRef.current) return;\n\n    const elapsedMs = performance.now() - wallStartRef.current;\n    const elapsed = mediaTimeFromSeconds({ seconds: elapsedMs / 1000 });\n    const nextTime = addMediaTime({ a: playheadStartRef.current, b: elapsed });\n\n    if (nextTime >= effectiveDuration) {\n      seekRef.current(effectiveDuration);\n      pauseRef.current();\n      return;\n    }\n\n    const tracksEl = tracksScrollRef.current;\n    const scrollLeft = tracksEl?.scrollLeft ?? 0;\n    const centerPixel = timelineTimeToPixels({\n      time: nextTime,\n      zoomLevel: zoomLevelRef.current,\n    });\n    const playheadLeft = getCenteredLineLeft({ centerPixel }) - scrollLeft;\n\n    if (playheadRef.current) {\n      playheadRef.current.style.left = `${playheadLeft}px`;\n    }\n\n    const playheadSec = mediaTimeToSeconds({ time: nextTime });\n    const nowPlaying = new Set<string>();\n\n    for (const ael of audioElementsRef.current) {\n      const startSec = mediaTimeToSeconds({ time: ael.startTime });\n      const endSec = startSec + mediaTimeToSeconds({ time: ael.duration });\n      if (playheadSec >= startSec && playheadSec < endSec) {\n        nowPlaying.add(ael.mediaId);\n        if (!playingMediaIds.current.has(ael.mediaId)) {\n          playAudio({\n            mediaId: ael.mediaId,\n            offsetSec: playheadSec - startSec,\n            muted: isAudioMutedRef.current,\n            trimStartSec: mediaTimeToSeconds({ time: ael.trimStart }),\n          });\n        }\n      }\n    }\n\n    for (const id of playingMediaIds.current) {\n      if (!nowPlaying.has(id)) stopAudio(id);\n    }\n    playingMediaIds.current = nowPlaying;\n\n    rafId = requestAnimationFrame(tick);\n  };\n\n  rafId = requestAnimationFrame(tick);\n  return () => {\n    cancelAnimationFrame(rafId);\n    seekRef.current(currentTimeRef.current);\n    stopAllAudio();\n  };\n}, [isPlaying, effectiveDuration]);",
+          "description": "High-performance requestAnimationFrame playhead sync loop with direct DOM mutation and audio intersection diffing",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "usePlayback Hook -> High-Precision Clock (performance.now) -> Direct DOM style injection -> Audio node intersection diff -> Dual-viewport scroll sync.",
+      "confidence": 0.96,
+      "considerations": [
+        "Zoom and layout state updates during playback must update mutable refs immediately to avoid jitter.",
+        "React state commit must occur on teardown to persist exact stopping position."
+      ],
+      "keyImplementationPoints": [
+        "React Virtual DOM bypass via direct style.left DOM manipulation inside 60fps rAF tick.",
+        "Dual-viewport synchronization keeping tracks and ruler scroll containers in lockstep.",
+        "Active audio channel diffing dynamically mounting/stopping Web Audio nodes on timeline intersection."
+      ],
+      "overview": "Decouples high-frequency 60fps timeline playhead animation from React component reconciliation using direct DOM mutations while synchronizing dual scroll viewports and Web Audio hardware nodes.",
+      "purpose": "Ultra-smooth 60fps video timeline playback with audio-visual synchronization without VDOM overhead.",
+      "relatedKnowledge": [
+        "High-precision timer (performance.now) & requestAnimationFrame timing loop",
+        "Direct DOM mutations for high-frequency UI updates in React"
+      ],
+      "summary": "Sub-Frame DOM Bypass Playhead Sync Loop with Dual-Viewport Auto-Scroll & Audio Bridge",
+      "tags": [
+        "hardware-timing",
+        "raf-loop",
+        "dom-bypass",
+        "audio-bridge",
+        "timeline"
+      ],
+      "title": "Sub-Frame DOM Bypass Playhead Sync Loop"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "class StorageService {\n  private projectsAdapter: IndexedDBAdapter<SerializedProject>;\n  private config: StorageConfig;\n\n  constructor() {\n    this.config = {\n      projectsDb: \"video-generator-projects\",\n      mediaDb: \"video-generator-media\",\n    };\n    this.projectsAdapter = new IndexedDBAdapter<SerializedProject>({\n      dbName: this.config.projectsDb,\n      storeName: \"projects\",\n      version: 1,\n    });\n  }\n\n  private getProjectMediaAdapters({ projectId }: { projectId: string }) {\n    const mediaMetadataAdapter = new IndexedDBAdapter<MediaAssetData>({\n      dbName: `${this.config.mediaDb}-${projectId}`,\n      storeName: \"media-metadata\",\n    });\n    const mediaAssetsAdapter = new OPFSAdapter(`media-files-${projectId}`);\n    return { mediaMetadataAdapter, mediaAssetsAdapter };\n  }\n\n  async saveMediaAsset({ projectId, mediaAsset }: { projectId: string; mediaAsset: MediaAsset }): Promise<void> {\n    const { mediaMetadataAdapter, mediaAssetsAdapter } = this.getProjectMediaAdapters({ projectId });\n    const metadata: MediaAssetData = {\n      id: mediaAsset.id,\n      name: mediaAsset.name,\n      type: mediaAsset.type,\n      size: mediaAsset.file.size,\n      width: mediaAsset.width,\n      height: mediaAsset.height,\n      thumbnailUrl: mediaAsset.thumbnailUrl,\n    };\n\n    try {\n      await mediaAssetsAdapter.set({ key: mediaAsset.id, value: mediaAsset.file });\n      await mediaMetadataAdapter.set({ key: mediaAsset.id, value: metadata });\n    } catch (error) {\n      try { await mediaAssetsAdapter.remove(mediaAsset.id); } catch {}\n      if (this.isQuotaExceededError({ error })) {\n        throw new StorageQuotaExceededError({ requiredBytes: mediaAsset.file.size });\n      }\n      throw error;\n    }\n  }\n\n  async deleteProject({ id }: { id: string }): Promise<void> {\n    await this.projectsAdapter.remove(id);\n    await deleteDatabase({ dbName: `${this.config.mediaDb}-${id}` });\n  }\n}",
+          "description": "Polyglot multi-engine storage orchestrator with sharded database isolation and transactional teardown",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "StorageService -> Global Projects IndexedDB Store -> Sharded Media Metadata IndexedDB + Sharded OPFS Directory per Project -> Cascade Deletion Pipeline.",
+      "confidence": 0.95,
+      "considerations": [
+        "Object URLs generated from loaded files must be revoked when no longer needed to prevent memory leaks.",
+        "Schema version upgrades in IndexedDB require consistent onupgradeneeded handlers."
+      ],
+      "keyImplementationPoints": [
+        "Polyglot partitioning separating structured JSON metadata (IndexedDB) from raw binary media chunks (OPFS).",
+        "Project-level DB sharding allowing single-call teardown via deleteDatabase() native request.",
+        "Type deserialization guards converting stringified ISO dates back to Date instances with duration safety."
+      ],
+      "overview": "Coordinates a hybrid multi-engine persistence strategy combining IndexedDB for queryable structured scene/metadata with OPFS for heavy binary media assets, partitioned by project.",
+      "purpose": "High-performance client-side database management with project-level sharding and atomic cascade cleanup.",
+      "relatedKnowledge": [
+        "W3C IndexedDB 3.0 API and Transactional Object Stores",
+        "Database Sharding & Cascading Deletion Strategy for Offline-First Web Apps"
+      ],
+      "summary": "Multi-Engine Polyglot Persistence Store with Sharded Transactional Teardown",
+      "tags": [
+        "local-db",
+        "indexeddb",
+        "opfs",
+        "sharding",
+        "offline-storage"
+      ],
+      "title": "Multi-Engine Polyglot Persistence Store"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { AxiosError } from \"axios\";\nimport { toast } from \"sonner\";\n\nexport interface ApiError {\n  code: number;\n  message: string;\n  errors?: Record<string, string>;\n  result: null;\n}\n\nexport const formatErrorMessage = (error: unknown): string[] => {\n  const axiosError = error as AxiosError<ApiError>;\n  const apiError = axiosError.response?.data;\n\n  if (!apiError) {\n    return [axiosError.message || \"An error occurred\"];\n  }\n\n  // If we have field-specific validation errors\n  if (apiError.errors && Object.keys(apiError.errors).length > 0) {\n    return Object.values(apiError.errors);\n  }\n\n  // If we have a general error message (like 404 not found)\n  if (apiError.message) {\n    const formattedMessage = apiError.message.charAt(0).toUpperCase() + apiError.message.slice(1);\n    return [formattedMessage];\n  }\n\n  return [\"An error occurred\"];\n};\n\nexport const showErrorToast = (error: AxiosError<ApiError>) => {\n  const errors = formatErrorMessage(error);\n  const errorList = errors.map(error => `• ${error}`).join('\\n');\n\n  toast.error(\"Error\", {\n    description: errorList,\n    style: { whiteSpace: 'pre-line' }\n  });\n};",
+          "description": "Standardized ApiError envelope DTO normalization and multi-line Sonner toast dispatcher",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/config/error-utils.ts -> ApiError DTO interface, formatErrorMessage() normalization pipeline, and showErrorToast() Sonner integration.",
+      "confidence": 0.95,
+      "considerations": [
+        "Always guarantees a non-empty array of human-readable error strings regardless of the failure shape (Axios network failure, generic error, structured validation map, or single error message).",
+        "Sonner toast configuration uses whitespace pre-line styling to cleanly display multi-error bullet points.",
+        "Auto-capitalizes server message strings to maintain professional UI presentation standards."
+      ],
+      "keyImplementationPoints": [
+        "Strongly typed ApiError generic envelope matching backend response contract: { code, message, errors?, result }.",
+        "Cascading priority normalization: Field-specific dictionary values -> Uppercased generic message -> Axios HTTP message -> Fallback string.",
+        "Bulleted string synthesis for multi-field form validation failures."
+      ],
+      "overview": "A resilient error normalization and presentation pattern that transforms unpredictable network and API backend errors into strongly-typed DTO envelopes, cascading down to structured multi-line toast notifications.",
+      "purpose": "To standardize backend error handling across UI components, avoiding boilerplate try-catch blocks and providing clean, multi-line validation feedback.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/route-aware-session-eviction-interceptor.md]]",
+        "[[01-Knowledge/patterns/frontend/mutation-driven-synchronized-auth-lifecycle.md]]"
+      ],
+      "summary": "Standardized DTO Error Envelope Normalizer & Multi-Target Toast Dispatcher provides cascading normalization of backend API response envelopes into structured bulleted toasts.",
+      "tags": [
+        "error-handling",
+        "dto",
+        "sonner",
+        "axios",
+        "frontend"
+      ],
+      "title": "standardized dto error envelope normalizer & multi-target toast dispatcher"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// 1. Service Definition (src/services/generate.ts)\nexport interface GenerateRequest {\n  global_prompt: string\n  segments: GenerateSegment[]\n  audio_segments?: AudioSegment[]\n  duration_seconds: number\n  fps: number\n  seed?: number\n  inpaint_audio: boolean\n}\n\nexport interface CheckStatusResponse {\n  prompt_id: string\n  status: 'queued' | 'processing' | 'completed' | 'failed'\n  progress: number | null\n  output_filename: string | null\n}\n\nexport const GenerateService = {\n  generate: async ({ metadata, images, audios }: { metadata: GenerateRequest; images: File[]; audios?: File[] }) => {\n    const formData = new FormData()\n    formData.append('metadata', JSON.stringify(metadata))\n    images.forEach((file) => formData.append('images', file))\n    audios?.forEach((file) => formData.append('audios', file))\n    const response = await axios.post<GenerateResponse>(ENDPOINTS.GENERATE, formData, {\n      headers: { 'Content-Type': 'multipart/form-data' },\n    })\n    return response.data\n  },\n  checkStatus: async (promptId: string) => {\n    const url = ENDPOINTS.CHECK_STATUS.replace(':prompt_id', promptId)\n    const response = await axios.get<CheckStatusResponse>(url)\n    return response.data\n  },\n  download: async (filename: string) => {\n    const url = ENDPOINTS.DOWNLOAD.replace(':filename', filename)\n    const response = await axios.get(url, { responseType: 'blob' })\n    const blob = new Blob([response.data])\n    const downloadUrl = URL.createObjectURL(blob)\n    const a = document.createElement('a')\n    a.href = downloadUrl\n    a.download = filename\n    a.click()\n    URL.revokeObjectURL(downloadUrl)\n  }\n}\n\n// 2. React Query Polling & Progress Emulation Hook (src/services/hooks/useGenerate.tsx)\nexport function useGenerateVideo() {\n  const generate = useMutation({ mutationFn: GenerateService.generate })\n  const [promptId, setPromptId] = useState<string | null>(null)\n  \n  const statusQuery = useQuery<CheckStatusResponse>({\n    queryKey: ['generate-status', promptId],\n    queryFn: () => GenerateService.checkStatus(promptId!),\n    enabled: !!promptId,\n    refetchInterval: (query) => {\n      const data = query.state.data\n      if (data?.status === 'completed' || data?.status === 'failed') return false\n      return 2000\n    },\n  })\n\n  // Smooth progress emulation with instant 100% completion jump\n  useEffect(() => {\n    const data = statusQuery.data\n    if (!data || !promptId) return\n    if (data.status === 'completed') {\n      progressApiRef.current?.jumpTo100()\n      if (data.output_filename) GenerateService.download(data.output_filename)\n      toast.success('Video generation complete!')\n    }\n  }, [statusQuery.data, promptId])\n\n  return { handleGenerate, isGenerating }\n}",
+          "description": "Dual-phase long-running job pipeline with multipart compilation, dynamic polling interval, and animated progress emulation",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/services/generate.ts -> Multi-part compiler, polling endpoint & blob downloader. src/services/hooks/useGenerate.tsx -> Polling state coordinator, simulated progress toast & auto-download trigger.",
+      "confidence": 0.95,
+      "considerations": [
+        "Uses dynamic refetchInterval in TanStack Query to automatically stop polling once status is 'completed' or 'failed', preventing zombie intervals.",
+        "ProgressToast component provides continuous visual feedback via asymptotic easing up to 80% while waiting for long async generative jobs, then jumps instantly to 100% on completion.",
+        "Automatic blob object URL lifecycle management (creation, click simulation, revocation) ensures clean memory disposal."
+      ],
+      "keyImplementationPoints": [
+        "Parallel OPFS asset retrieval combining image and audio binaries with serialized JSON metadata into FormData.",
+        "Conditional refetchInterval lifecycle governed by reactive React Query query state.",
+        "Separation of concerns between low-level HTTP transport (GenerateService) and reactive UI state coordination (useGenerateVideo)."
+      ],
+      "overview": "An asynchronous job lifecycle coordinator designed for long-running AI video/media generation pipelines combining multi-modal binary compilation, reactive status polling, and UX progress emulation.",
+      "purpose": "To orchestrate multi-part file uploads with background AI generation tasks while delivering interactive, responsive progress feedback and automatic asset download.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/origin-private-file-system-opfs-direct-stream-adapter.md]]",
+        "[[01-Knowledge/patterns/frontend/multi-engine-polyglot-persistence-store.md]]"
+      ],
+      "summary": "Dual-Phase Long-Running Job Pipeline with Multipart Asset Packing & Progress Emulation orchestrates background asynchronous tasks with dynamic polling intervals and simulated progress UX.",
+      "tags": [
+        "long-polling",
+        "react-query",
+        "multipart",
+        "async-jobs",
+        "media-generation"
+      ],
+      "title": "dual-phase long-running job pipeline with multipart asset packing & progress emulation"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export const TICKS_PER_SECOND = 120_000;\n\ndeclare const MediaTimeBrand: unique symbol;\nexport type MediaTime = number & { [MediaTimeBrand]?: never };\n\nexport type FrameRate = {\n  numerator: number;\n  denominator: number;\n};\n\nexport const ZERO_MEDIA_TIME = 0 as MediaTime;\n\nexport function mediaTime({ ticks }: { ticks: number }): MediaTime {\n  if (!Number.isInteger(ticks)) {\n    throw new Error(`mediaTime: expected integer ticks, got ${ticks}`);\n  }\n  return ticks as MediaTime;\n}\n\nexport function mediaTimeFromSeconds({ seconds }: { seconds: number }): MediaTime {\n  return mediaTime({ ticks: Math.round(seconds * TICKS_PER_SECOND) });\n}\n\nexport function mediaTimeToSeconds({ time }: { time: MediaTime }): number {\n  return time / TICKS_PER_SECOND;\n}\n\nexport function roundFrameTime({ time, fps }: { time: MediaTime; fps: FrameRate }): MediaTime {\n  const ticksPerFrame = (TICKS_PER_SECOND * fps.denominator) / fps.numerator;\n  const rounded = Math.round(time / ticksPerFrame) * ticksPerFrame;\n  return rounded as MediaTime;\n}\n\nfunction dropFrameCompensation(frameNumber: number, rate: FrameRate): number {\n  const frameRate = Math.round(rate.numerator / rate.denominator);\n  const dropsPerMinute = frameRate === 60 ? 4 : 2;\n  const framesPerMinute = frameRate * 60;\n  const framesPerTenMinutes = framesPerMinute * 10;\n\n  const d = Math.floor(frameNumber / framesPerTenMinutes);\n  const m = Math.floor((frameNumber % framesPerTenMinutes) / framesPerMinute);\n\n  return d * dropsPerMinute * 9 + m * dropsPerMinute;\n}\n\nexport function parseTimecode({ timeCode, format, rate }: { timeCode: string; format: string; rate: FrameRate }): number | null {\n  // Regex builder supporting HH:MM:SS:FF formats with drop-frame compensation\n  // ...\n  return framesToTicks(totalF, rate);\n}",
+          "description": "Branded nominal integer tick engine with SMPTE drop-frame arithmetic and sub-frame precision",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/media-time.ts -> Branded MediaTime nominal type, integer tick arithmetic, frame rounding, and SMPTE drop-frame timecode parser/formatter.",
+      "confidence": 0.98,
+      "considerations": [
+        "TICKS_PER_SECOND = 120_000 is evenly divisible by standard frame rates (24, 25, 30, 48, 50, 60, 120 fps), eliminating floating-point rounding errors.",
+        "Drop-frame compensation precisely accounts for NTSC 29.97 and 59.94 fps standards where 2 or 4 frame numbers are dropped per minute except every tenth minute.",
+        "Branded nominal typing ensures raw floating-point numbers cannot accidentally be mixed with MediaTime ticks without explicit conversion."
+      ],
+      "keyImplementationPoints": [
+        "Zero-overhead branded nominal type pattern using unique symbol constraint.",
+        "Pure integer math with assertions preventing fractional tick contamination.",
+        "Comprehensive SMPTE timecode formatting and parsing supporting dynamic token mapping (HH, MM, SS, FF)."
+      ],
+      "overview": "A high-precision nominal integer media timing engine providing sub-frame tick calculations and standard SMPTE drop-frame timecode compensation without floating point drift.",
+      "purpose": "To provide frame-accurate video and audio editing timeline calculations, snap alignment, and timecode conversions across arbitrary frame rates.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/web-audio-api-hardware-buffer-graph-orchestrator.md]]",
+        "[[01-Knowledge/patterns/frontend/sub-frame-dom-bypass-playhead-sync-loop.md]]"
+      ],
+      "summary": "Nominal Integer Tick Engine with SMPTE Drop-Frame Timecode Arithmetic implements 120k tick/sec nominal branded types with NTSC drop-frame compensation for video timeline precision.",
+      "tags": [
+        "media-time",
+        "timecode",
+        "smpte",
+        "drop-frame",
+        "branded-types"
+      ],
+      "title": "nominal integer tick engine with smpte drop-frame timecode arithmetic"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// 1. Snapping Pipeline (src/pages/Editor/utils/snapping/resolve.ts)\nexport function resolveTimelineSnap({\n  targetTime,\n  snapPoints,\n  maxSnapDistance,\n}: {\n  targetTime: MediaTime;\n  snapPoints: SnapPoint[];\n  maxSnapDistance: number;\n}): SnapResult {\n  let closestSnapPoint: SnapPoint | null = null;\n  let closestDistance = Infinity;\n\n  for (const snapPoint of snapPoints) {\n    const distance = Math.abs(targetTime - snapPoint.time);\n    if (distance <= maxSnapDistance && distance < closestDistance) {\n      closestDistance = distance;\n      closestSnapPoint = snapPoint;\n    }\n  }\n\n  return {\n    snappedTime: closestSnapPoint ? closestSnapPoint.time : targetTime,\n    snapPoint: closestSnapPoint,\n    snapDistance: closestDistance,\n  };\n}\n\n// 2. Main Track Zero Anchor Enforcement (src/pages/Editor/utils/placement/main-track.ts)\nexport function enforceMainTrackStart({\n  track,\n  requestedStartTime,\n  excludeElementId,\n}: {\n  track: VideoTrack;\n  requestedStartTime: MediaTime;\n  excludeElementId?: string;\n}): MediaTime {\n  const earliestElement = getEarliestMainTrackElement({\n    mainTrack: track,\n    excludeElementId,\n  });\n  if (!earliestElement) return requestedStartTime;\n\n  // Magnetic collapse: if element is placed before or at earliest element, snap to ZERO\n  if (requestedStartTime <= earliestElement.startTime) {\n    return ZERO_MEDIA_TIME;\n  }\n  return requestedStartTime;\n}\n\n// 3. Half-Open Interval Collision Check (src/pages/Editor/utils/placement/overlap.ts)\nfunction wouldElementOverlap({\n  elements,\n  startTime,\n  endTime,\n  excludeElementId,\n}: {\n  elements: TimelineElement[];\n  startTime: number;\n  endTime: number;\n  excludeElementId?: string;\n}): boolean {\n  return elements.some((element) => {\n    if (excludeElementId && element.id === excludeElementId) return false;\n    const elementEnd = element.startTime + element.duration;\n    return startTime < elementEnd && endTime > element.startTime;\n  });\n}",
+          "description": "Multi-source snapping resolver and magnetic gap collapse placement engine",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/pages/Editor/utils/snapping/* -> Snap point source aggregation and proximity resolver. src/pages/Editor/utils/placement/* -> Main track anchor enforcement, interval collision testing, and placement strategies.",
+      "confidence": 0.92,
+      "considerations": [
+        "Uses half-open temporal intervals [start, start + duration) allowing adjacent clips to touch perfectly without false collision positives.",
+        "Zero-origin magnetic snapping enforces that the primary storytelling track never leaves an accidental leading gap.",
+        "Snap point builder dynamically accepts any number of functional source generators (playhead, markers, other clips, grid ticks)."
+      ],
+      "keyImplementationPoints": [
+        "Nearest-neighbor distance search within configurable threshold (maxSnapDistance).",
+        "Functional composition of heterogeneous snap point sources (buildTimelineSnapPoints).",
+        "Exclusion filters allowing moving/resizing elements to ignore their own historical positions during collision and snap calculations."
+      ],
+      "overview": "A geometric timeline positioning engine providing multi-source magnetic snapping, half-open interval collision validation, and primary track zero-anchor enforcement.",
+      "purpose": "To ensure seamless clip placement, magnetic drag alignment, and non-destructive timeline editing across multi-track video compositions.",
+      "relatedKnowledge": [
+        "[[01-Knowledge/patterns/frontend/nominal-integer-tick-engine-with-smpte-drop-frame-timecode-arithmetic.md]]",
+        "[[01-Knowledge/patterns/frontend/sub-frame-dom-bypass-playhead-sync-loop.md]]"
+      ],
+      "summary": "Multi-Source Geometric Snapping Pipeline & Magnetic Gap Collapse Placement Engine resolves timeline proximity snapping and enforces contiguous track placement.",
+      "tags": [
+        "timeline",
+        "snapping",
+        "placement",
+        "collision-detection",
+        "media-editor"
+      ],
+      "title": "multi-source geometric snapping pipeline & magnetic gap collapse placement engine"
+    }
+  ]
+}

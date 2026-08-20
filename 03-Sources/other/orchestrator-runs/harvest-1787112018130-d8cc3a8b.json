@@ -1,0 +1,334 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T04:01:11.086Z",
+  "harvestId": "harvest-1787112018130-d8cc3a8b",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/gallery-fmfu",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/gallery-fmfu",
+    "packageName": "gallery-fmfu",
+    "packageVersion": "0.0.1",
+    "dependencies": [
+      "@base-ui/react",
+      "@fontsource/montserrat",
+      "@hookform/resolvers",
+      "@shadcn/react",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "input-otp",
+      "lucide-react",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "shadcn",
+      "sweetalert2",
+      "tailwind-merge",
+      "tailwindcss",
+      "tw-animate-css",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/node",
+      "@types/react",
+      "@types/react-dom",
+      "@vitejs/plugin-react",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "prettier",
+      "prettier-plugin-tailwindcss",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "build",
+      "lint",
+      "format",
+      "typecheck",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/services/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/lib/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": false,
+        "libraries": [],
+        "relevantFiles": []
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 170,
+        "sampleDirectories": [
+          ".agents",
+          ".agents/rules",
+          ".agents/workflows",
+          ".opencode",
+          ".opencode/plugins",
+          "doc",
+          "public",
+          "src",
+          "src/assets",
+          "src/components",
+          "src/components/ui",
+          "src/hooks",
+          "src/lib",
+          "src/lib/constant",
+          "src/lib/i18n"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 836,
+      "linkCount": 1461
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "import { useEffect, useState } from \"react\";\nimport CryptoJS from \"crypto-js\";\n\ntype SetValue<T> = T | ((val: T) => T);\n\ninterface UseLocalStorageOptions {\n  encrypted?: boolean;\n}\n\nconst SECRET_KEY = `${import.meta.env.VITE_SECRET_KEY}`;\n\n// Save encrypted data\nexport const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\n// Retrieve and decrypt data with self-healing corrupted data cleanup\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      console.error(`Failed to decrypt data for key: ${storageKey} - removing corrupted data`);\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    console.error(`Error retrieving data for key: ${storageKey}`, e);\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};",
+          "description": "Core encryption/decryption utilities with automatic corruption recovery and same-window event dispatch.",
+          "language": "typescript"
+        },
+        {
+          "code": "function useLocalStorage<T>(\n  key: string,\n  initialValue: T,\n  options: UseLocalStorageOptions = {}\n): [T, (value: SetValue<T>) => void] {\n  const { encrypted = false } = options;\n\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    if (typeof window !== \"undefined\") {\n      try {\n        if (encrypted) {\n          const item = getData(key);\n          if (item !== null) return item;\n          if (initialValue) setData(key, initialValue);\n          return initialValue;\n        } else {\n          const item = localStorage.getItem(key);\n          if (item !== null) return JSON.parse(item);\n          if (initialValue) localStorage.setItem(key, JSON.stringify(initialValue));\n          return initialValue;\n        }\n      } catch (error) {\n        return initialValue;\n      }\n    }\n    return initialValue;\n  });\n\n  useEffect(() => {\n    const handleStorageChange = () => {\n      if (typeof window !== \"undefined\") {\n        try {\n          if (encrypted) {\n            const newValue = getData(key);\n            if (newValue !== null) setStoredValue(newValue);\n          } else {\n            const newValue = localStorage.getItem(key);\n            if (newValue !== null) setStoredValue(JSON.parse(newValue));\n          }\n        } catch (error) {\n          console.error(`Error syncing localStorage:`, error);\n        }\n      }\n    };\n\n    window.addEventListener(\"storage\", handleStorageChange);\n    return () => window.removeEventListener(\"storage\", handleStorageChange);\n  }, [key, encrypted]);\n\n  const setValue = (value: SetValue<T>) => {\n    const newValue = value instanceof Function ? value(storedValue) : value;\n    setStoredValue(newValue);\n    if (typeof window !== \"undefined\") {\n      if (encrypted) {\n        setData(key, newValue);\n      } else {\n        localStorage.setItem(key, JSON.stringify(newValue));\n        window.dispatchEvent(new Event(\"storage\"));\n      }\n    }\n  };\n\n  return [storedValue, setValue];\n}",
+          "description": "React hook integrating synchronized state with cross-tab window event listener and encrypted storage.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/hooks/useLocalStorage.ts\n├── setData() (Standalone encrypted setter)\n├── getData() (Standalone encrypted getter with self-healing)\n├── removeData() (Standalone remover with event dispatch)\n└── useLocalStorage<T>() (Reactive state hook with event listener)",
+      "confidence": 0.95,
+      "considerations": [
+        "Client-side encryption using a frontend environment key mitigates casual plaintext DevTools tampering/inspection, but is not equivalent to secure server-side hardware vaults.",
+        "Dispatches 'storage' custom event so changes within the same tab update all active hooks immediately, alongside native multi-tab storage events.",
+        "Auto-deletes invalid/tampered ciphertext on decryption failure to prevent permanent app lockup or crashes."
+      ],
+      "keyImplementationPoints": [
+        "AES-256 symmetric encryption/decryption using CryptoJS with environment-configured secret key.",
+        "Self-healing error handling that purges corrupted local storage keys automatically.",
+        "Reactive synchronization across components and browser tabs via Window 'storage' event dispatching.",
+        "Dual-mode support for both encrypted and standard JSON persistence."
+      ],
+      "overview": "Penyimpanan state client-side terenkripsi menggunakan AES (CryptoJS) yang membungkus Web Storage API dengan dukungan reaktivitas React hook dan event synchronization antar-tab/window.",
+      "purpose": "Mengamankan auth token dan data pengguna dari plaintext inspection di browser DevTools sekaligus menjaga konsistensi state di berbagai komponen dan tab.",
+      "relatedKnowledge": [
+        "Web Storage API",
+        "CryptoJS.AES",
+        "React custom hooks",
+        "Cross-tab communication patterns"
+      ],
+      "summary": "Encrypted LocalStorage persistence hook and helper functions with cross-tab reactive synchronization and self-healing data recovery.",
+      "tags": [
+        "storage",
+        "encryption",
+        "react-hooks",
+        "crypto-js",
+        "state-management"
+      ],
+      "title": "Encrypted LocalStorage with Cross-Tab Event Synchronization"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// Flatten and sort payload parameters for deterministic hashing\nfunction flattenObject(obj: any, prefix: string = \"\"): any {\n  let flattened: any = {};\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const prefixedKey = prefix === \"\" ? key : `${prefix}.${key}`;\n      if (typeof value === \"object\" && value !== null && !Array.isArray(value)) {\n        const nested = flattenObject(value, prefixedKey);\n        flattened = { ...flattened, ...nested };\n      } else if (Array.isArray(value)) {\n        flattened[prefixedKey] = \"\";\n      } else {\n        flattened[prefixedKey] = value;\n      }\n    }\n  }\n  return flattened;\n}\n\nexport const makeSignature = (\n  email: number,\n  timestamp: number,\n  data: any,\n  isFormData?: boolean\n) => {\n  const formDataObject: any = { email, timestamp };\n  if (isFormData) {\n    for (const pair of data.entries()) {\n      formDataObject[pair[0]] = pair[1];\n    }\n  }\n  const newPayload = isFormData ? formDataObject : { email, ...data, timestamp };\n  const finalPayload = formatObject(newPayload);\n  return CryptoJS.SHA1(finalPayload);\n};",
+          "description": "Payload flattening and SHA-1 deterministic cryptographic signature generation for API requests.",
+          "language": "typescript"
+        },
+        {
+          "code": "// Request & Response Interceptors in src/lib/axios.ts\naxios.interceptors.request.use(async (config) => {\n  const token = getData(LOCALSTORAGE_KEY.TOKEN);\n  const timestamp = getTimestamp();\n\n  if (token) {\n    config.headers.Authorization = `Bearer ${token}`;\n  }\n\n  const signature = makeSignature(\n    0,\n    timestamp,\n    config.data || {},\n    config.data instanceof FormData\n  );\n\n  config.headers[\"sig\"] = signature;\n  config.headers[\"email\"] = \"0\";\n  config.headers[\"timestamp\"] = timestamp.toString();\n\n  return config;\n});\n\naxios.interceptors.response.use(\n  (response) => response,\n  async (error) => {\n    const status = error.response?.status;\n    const data = error.response?.data;\n\n    if (status === 401) {\n      const isLoginPage = window.location.pathname.includes(\"/login\") || window.location.hash.includes(\"/login\");\n      if (!isLoginPage) {\n        localStorage.removeItem(LOCALSTORAGE_KEY.TOKEN);\n        localStorage.removeItem(LOCALSTORAGE_KEY.REFRESH_TOKEN);\n        localStorage.removeItem(LOCALSTORAGE_KEY.USER);\n\n        await Swal.fire({\n          title: \"Sesi telah kedaluwarsa.\",\n          icon: \"warning\",\n          confirmButtonText: \"Go to Login\",\n          allowOutsideClick: false,\n          allowEscapeKey: false,\n        });\n\n        window.location.href = \"/login\";\n      }\n    }\n    return Promise.reject(error);\n  }\n);",
+          "description": "Axios interceptor injecting cryptographic signature headers and handling 401 unauthorized session expiry globally.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/\n├── signature.ts (Payload normalization, flattening, and SHA-1 hashing)\n└── axios.ts (Axios client instance, Request Signing Interceptor, Response 401 Interceptor)",
+      "confidence": 0.95,
+      "considerations": [
+        "Timestamp synchronization between client and backend is critical to prevent signature replay expiration.",
+        "FormData handling requires manual iterator extraction (`data.entries()`) to compute payload signature correctly.",
+        "Login page checking (`isLoginPage`) prevents recursive modal loops during failed login attempts."
+      ],
+      "keyImplementationPoints": [
+        "Lexicographical key sorting and recursive object flattening for deterministic hashing.",
+        "Support for both JSON payloads and multipart FormData payloads in signature creation.",
+        "Automated injection of Bearer token, signature hash, and timestamp headers on all outgoing requests.",
+        "Centralized 401 session expiry interceptor with storage cleanup, SweetAlert2 prompt, and safe redirect."
+      ],
+      "overview": "Pola keamanan HTTP client terpusat di mana setiap outgoing request disuntikkan signature kriptografi (SHA-1 dari flattened sorted payload) dan token Bearer, serta penanganan respon 401 Unauthorized secara global.",
+      "purpose": "Memastikan integritas payload request ke backend, mencegah tampering data, dan menyediakan penanganan session expiry yang mulus bagi pengguna.",
+      "relatedKnowledge": [
+        "Axios Interceptors",
+        "HMAC/Request Signing",
+        "SweetAlert2 Modal Invalidation",
+        "FormData API"
+      ],
+      "summary": "Automated request signing interceptor using SHA-1 signature generation and centralized 401 session expiration handling.",
+      "tags": [
+        "security",
+        "axios",
+        "interceptor",
+        "request-signing",
+        "authentication"
+      ],
+      "title": "Request Signing Interceptor & Automated Session Invalidation"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { toast } from \"@/components/ui/toast\";\nimport { AxiosError } from \"axios\";\n\nexport interface ApiError {\n  code: number;\n  message: string;\n  errors?: Record<string, string>;\n  result: null;\n}\n\nexport const formatErrorMessage = (error: unknown): string[] => {\n  const axiosError = error as AxiosError<ApiError>;\n  const apiError = axiosError.response?.data;\n\n  if (!apiError) {\n    return [axiosError.message || \"An error occurred\"];\n  }\n\n  // If we have field-specific validation errors\n  if (apiError.errors && Object.keys(apiError.errors).length > 0) {\n    return Object.values(apiError.errors);\n  }\n\n  // If we have a general error message\n  if (apiError.message) {\n    const formattedMessage = apiError.message.charAt(0).toUpperCase() + apiError.message.slice(1);\n    return [formattedMessage];\n  }\n\n  return [\"An error occurred\"];\n};\n\nexport function unwrapResult<T>(response: {\n  code?: number;\n  message?: string;\n  result?: T | null;\n}): T {\n  if (response.code && response.code !== 200) {\n    throw new Error(response.message || 'Request gagal');\n  }\n\n  if (!response.result) {\n    throw new Error(response.message || 'Data tidak ditemukan');\n  }\n\n  return response.result;\n}\n\nexport const showErrorToast = (error: AxiosError<ApiError>) => {\n  const errors = formatErrorMessage(error);\n  const errorList = errors.map(err => `• ${err}`).join('\\n');\n\n  toast.add({\n    title: \"Error\",\n    type: \"error\",\n    description: errorList,\n  });\n};",
+          "description": "Generic API envelope unwrapping utility and formatted multi-field error extractor.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/lib/error-utils.ts\n├── interface ApiError (Standard backend response envelope)\n├── unwrapResult<T>() (Generic payload extractor and error thrower)\n├── formatErrorMessage() (Normalized array of validation/general error strings)\n└── showErrorToast() (Direct integration with UI toast system)",
+      "confidence": 0.92,
+      "considerations": [
+        "Assumes backend adheres to the `{ code, message, errors, result }` envelope convention.",
+        "UnwrapResult throws JavaScript Error objects that can be caught cleanly by React Query mutations or try-catch blocks."
+      ],
+      "keyImplementationPoints": [
+        "Generic unwrapper `unwrapResult<T>()` extracting pure data models and eliminating repeated status checks in service callers.",
+        "Hierarchical error parsing covering validation maps, API error strings, and network fallback messages.",
+        "Unified toast UI dispatch formatting multiple errors as a bulleted list."
+      ],
+      "overview": "Pola pembongkaran API envelope terstandar (`unwrapResult<T>()`) dan normalisasi pesan error untuk memisahkan validasi field backend dan pesan error umum secara konsisten.",
+      "purpose": "Menghilangkan boilerplate validasi response code di layer service serta mempermudah rendering error yang ramah pengguna.",
+      "relatedKnowledge": [
+        "Result pattern",
+        "Axios Error handling",
+        "TypeScript Generics",
+        "Toast notification integration"
+      ],
+      "summary": "Standardized API response envelope unwrapper and normalized multi-field error formatting utility.",
+      "tags": [
+        "error-handling",
+        "api-contracts",
+        "typescript-generics",
+        "toast"
+      ],
+      "title": "Standardized API Envelope Unwrapping & Normalized Error Handling"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// Image thumbnail fetcher with Blob and Object URL cleanup\nexport const ThumbnailImage: React.FC<ThumbnailImageProps> = ({\n  photoId,\n  alt = '',\n  className = '',\n}) => {\n  const [imageUrl, setImageUrl] = useState<string | null>(null);\n  const [loading, setLoading] = useState<boolean>(true);\n  const [error, setError] = useState<boolean>(false);\n\n  useEffect(() => {\n    let isMounted = true;\n    let createdUrl: string | null = null;\n\n    const loadThumbnail = async () => {\n      setLoading(true);\n      setError(false);\n      try {\n        const endpoint = PostMediaService.getThumbnailUrl(photoId);\n        const response = await axios.get(endpoint, { responseType: 'blob' });\n\n        if (isMounted) {\n          const rawContentType = response.headers['content-type'];\n          const contentType = typeof rawContentType === 'string' ? rawContentType : 'image/jpeg';\n          const blob = new Blob([response.data], { type: contentType });\n          createdUrl = URL.createObjectURL(blob);\n          setImageUrl(createdUrl);\n          setLoading(false);\n        }\n      } catch {\n        if (isMounted) {\n          const baseUrl = import.meta.env.VITE_API_URL || '';\n          setImageUrl(`${baseUrl}/post-media/${photoId}/thumbnail`);\n          setError(true);\n          setLoading(false);\n        }\n      }\n    };\n\n    if (photoId) {\n      loadThumbnail();\n    } else {\n      setLoading(false);\n      setError(true);\n    }\n\n    return () => {\n      isMounted = false;\n      if (createdUrl) {\n        URL.revokeObjectURL(createdUrl);\n      }\n    };\n  }, [photoId]);\n\n  if (loading) return <div className=\"absolute inset-0 animate-pulse bg-muted/60\" />;\n  return <img src={imageUrl || ''} alt={alt} className={className} onError={() => setError(true)} />;\n};",
+          "description": "Authenticated thumbnail component with Blob streaming and strict memory revocation on unmount.",
+          "language": "typescript"
+        },
+        {
+          "code": "// Authenticated file download with progress tracking\ndownloadPhoto: async (\n  photoId: string,\n  filename?: string,\n  onProgress?: (progress: number) => void\n): Promise<void> => {\n  const response = await axios.get(`/post-media/${photoId}/download`, {\n    responseType: \"blob\",\n    onDownloadProgress: (progressEvent) => {\n      if (progressEvent.total) {\n        const percentCompleted = Math.round(\n          (progressEvent.loaded * 100) / progressEvent.total\n        );\n        onProgress?.(percentCompleted);\n      }\n    },\n  });\n  const rawContentType = response.headers[\"content-type\"];\n  const contentType = typeof rawContentType === \"string\" ? rawContentType : \"image/jpeg\";\n  const blob = new Blob([response.data], { type: contentType });\n  const url = URL.createObjectURL(blob);\n  const link = document.createElement(\"a\");\n  link.href = url;\n  link.download = filename || `photo-${photoId}.jpg`;\n  document.body.appendChild(link);\n  link.click();\n  document.body.removeChild(link);\n  URL.revokeObjectURL(url);\n};",
+          "description": "Download service leveraging Axios blob response, download progress callback, and programmatic anchor trigger.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── services/post-media.ts (Blob download method with progress tracking & Object URL cleanup)\n└── pages/Gallery/components/ThumbnailImage.tsx (Component with authenticated Blob loader & URL.revokeObjectURL lifecycle hook)",
+      "confidence": 0.9,
+      "considerations": [
+        "Always revoke Object URLs (`URL.revokeObjectURL`) to prevent browser heap memory bloat when loading numerous images.",
+        "Requires Axios client credentials rather than direct HTML `src` links when accessing protected static assets."
+      ],
+      "keyImplementationPoints": [
+        "Fetching authenticated binary streams with `responseType: 'blob'`.",
+        "Creating localized object references via `URL.createObjectURL(blob)`.",
+        "Guaranteed memory deallocation in component cleanup handlers via `URL.revokeObjectURL()`.",
+        "Progress tracking for large media downloads using `onDownloadProgress`."
+      ],
+      "overview": "Pola pemuatan gambar dan file unduhan privat yang memerlukan header otentikasi HTTP dengan mengunduh binary Blob via Axios, mengonversi ke Object URL lokal, dan membersihkan alokasi memori secara eksplisit.",
+      "purpose": "Memungkinkan rendering dan pengunduhan aset media yang terlindungi autentikasi tanpa kebocoran memori (memory leak) di browser.",
+      "relatedKnowledge": [
+        "Blob API",
+        "URL.createObjectURL / URL.revokeObjectURL",
+        "Axios onDownloadProgress",
+        "React useEffect cleanup"
+      ],
+      "summary": "Authenticated blob media loader and download stream with explicit memory deallocation and progress tracking.",
+      "tags": [
+        "media",
+        "blob",
+        "memory-management",
+        "file-download",
+        "react"
+      ],
+      "title": "Authenticated Blob Stream & Lifecycle-Managed Media Loader"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// PrivateRoute: Guarantees authenticated access with preserved navigation state\nconst PrivateRoute: React.FC<IPrivateRoute> = ({ children }: IPrivateRoute) => {\n  const [token] = useLocalStorage<string | null>(LOCALSTORAGE_KEY.TOKEN, null, { encrypted: true });\n  const location = useLocation();\n\n  if (!token) {\n    return <Navigate to=\"/login\" state={{ from: location }} replace />;\n  }\n\n  return <>{children}</>;\n};",
+          "description": "Guarded route component redirecting unauthenticated users to login while saving current location.",
+          "language": "typescript"
+        },
+        {
+          "code": "// PublicRoute: Prevents logged-in users from visiting auth pages\nconst PublicRoute: React.FC<IPublicRoute> = ({ children }: IPublicRoute) => {\n  const [token] = useLocalStorage<string | null>(LOCALSTORAGE_KEY.TOKEN, null, { encrypted: true });\n  const location = useLocation();\n\n  if (token) {\n    return <Navigate to=\"/\" replace state={{ from: location }} />;\n  }\n\n  return <>{children}</>;\n};",
+          "description": "Guarded route component redirecting authenticated users away from login/public pages.",
+          "language": "typescript"
+        },
+        {
+          "code": "// Router configuration in src/routes/index.tsx\nexport const router = createBrowserRouter([\n  {\n    path: \"/\",\n    element: (\n      <PrivateRoute>\n        <Outlet />\n      </PrivateRoute>\n    ),\n    children: [\n      { index: true, element: <Navigate to={ROUTES.GALLERY} replace /> },\n      { path: ROUTES.GALLERY, element: <GalleryPage /> }\n    ]\n  },\n  {\n    path: ROUTES.LOGIN,\n    element: (\n      <PublicRoute>\n        <LoginPage />\n      </PublicRoute>\n    ),\n  },\n  {\n    path: \"*\",\n    element: <NotFound />,\n  },\n]);",
+          "description": "React Router v6 browser router definition composed with declarative guard wrappers.",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/routes/\n├── index.tsx (Main router definition with nested route trees)\n├── PrivateRoute.tsx (Guard for authenticated private pages)\n└── PublicRoute.tsx (Guard for guest-only public pages)",
+      "confidence": 0.94,
+      "considerations": [
+        "Location state preservation (`state: { from: location }`) enables seamless post-login redirection.",
+        "Encrypted token read ensures consistent authentication state across routes."
+      ],
+      "keyImplementationPoints": [
+        "Bi-directional route guarding separating public/guest-only flows and private authenticated areas.",
+        "Preserving intended navigation history via `useLocation()` and `<Navigate state={{ from: location }} />`.",
+        "Declarative composition inside `createBrowserRouter` without polluting presentation components."
+      ],
+      "overview": "Pola pelindung rute dua arah menggunakan React Router v6 untuk mengontrol hak akses halaman berdasarkan token autentikasi.",
+      "purpose": "Mencegah akses ilegal ke rute privat sekaligus mengalihkan pengguna yang sudah login dari halaman otentikasi kembali ke aplikasi utama.",
+      "relatedKnowledge": [
+        "React Router v6 createBrowserRouter",
+        "React Router Navigate",
+        "Authentication Route Guards"
+      ],
+      "summary": "Bi-directional route protection architecture with preserved navigation state for React Router.",
+      "tags": [
+        "routing",
+        "react-router",
+        "route-guards",
+        "auth-guards"
+      ],
+      "title": "Bi-Directional Route Protection with Preserved Navigation State"
+    }
+  ]
+}

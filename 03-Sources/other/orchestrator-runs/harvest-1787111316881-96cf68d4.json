@@ -1,0 +1,394 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T03:49:43.292Z",
+  "harvestId": "harvest-1787111316881-96cf68d4",
+  "type": "codebase-harvest",
+  "domain": "frontend",
+  "repositoryPath": "/Users/sagaino/ciniru/identity-kit-source-code",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/ciniru/identity-kit-source-code",
+    "packageName": "identify-verification-kit",
+    "packageVersion": "0.0.0",
+    "dependencies": [
+      "@base-ui/react",
+      "@electron-toolkit/preload",
+      "@electron-toolkit/utils",
+      "@hookform/resolvers",
+      "@tailwindcss/vite",
+      "@tanstack/react-query",
+      "@tiptap/extension-image",
+      "@tiptap/extension-link",
+      "@tiptap/extension-underline",
+      "@tiptap/react",
+      "@tiptap/starter-kit",
+      "axios",
+      "class-variance-authority",
+      "clsx",
+      "cmdk",
+      "crypto-js",
+      "date-fns",
+      "embla-carousel-react",
+      "i18next",
+      "iconsax-reactjs",
+      "input-otp",
+      "leaflet",
+      "leaflet-draw",
+      "leaflet.fullscreen",
+      "leaflet.markercluster",
+      "lucide-react",
+      "moment",
+      "next-themes",
+      "pako",
+      "radix-ui",
+      "react",
+      "react-day-picker",
+      "react-dom",
+      "react-hook-form",
+      "react-i18next",
+      "react-icons",
+      "react-leaflet",
+      "react-leaflet-markercluster",
+      "react-resizable-panels",
+      "react-router-dom",
+      "recharts",
+      "sonner",
+      "tailwind-merge",
+      "tailwindcss",
+      "vaul",
+      "ws",
+      "zod"
+    ],
+    "devDependencies": [
+      "@eslint/js",
+      "@types/crypto-js",
+      "@types/geojson",
+      "@types/leaflet",
+      "@types/leaflet-draw",
+      "@types/leaflet.markercluster",
+      "@types/node",
+      "@types/pako",
+      "@types/react",
+      "@types/react-dom",
+      "@types/ws",
+      "@vitejs/plugin-react",
+      "electron",
+      "electron-builder",
+      "electron-vite",
+      "eslint",
+      "eslint-plugin-react-hooks",
+      "eslint-plugin-react-refresh",
+      "globals",
+      "shadcn",
+      "tw-animate-css",
+      "typescript",
+      "typescript-eslint",
+      "vite"
+    ],
+    "scripts": [
+      "dev",
+      "dev:renderer",
+      "start",
+      "build",
+      "lint",
+      "preview"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/main/handlers/auth.handler.ts",
+          "src/main/ipc/auth.ipc.ts",
+          "src/main/services/auth.service.ts",
+          "src/preload/modules/auth.ts",
+          "src/renderer/src/assets/ic_passport.png",
+          "src/renderer/src/lib/clear-auth-session.ts",
+          "src/renderer/src/lib/invoke-ipc-with-auth-handling.ts",
+          "src/shared/auth",
+          "src/shared/auth/channels.ts",
+          "src/shared/auth/roles.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [
+          "zod"
+        ],
+        "relevantFiles": [
+          "src/main/handlers",
+          "src/main/handlers/admin.handler.ts",
+          "src/main/handlers/auth.handler.ts",
+          "src/main/handlers/broadcast.handler.ts",
+          "src/main/handlers/device.handler.ts",
+          "src/main/handlers/division.handler.ts",
+          "src/main/handlers/history.handler.ts",
+          "src/main/handlers/license.handler.ts",
+          "src/main/handlers/log-activity.handler.ts",
+          "src/main/handlers/operator.handler.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/shared/auth/schema.ts"
+        ]
+      },
+      "structure": {
+        "style": "Modular Architecture",
+        "totalFilesScanned": 196,
+        "sampleDirectories": [
+          "public",
+          "src",
+          "src/main",
+          "src/main/handlers",
+          "src/main/ipc",
+          "src/main/services",
+          "src/main/utils",
+          "src/preload",
+          "src/preload/modules",
+          "src/renderer",
+          "src/renderer/public",
+          "src/renderer/src",
+          "src/renderer/src/assets",
+          "src/renderer/src/components",
+          "src/renderer/src/components/common"
+        ]
+      }
+    },
+    "graphifySummary": null
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/shared/auth/channels.ts\nexport const AUTH_IPC_CHANNELS = {\n  LOGIN: 'auth:login',\n} as const;\n\n// src/main/ipc/auth.ipc.ts\nimport { ipcMain } from 'electron'\nimport { AuthHandler } from '../handlers/auth.handler'\nimport { AUTH_IPC_CHANNELS } from 'src/shared/auth/channels'\n\nexport function registerAuthIpcHandlers(): void {\n  ipcMain.handle(AUTH_IPC_CHANNELS.LOGIN, AuthHandler.login)\n}\n\nexport function unregisterAuthIpcHandlers(): void {\n  ipcMain.removeHandler(AUTH_IPC_CHANNELS.LOGIN)\n}\n\n// src/preload/modules/auth.ts\nimport { ipcRenderer } from 'electron'\nimport { AUTH_IPC_CHANNELS } from 'src/shared/auth/channels'\nimport type { LoginFormData } from 'src/shared/auth/schema'\nimport type { LoginResponse } from 'src/shared/auth/types'\n\nexport const authModule = {\n  login: (data: LoginFormData): Promise<LoginResponse> =>\n    ipcRenderer.invoke(AUTH_IPC_CHANNELS.LOGIN, data),\n}",
+          "description": "End-to-end typed contract linking Shared Channels, Main IPC handler, and Preload Context Bridge",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/           # Shared types, Zod schemas, and channel constants (e.g. auth/channels.ts)\n├── main/\n│   ├── ipc/          # Main process IPC channel listener registration / unregistration\n│   ├── handlers/     # Request validation and forwarding to services\n│   └── services/     # Pure backend business logic and HTTP calls\n├── preload/\n│   ├── modules/      # Modular IPC wrappers exposing typed APIs via contextBridge\n│   └── index.ts      # Exposes window.api to renderer\n└── renderer/src/\n    └── services/     # Frontend client wrapper handling auth tokens & response mapping",
+      "confidence": 0.95,
+      "considerations": [
+        "Avoid putting business logic or credential storage directly inside preload scripts; preload should strictly act as a secure boundary.",
+        "Always provide unregister handlers for dynamic windows or hot-reloading scenarios to prevent memory leaks and duplicate invocation errors.",
+        "Types must be shared across processes without importing Node.js or Electron dependencies into the renderer bundle."
+      ],
+      "keyImplementationPoints": [
+        "Centralize IPC channel names as constant objects with 'as const' in the shared directory.",
+        "Decouple IPC handler registration (main/ipc) from request execution logic (main/handlers and main/services).",
+        "Group contextBridge APIs into feature-specific modules (authModule, deviceModule, operatorModule) mounted under window.api.",
+        "Enforce strict TypeScript return types on all invoke calls in the preload layer."
+      ],
+      "overview": "A robust architectural pattern for Electron desktop applications that establishes type safety and security boundaries across Main, Preload, and Renderer processes using shared channel constants and domain-specific DTOs.",
+      "purpose": "Provide end-to-end type safety, prevent IPC channel naming typos, enforce context isolation security, and maintain a clean separation of concerns between desktop native operations and frontend UI.",
+      "relatedKnowledge": [
+        "Electron Context Isolation",
+        "TypeScript as const Assertions",
+        "Clean Architecture Layering"
+      ],
+      "summary": "Type-safe modular IPC communication bridging Renderer, Preload, and Main processes with shared channel definitions and modular handler registries.",
+      "tags": [
+        "electron",
+        "ipc",
+        "typescript",
+        "architecture",
+        "context-bridge"
+      ],
+      "title": "Type-Safe 3-Tier Desktop IPC Architecture"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/utils/request-signature.ts\nimport { createHash } from 'node:crypto'\n\nconst mapBodyToSignatureString = (body: unknown, parentKey = ''): string => {\n  if (!body || typeof body !== 'object' || Array.isArray(body)) return ''\n\n  const entries = Object.entries(body as Record<string, unknown>)\n    .sort(([a], [b]) => a.localeCompare(b))\n\n  let keys = ''\n\n  for (const [key, value] of entries) {\n    const finalKey = parentKey ? `${parentKey}.${key}` : key\n\n    if (Array.isArray(value)) {\n      keys += finalKey\n      continue\n    }\n\n    if (value && typeof value === 'object') {\n      keys += mapBodyToSignatureString(value, finalKey)\n      continue\n    }\n\n    keys += `${finalKey}${String(value ?? '')}`\n  }\n\n  return keys\n}\n\nexport const buildRequestSecurityHeaders = (\n  payload: Record<string, unknown>,\n  email = '0'\n): Record<'timestamp' | 'email' | 'sig', string> => {\n  const timestamp = Date.now()\n  const signaturePayload = {\n    ...payload,\n    timestamp,\n    email: payload.email ?? email,\n  }\n  const keys = mapBodyToSignatureString(signaturePayload)\n  const sig = createHash('sha1').update(keys).digest('hex')\n\n  return {\n    timestamp: String(timestamp),\n    email,\n    sig,\n  }\n}",
+          "description": "Recursive key sorting, string serialization, and SHA1 hash computation for request payloads",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/main/\n├── utils/\n│   └── request-signature.ts  # Canonical sorting, flattening, and SHA1 hashing utility\n└── services/\n    ├── auth.service.ts       # Integrates security headers into axios requests\n    └── operator.service.ts   # Signs data and mutations before dispatching to API backend",
+      "confidence": 0.94,
+      "considerations": [
+        "Key sorting is strictly alphabetical (localeCompare); client and backend must use identical normalization rules.",
+        "Array elements are indexed by key name only to prevent ordering anomalies.",
+        "Timestamp drift between client machine and remote server must be accounted for in backend validation windows."
+      ],
+      "keyImplementationPoints": [
+        "Sort object keys lexicographically at every recursive depth.",
+        "Recursively serialize nested JSON objects into dot-notated key-value strings.",
+        "Append timestamp and identity (e.g. email or client identifier) to the signature payload.",
+        "Digest the resulting canonical string with SHA1 (or HMAC) to generate the sig header."
+      ],
+      "overview": "A deterministic payload canonicalization and hashing mechanism executed in the Node.js main process to sign HTTP requests with timestamp and integrity headers, preventing man-in-the-middle payload tampering.",
+      "purpose": "Guarantee request integrity and non-repudiation between the desktop client and backend APIs by generating tamper-evident cryptographic signature headers.",
+      "relatedKnowledge": [
+        "Cryptographic Hashes (SHA1/SHA256)",
+        "Canonical Request Representation",
+        "API Request Signing & HMAC"
+      ],
+      "summary": "Deterministic recursive payload sorting and hashing utility for generating tamper-proof API security headers.",
+      "tags": [
+        "security",
+        "cryptography",
+        "api-signing",
+        "axios",
+        "node-crypto"
+      ],
+      "title": "Recursive Request Signature Generator for API Integrity"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/hooks/useLocalStorage.ts\nimport { useEffect, useState } from \"react\";\nimport CryptoJS from \"crypto-js\";\n\ntype SetValue<T> = T | ((val: T) => T);\n\ninterface UseLocalStorageOptions {\n  encrypted?: boolean;\n}\n\nconst SECRET_KEY = `${import.meta.env.VITE_SECRET_KEY}`;\n\nexport const setData = (storageKey: string, value: any) => {\n  try {\n    const jsonValue = JSON.stringify(value);\n    const encrypted = CryptoJS.AES.encrypt(jsonValue, SECRET_KEY).toString();\n    localStorage.setItem(storageKey, encrypted);\n    window.dispatchEvent(new Event(\"storage\"));\n  } catch (e) {\n    console.error(\"Gagal menyimpan di localStorage\", e);\n    return null;\n  }\n};\n\nexport const getData = (storageKey: string) => {\n  try {\n    const encrypted = localStorage.getItem(storageKey);\n    if (!encrypted) return null;\n    const bytes = CryptoJS.AES.decrypt(encrypted, SECRET_KEY);\n    const decrypted = bytes.toString(CryptoJS.enc.Utf8);\n    if (!decrypted) {\n      localStorage.removeItem(storageKey);\n      return null;\n    }\n    return JSON.parse(decrypted);\n  } catch (e) {\n    localStorage.removeItem(storageKey);\n    return null;\n  }\n};\n\nfunction useLocalStorage<T>(\n  key: string,\n  initialValue: T,\n  options: UseLocalStorageOptions = {}\n): [T, (value: SetValue<T>) => void] {\n  const { encrypted = false } = options;\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    try {\n      const item = encrypted ? getData(key) : localStorage.getItem(key);\n      if (item !== null) return encrypted ? item : JSON.parse(item);\n      return initialValue;\n    } catch {\n      return initialValue;\n    }\n  });\n\n  useEffect(() => {\n    const handleStorageChange = () => {\n      try {\n        const newValue = encrypted ? getData(key) : localStorage.getItem(key);\n        setStoredValue(newValue !== null ? (encrypted ? newValue : JSON.parse(newValue)) : initialValue);\n      } catch (error) {\n        console.error(\"Error syncing storage:\", error);\n      }\n    };\n    window.addEventListener(\"storage\", handleStorageChange);\n    return () => window.removeEventListener(\"storage\", handleStorageChange);\n  }, [key, encrypted, initialValue]);\n\n  const setValue = (value: SetValue<T>) => {\n    const newValue = value instanceof Function ? value(storedValue) : value;\n    setStoredValue(newValue);\n    if (encrypted) {\n      setData(key, newValue);\n    } else {\n      localStorage.setItem(key, JSON.stringify(newValue));\n      window.dispatchEvent(new Event(\"storage\"));\n    }\n  };\n\n  return [storedValue, setValue];\n}",
+          "description": "AES-encrypted custom React hook with multi-window event synchronization and auto-healing on corruption",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/\n├── hooks/\n│   └── useLocalStorage.ts      # Encrypted storage hook and standalone getData/setData helpers\n├── config/constant/\n│   └── localstorage.ts         # Central storage key constants (e.g. TOKEN, USER, PERMISSIONS)\n└── services/                   # Reads token securely via getData(LOCALSTORAGE_KEY.TOKEN)",
+      "confidence": 0.92,
+      "considerations": [
+        "Client-side symmetric keys protect against casual plain-text inspection on disk, but true hardware-level security in Electron should ideally leverage SafeStorage API for sensitive master keys.",
+        "Dispatching custom 'storage' events is essential because native window.onstorage only fires in other windows/tabs, not the emitting window.",
+        "Corrupted data (e.g. invalid JSON or decrypt failure) must be wiped to prevent infinite render crashes."
+      ],
+      "keyImplementationPoints": [
+        "Transparent AES encryption/decryption using CryptoJS with a configurable secret key.",
+        "Self-healing logic that catches decryption/parse exceptions and purges invalid keys automatically.",
+        "Custom 'storage' DOM Event dispatching enabling instant cross-component and cross-window reactivity.",
+        "Support for functional state updates (value instanceof Function ? value(storedValue) : value)."
+      ],
+      "overview": "A custom React hook and helper utility that provides transparent AES encryption for localStorage entries along with cross-window/cross-component state synchronization and automated corrupted-data self-healing.",
+      "purpose": "Secure sensitive user data (tokens, profile info) stored on the client disk while preserving standard React state reactivity and cross-tab/multi-window synchronization.",
+      "relatedKnowledge": [
+        "React Custom Hooks",
+        "Web Storage API",
+        "AES Symmetric Encryption (CryptoJS)",
+        "DOM Custom Events"
+      ],
+      "summary": "AES-encrypted React local storage hook with live window event synchronization and corrupted data self-healing.",
+      "tags": [
+        "react",
+        "hooks",
+        "localstorage",
+        "crypto-js",
+        "encryption",
+        "state-management"
+      ],
+      "title": "AES-Encrypted Reactive Storage Hook with Multi-Window Sync"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/lib/invoke-ipc-with-auth-handling.ts\nimport { clearAuthSession } from './clear-auth-session'\nimport { IpcServiceError } from './ipc-service-error'\nimport { extractIpcErrorStatusCode, normalizeIpcErrorMessage } from './normalize-ipc-error-message'\nimport { toast } from 'sonner'\n\ninterface InvokeIpcWithAuthHandlingOptions {\n  methodName: string\n  fallbackMessage: string\n  treatUnauthorizedAsSessionExpired?: boolean\n}\n\nconst SESSION_EXPIRED_MESSAGE = 'Sesi login telah berakhir. Silakan login kembali.'\nconst SESSION_EXPIRED_TOAST_COOLDOWN_MS = 3000\nlet lastSessionExpiredToastAt = 0\n\nexport const invokeIpcWithAuthHandling = async <T>(\n  action: () => Promise<T>,\n  options: InvokeIpcWithAuthHandlingOptions\n): Promise<T> => {\n  try {\n    return await action()\n  } catch (error) {\n    const statusCode = extractIpcErrorStatusCode(error, { methodName: options.methodName })\n    const shouldHandle401AsSessionExpired = options.treatUnauthorizedAsSessionExpired ?? true\n\n    if (statusCode === 401 && shouldHandle401AsSessionExpired) {\n      clearAuthSession()\n      const now = Date.now()\n      if (now - lastSessionExpiredToastAt > SESSION_EXPIRED_TOAST_COOLDOWN_MS) {\n        lastSessionExpiredToastAt = now\n        toast.error(SESSION_EXPIRED_MESSAGE)\n      }\n      throw new IpcServiceError(SESSION_EXPIRED_MESSAGE, 401)\n    }\n\n    throw new IpcServiceError(\n      normalizeIpcErrorMessage(error, {\n        methodName: options.methodName,\n        fallbackMessage: options.fallbackMessage,\n      }),\n      statusCode ?? undefined\n    )\n  }\n}",
+          "description": "IPC invoker wrapper with status extraction, session clearing, and toast throttling",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/lib/\n├── invoke-ipc-with-auth-handling.ts  # Core IPC invocation wrapper with 401 interceptor\n├── normalize-ipc-error-message.ts    # Extracts status codes (e.g. HTTP_STATUS_401) and clean messages\n├── ipc-service-error.ts              # Custom Error class retaining status code and origin\n└── clear-auth-session.ts             # Storage reset & redirect trigger",
+      "confidence": 0.93,
+      "considerations": [
+        "Session expired toasts must be throttled with a cooldown timer to avoid multiple notifications during concurrent API queries.",
+        "The wrapper preserves the typed response promise <T> while normalizing arbitrary IPC error shapes."
+      ],
+      "keyImplementationPoints": [
+        "Extract HTTP status codes from structured error prefixes (e.g. 'HTTP_STATUS_401::...').",
+        "Automatically wipe credentials and tokens via clearAuthSession on 401 Unauthorized responses.",
+        "Debounce/throttle session-expired toast notifications using timestamp comparison (SESSION_EXPIRED_TOAST_COOLDOWN_MS).",
+        "Re-throw standard IpcServiceError instances containing clean human-readable messages and status codes."
+      ],
+      "overview": "A centralized higher-order IPC invocation wrapper in the renderer process that intercepts 401 Unauthorized responses, cleans up local auth sessions, and throttles toast notifications across concurrent requests.",
+      "purpose": "Prevent unhandled 401 authentication errors across multiple React components, avoid notification alert flooding, and ensure a single unified logout flow on token expiration.",
+      "relatedKnowledge": [
+        "Axios / Fetch Interceptors",
+        "Sonner Toast Notifications",
+        "Error Handling in Async IPC"
+      ],
+      "summary": "Centralized IPC invocation wrapper with error status code extraction, session revocation, and notification throttling.",
+      "tags": [
+        "error-handling",
+        "ipc",
+        "auth",
+        "sonner",
+        "session-management"
+      ],
+      "title": "Centralized IPC Invoker with Rate-Limited 401 Session Interceptor"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/main/services/ws.service.ts\nimport type { WebContents } from 'electron'\nimport { WebSocket, type RawData } from 'ws'\nimport { WS_IPC_CHANNELS } from 'src/shared/ws/channels'\n\nlet ws: WebSocket | null = null\n\nexport const WsService = {\n  connect: (sender: WebContents, url: string): void => {\n    if (ws) {\n      ws.terminate()\n      ws = null\n    }\n\n    ws = new WebSocket(url)\n\n    ws.on('open', () => sender.send(WS_IPC_CHANNELS.STATUS, 'connected'))\n    ws.on('close', () => sender.send(WS_IPC_CHANNELS.STATUS, 'disconnected'))\n    ws.on('error', () => sender.send(WS_IPC_CHANNELS.STATUS, 'error'))\n    ws.on('message', (data: RawData) => {\n      sender.send(WS_IPC_CHANNELS.MESSAGE, data.toString())\n    })\n  },\n\n  send: (message: string): void => {\n    ws?.send(message)\n  },\n\n  disconnect: (): void => {\n    ws?.terminate()\n    ws = null\n  }\n}",
+          "description": "Main process WebSocket manager forwarding status and messages to Electron WebContents",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/\n├── shared/ws/\n│   └── channels.ts       # Status, Message, Connect, and Disconnect IPC channel constants\n├── main/\n│   ├── services/\n│   │   └── ws.service.ts # Pure Node.js ws instance management\n│   └── handlers/\n│       └── ws.handler.ts # Listens to renderer connect/disconnect/send commands\n└── preload/modules/\n    └── ws.ts             # Exposes onMessage, onStatusChange, connect, and send to renderer",
+      "confidence": 0.9,
+      "considerations": [
+        "Using Node.js 'ws' in the main process bypasses browser-level WebSocket restrictions (such as self-signed certs or local IP CORS).",
+        "Ensure the previous WebSocket instance is explicitly terminated before initializing a new connection to prevent dangling connections.",
+        "Large binary payloads can be compressed (e.g. pako) or forwarded as ArrayBuffers."
+      ],
+      "keyImplementationPoints": [
+        "Maintain single active WebSocket reference in main process service singleton.",
+        "Forward WebSocket lifecycle events ('open', 'close', 'error', 'message') directly to sender WebContents.",
+        "Provide explicit terminate() and clean teardown methods to handle network switches or user logouts."
+      ],
+      "overview": "A desktop networking pattern that encapsulates WebSocket lifecycle management inside Electron's main process, routing streaming events and binary data to the UI renderer via typed IPC events.",
+      "purpose": "Avoid browser CORS and mixed-content restrictions, isolate real-time network sockets from UI re-renders, and manage robust socket connections natively.",
+      "relatedKnowledge": [
+        "Node.js ws Library",
+        "Electron WebContents IPC Eventing",
+        "Binary Data Streaming & Pako Compression"
+      ],
+      "summary": "Main-process WebSocket proxy managing socket connections and event forwarding to Electron WebContents.",
+      "tags": [
+        "electron",
+        "websocket",
+        "networking",
+        "ipc",
+        "streaming"
+      ],
+      "title": "Main-Process WebSocket Proxy for Native Desktop Event Streaming"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "// src/renderer/src/components/ui/map.tsx & MapSection.tsx\nimport React from 'react'\nimport { useMap } from 'react-leaflet'\nimport { Map, MapLayers, MapMarker, MapTileLayer } from '@/components/ui/map'\nimport type { IDeviceLocation } from '../data'\n\ninterface IMapSectionProps {\n  locations: IDeviceLocation[]\n  selectedPosition: [number, number] | null\n}\n\nconst FocusMapMarker: React.FC<{ position: [number, number] | null }> = ({ position }) => {\n  const map = useMap()\n\n  React.useEffect(() => {\n    if (!position) return\n\n    map.flyTo(position, Math.max(map.getZoom(), 12), {\n      animate: true,\n      duration: 0.8,\n    })\n  }, [map, position])\n\n  return null\n}\n\nexport const MapSection: React.FC<IMapSectionProps> = ({ locations, selectedPosition }) => {\n  const mappedLocations = locations.filter(\n    (device): device is IDeviceLocation & { position: [number, number] } => device.position !== null\n  )\n\n  return (\n    <div className=\"w-full rounded-[12px] bg-accent p-0\">\n      <div className=\"overflow-hidden rounded-[12px] border border-[#334155] h-full\">\n        <Map center={[0.7893, 113.9213]} zoom={5} minZoom={4} className=\"h-full min-h-0 w-full rounded-none\">\n          <MapLayers defaultTileLayer=\"Street\">\n            <FocusMapMarker position={selectedPosition} />\n            <MapTileLayer\n              name=\"Street\"\n              url=\"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png\"\n              attribution=\"&copy; OpenStreetMap contributors, &copy; CARTO\"\n            />\n            <MapTileLayer\n              name=\"Dark\"\n              url=\"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png\"\n              attribution=\"&copy; OpenStreetMap contributors, &copy; CARTO\"\n            />\n            {mappedLocations.map((device) => (\n              <MapMarker\n                key={device.rowKey}\n                position={device.position}\n                iconAnchor={[44, 12]}\n                icon={\n                  <span className=\"inline-flex h-6 min-w-22 items-center justify-center rounded-full bg-primary px-3 text-xs font-semibold text-white shadow-md\">\n                    {device.id}\n                  </span>\n                }\n              />\n            ))}\n          </MapLayers>\n        </Map>\n      </div>\n    </div>\n  )\n}",
+          "description": "Declarative compound map component composition with dynamic markers, tile switching, and camera fly-to hook",
+          "language": "typescript"
+        }
+      ],
+      "codeStructure": "src/renderer/src/\n├── components/ui/\n│   └── map.tsx             # Compound Leaflet container encapsulating tiles, draw tools, marker clusters, fullscreen controls\n└── pages/Dashboard/\n    └── components/\n        └── MapSection.tsx  # Declarative usage composing Map, MapLayers, MapTileLayer, FocusMapMarker, and MapMarker",
+      "confidence": 0.91,
+      "considerations": [
+        "Dynamic Leaflet tiles and markers must properly handle component unmounting and container resize (invalidateSize).",
+        "Custom marker icons rendered via React elements need to be projected cleanly into Leaflet DivIcons.",
+        "Imperative animations like map.flyTo should be isolated in small child components that consume useMap()."
+      ],
+      "keyImplementationPoints": [
+        "Compound component design pattern (<Map>, <MapLayers>, <MapTileLayer>, <MapMarker>) for clean DX and declarative syntax.",
+        "Custom child controller component (FocusMapMarker) utilizing useMap() hook to execute imperative flyTo animations smoothly.",
+        "Integration of Leaflet plugins (MarkerCluster, Draw, Fullscreen, TileLayers) behind modular UI primitives.",
+        "Dynamic custom HTML/Tailwind-styled markers using DivIcon projections."
+      ],
+      "overview": "A declarative React compound component pattern wrapping Leaflet and its ecosystem plugins (MarkerCluster, Draw, Tile Switcher), enabling rich geospatial tracking and animated camera transitions in a clean JSX hierarchy.",
+      "purpose": "Simplify complex imperative Leaflet map setups, avoid memory leaks, and provide a unified declarative API for geospatial data visualization and device tracking.",
+      "relatedKnowledge": [
+        "React Compound Components",
+        "React Leaflet & Leaflet Plugins",
+        "Leaflet DivIcon & Camera Animations"
+      ],
+      "summary": "Declarative compound component architecture for React Leaflet map composition, plugin integration, and camera transitions.",
+      "tags": [
+        "react",
+        "leaflet",
+        "maps",
+        "geospatial",
+        "compound-components",
+        "ui"
+      ],
+      "title": "Declarative Compound Component Pattern for Leaflet Maps & Plugins"
+    }
+  ]
+}

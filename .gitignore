@@ -1,0 +1,19 @@
+# ==============================================================================
+# 🧠 Obsidian Knowledge Vault - Git Ignore Policy
+# ==============================================================================
+
+# OS & System Files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Obsidian Local Workspace & Window States
+# (Diabaikan agar tidak terjadi merge conflict posisi tab/layout antar device)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.obsidian/indexeddb/
+.trash/
+
+# Sync Lock & Temp Data
+*.sync-conflict-*

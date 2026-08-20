@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-19T09:01:54.741Z",
+  "harvestId": "harvest-1787130041232-c9802673",
+  "type": "codebase-harvest",
+  "domain": "backend",
+  "repositoryPath": "/Users/sagaino/Documents/personal-ai-orchestrator",
+  "requestedBy": "user",
+  "scanSummary": {
+    "repositoryPath": "/Users/sagaino/Documents/personal-ai-orchestrator",
+    "packageName": "personal-ai-orchestrator",
+    "packageVersion": "0.1.0",
+    "dependencies": [
+      "chokidar"
+    ],
+    "devDependencies": [],
+    "scripts": [
+      "add-project",
+      "remove-project",
+      "purge-project-archive",
+      "projects",
+      "context",
+      "plan",
+      "validate-task",
+      "request-task",
+      "status",
+      "review",
+      "preview",
+      "request-changes",
+      "notifications",
+      "notification:read",
+      "notification:test",
+      "telemetry",
+      "knowledge-health",
+      "knowledge-candidates",
+      "knowledge-review",
+      "promote-knowledge",
+      "reject-knowledge",
+      "recover",
+      "retry",
+      "start-task",
+      "prepare",
+      "approve",
+      "claim",
+      "execute",
+      "reject-review",
+      "reject",
+      "retrospect",
+      "approve-knowledge",
+      "sync-wiki",
+      "complete",
+      "accept",
+      "runs",
+      "watch",
+      "watch:once",
+      "daemon:install",
+      "daemon:start",
+      "daemon:status",
+      "daemon:stop",
+      "daemon:uninstall",
+      "test:unit",
+      "test:smoke",
+      "test"
+    ],
+    "detectedPatterns": {
+      "auth": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "src/api/auth.mjs",
+          "templates/frontend-vite/src/services/auth.ts"
+        ]
+      },
+      "errorHandling": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "templates/frontend-vite/src/lib/error-utils.ts"
+        ]
+      },
+      "database": {
+        "detected": true,
+        "libraries": [],
+        "relevantFiles": [
+          "runs/events/fe-014-20260814t142802z-3db2f8ab.jsonl",
+          "runs/fe-014-20260814t142802z-3db2f8ab.json",
+          "runs/intake/intake-1786933056367-db96b6c7.jsonl",
+          "runs/notifications/28785ccdbff88175425f0474.json",
+          "runs/telemetry/intakes/intake-1786933056367-db96b6c7.json",
+          "runs/workspace-backups/task-018-20260819t020614z-ab205748/1787105388448-dba15573",
+          "runs/workspace-backups/task-018-20260819t020614z-ab205748/1787105388448-dba15573/files",
+          "runs/workspace-backups/task-018-20260819t020614z-ab205748/1787105388448-dba15573/manifest.json",
+          "src/schema.mjs",
+          "test/schema.test.mjs"
+        ]
+      },
+      "structure": {
+        "style": "Controller-Service-Repository Pattern",
+        "totalFilesScanned": 684,
+        "sampleDirectories": [
+          "docs",
+          "native",
+          "native/macos-notifier",
+          "postman",
+          "runs",
+          "runs/daemon",
+          "runs/events",
+          "runs/intake",
+          "runs/jobs",
+          "runs/locks",
+          "runs/notifications",
+          "runs/onboarding",
+          "runs/onboarding/events",
+          "runs/purged-project-archives",
+          "runs/purged-project-archives/test-add-new-project"
+        ]
+      }
+    },
+    "graphifySummary": {
+      "nodeCount": 876,
+      "linkCount": 2217
+    }
+  },
+  "patterns": [
+    {
+      "codeSnippets": [
+        {
+          "code": "import fs from \"node:fs\";\nimport path from \"node:path\";\nimport { randomUUID } from \"node:crypto\";\nimport { validateJob } from \"./schema.mjs\";\n\nexport function writeAtomic(filePath, value) {\n  const validation = validateJob(value);\n  if (!validation.valid) {\n    throw new Error(`Job schema invalid: ${validation.errors.join(\", \")}`);\n  }\n  fs.mkdirSync(path.dirname(filePath), { recursive: true });\n  const temporaryPath = `${filePath}.${process.pid}.${randomUUID().slice(0, 8)}.tmp`;\n  fs.writeFileSync(temporaryPath, `${JSON.stringify(value, null, 2)}\\n`, {\n    encoding: \"utf8\",\n    mode: 0o600,\n  });\n  fs.renameSync(temporaryPath, filePath);\n}",
+          "description": "Atomic file write with schema pre-flight validation and POSIX atomic rename",
+          "language": "javascript"
+        },
+        {
+          "code": "export function validateManifest(manifest) {\n  const errors = [];\n  if (!manifest || typeof manifest !== \"object\") {\n    return { valid: false, errors: [\"Manifest must be a non-null object\"] };\n  }\n  if (!manifest.schemaVersion) errors.push(\"Missing schemaVersion\");\n  if (!manifest.runId || typeof manifest.runId !== \"string\") errors.push(\"Missing or invalid runId\");\n  if (!manifest.state || !Object.values(RUN_STATES).includes(manifest.state)) {\n    errors.push(`Invalid manifest state: ${manifest.state}`);\n  }\n  if (!manifest.project?.id) errors.push(\"Missing project.id\");\n  if (!manifest.project?.repository) errors.push(\"Missing project.repository\");\n  if (!manifest.task?.path) errors.push(\"Missing task.path\");\n  return { valid: errors.length === 0, errors };\n}",
+          "description": "Strict data validation guarding runtime state mutations",
+          "language": "javascript"
+        }
+      ],
+      "codeStructure": "src/\n├── schema.mjs           # Central validation contracts for manifests and jobs\n├── job-queue.mjs        # Atomic job state mutations and schema checks\n└── run-manager.mjs      # Run manifest state machine and transactional updates",
+      "confidence": 0.96,
+      "considerations": [
+        "Atomic rename (`fs.renameSync`) is only atomic within the same filesystem mount/volume. Ensure temporary files are created in the same parent directory.",
+        "Always set restrictive file modes (e.g. `0o600`) when persisting sensitive job or token metadata.",
+        "Schema validation must occur synchronously before opening file handles or writing temp files."
+      ],
+      "keyImplementationPoints": [
+        "Write data to a unique temporary file (`<path>.<pid>.<uuid>.tmp`) before swapping into place.",
+        "Validate data against explicit schema rules before writing to disk to prevent corrupted state files.",
+        "Use POSIX-compliant `fs.renameSync` for atomic file replacement.",
+        "Apply strict filesystem permissions (`0o600`) on runtime metadata files."
+      ],
+      "overview": "Pola persistensi file atomik menyediakan penyimpanan data lokal yang tangguh dan tahan terhadap crash (crash-resilient) tanpa memerlukan database eksternal. Pola ini menggabungkan validasi skema sebelum penulisan ke disk dengan operasi rename POSIX atomik.",
+      "purpose": "Mencegah korupsi data akibat partial writes atau crash sistem pada backend local-first tanpa dependensi database eksternal.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/file-based-persistence.md",
+        "01-Knowledge/patterns/backend/data-integrity-guards.md"
+      ],
+      "summary": "Pola penyimpanan state berbasis file atomik dengan pre-write schema validation dan POSIX atomic rename untuk mencegah partial writes dan status korup.",
+      "tags": [
+        "backend",
+        "persistence",
+        "atomicity",
+        "schema-validation",
+        "nodejs"
+      ],
+      "title": "Atomic File-Based Persistence with Schema Gating & Concurrency Control"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "import { timingSafeEqual, randomBytes } from \"node:crypto\";\n\nexport function authenticateRequest(req, expectedToken) {\n  if (!expectedToken || typeof expectedToken !== \"string\") {\n    return { authenticated: false, reason: \"Server API token not configured\" };\n  }\n\n  const extracted = extractTokenFromRequest(req);\n  if (!extracted) {\n    return { authenticated: false, reason: \"Missing Authorization header or token\" };\n  }\n\n  try {\n    const expectedBuffer = Buffer.from(expectedToken, \"utf8\");\n    const actualBuffer = Buffer.from(extracted, \"utf8\");\n    if (expectedBuffer.length !== actualBuffer.length) {\n      return { authenticated: false, reason: \"Invalid API token\" };\n    }\n    const matches = timingSafeEqual(expectedBuffer, actualBuffer);\n    return matches\n      ? { authenticated: true, reason: null }\n      : { authenticated: false, reason: \"Invalid API token\" };\n  } catch {\n    return { authenticated: false, reason: \"Token validation error\" };\n  }\n}",
+          "description": "Constant-time token validation preventing timing side-channel attacks",
+          "language": "javascript"
+        },
+        {
+          "code": "export function validateOrigin(req) {\n  const origin = req.headers[\"origin\"] || req.headers[\"referer\"];\n  if (!origin || typeof origin !== \"string\") {\n    return { valid: true, reason: null };\n  }\n\n  try {\n    const parsed = new URL(origin);\n    const hostname = parsed.hostname.toLowerCase();\n    if (hostname === \"127.0.0.1\" || hostname === \"localhost\" || hostname === \"[::1]\") {\n      return { valid: true, reason: null };\n    }\n    return { valid: false, reason: `Origin ${parsed.origin} is not allowed. Only localhost/127.0.0.1 is permitted.` };\n  } catch {\n    return { valid: false, reason: \"Malformed Origin or Referer header\" };\n  }\n}",
+          "description": "Loopback origin guard preventing unauthorized cross-origin requests",
+          "language": "javascript"
+        }
+      ],
+      "codeStructure": "src/\n└── api/\n    ├── auth.mjs         # Authentication, origin check, and idempotency store\n    ├── router.mjs       # Middleware integration and route dispatching\n    └── server.mjs       # HTTP server instantiation with security layer",
+      "confidence": 0.95,
+      "considerations": [
+        "Length check must precede `timingSafeEqual` to avoid buffer length mismatch errors in Node.js crypto.",
+        "Origin and Referer headers must be strictly restricted to loopback addresses (`127.0.0.1`, `localhost`, `[::1]`) for local API security.",
+        "Idempotency cache should have automated TTL eviction to avoid memory leaks."
+      ],
+      "keyImplementationPoints": [
+        "Gunakan `crypto.timingSafeEqual` untuk mencegah serangan timing side-channel saat memverifikasi API token.",
+        "Batasi akses origin hanya ke host loopback lokal (`127.0.0.1`, `localhost`, `[::1]`).",
+        "Dukung idempotency store dengan TTL dan persistensi disk untuk mencegah eksekusi ganda pada operasi berulang.",
+        "Simpan token lokal dengan permission ketat `0o600`."
+      ],
+      "overview": "Pola keamanan API lokal zero-dependency yang memadukan verifikasi token waktu-konstan (constant-time verification), pembatasan origin loopback lokal, dan store idempotensi berbasis TTL.",
+      "purpose": "Mengamankan endpoint REST lokal dari eksploitasi browser lintas-origin (CSRF/DNS rebinding) dan replay request tanpa rely pada middleware pihak ketiga.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/api-security.md",
+        "01-Knowledge/patterns/backend/idempotent-api-design.md"
+      ],
+      "summary": "Arsitektur keamanan API lokal zero-dependency menggunakan constant-time crypto token check, loopback origin filter, dan sliding-window TTL idempotency store.",
+      "tags": [
+        "backend",
+        "security",
+        "authentication",
+        "idempotency",
+        "timing-safe"
+      ],
+      "title": "Timing-Safe Token Authentication, Loopback Origin Filter & Idempotency Store"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export class DaemonWorkerPool {\n  constructor({ runsRoot, maxParallelJobs = 2, pollIntervalMs = 1000 }) {\n    this.runsRoot = runsRoot;\n    this.maxParallelJobs = maxParallelJobs;\n    this.pollIntervalMs = pollIntervalMs;\n    this.activeWorkers = new Map(); // jobId -> workerPromise\n    this.runningProjects = new Set(); // projectId (exclusive lock)\n  }\n\n  canScheduleProject(projectId) {\n    return !this.runningProjects.has(projectId);\n  }\n\n  async processNext() {\n    if (this.activeWorkers.size >= this.maxParallelJobs) return;\n    const queuedJobs = listJobs(this.runsRoot).filter(j => j.state === JOB_STATES.QUEUED);\n    \n    for (const job of queuedJobs) {\n      if (this.activeWorkers.size >= this.maxParallelJobs) break;\n      if (this.canScheduleProject(job.projectId)) {\n        this.runningProjects.add(job.projectId);\n        const worker = this.executeJob(job).finally(() => {\n          this.activeWorkers.delete(job.jobId);\n          this.runningProjects.delete(job.projectId);\n        });\n        this.activeWorkers.set(job.jobId, worker);\n      }\n    }\n  }\n}",
+          "description": "Bounded concurrency worker pool with project-exclusive lock enforcement",
+          "language": "javascript"
+        }
+      ],
+      "codeStructure": "src/\n├── daemon.mjs           # Daemon worker pool and orchestration loop\n├── job-queue.mjs        # Persistent FIFO job queue and state transitions\n└── run-manager.mjs      # Task execution life-cycle management",
+      "confidence": 0.94,
+      "considerations": [
+        "Pastikan pembebasan lock project terjadi di blok `finally` untuk mencegah deadlock saat worker crash.",
+        "Worker pool harus mendukung graceful shutdown dengan sinyal SIGINT/SIGTERM untuk menyelesaikan pekerjaan aktif.",
+        "State transisi harus dicatat secara persisten ke disk agar daemon dapat melanjutkan job setelah restart."
+      ],
+      "keyImplementationPoints": [
+        "Batasi eksekusi paralel maksimum (`maxParallelJobs`) untuk mencegah saturasi resource CPU/RAM.",
+        "Terapkan mutual exclusion pada level project (`runningProjects Set`) agar dua task pada repo yang sama tidak saling menimpa.",
+        "Gunakan state machine formal (`QUEUED` -> `RUNNING` -> `REVIEW` -> `DONE`/`FAILED`).",
+        "Bangun mekanisme auto-recovery saat daemon restart untuk mendeteksi job yang terhenti di tengah jalan."
+      ],
+      "overview": "Pola worker pool asinkron dengan kontrol konkurensi terbatas dan mutual exclusion pada tingkat proyek, memastikan tugas dieksekusi secara teratur dan bebas dari race condition pada repositori yang sama.",
+      "purpose": "Mengatur antrean eksekusi tugas latar belakang dengan batasan konkurensi dan isolasi proyek tanpa membutuhkan message broker berat seperti Redis atau RabbitMQ.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/job-queues.md",
+        "01-Knowledge/patterns/backend/concurrency-locks.md"
+      ],
+      "summary": "Pola daemon worker queue mandiri dengan bounded worker concurrency dan project-exclusive mutual exclusion untuk mencegah konflik git worktree dan race conditions.",
+      "tags": [
+        "backend",
+        "concurrency",
+        "job-queue",
+        "daemon",
+        "lock-management"
+      ],
+      "title": "Bounded Asynchronous Daemon Job Queue with Project-Exclusive Mutual Exclusion"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export function createWorktreeWorkspace({ repoPath, runsRoot, runId }) {\n  const worktreeDir = path.join(runsRoot, \"workspaces\", runId);\n  fs.mkdirSync(path.dirname(worktreeDir), { recursive: true });\n\n  // Create detached worktree from current HEAD/baseline\n  execFileSync(\"git\", [\"worktree\", \"add\", \"--detach\", worktreeDir, \"HEAD\"], {\n    cwd: repoPath,\n    stdio: \"pipe\",\n  });\n\n  return {\n    worktreeDir,\n    cleanup: () => {\n      try {\n        execFileSync(\"git\", [\"worktree\", \"remove\", \"--force\", worktreeDir], {\n          cwd: repoPath,\n          stdio: \"pipe\",\n        });\n      } catch {}\n    }\n  };\n}",
+          "description": "Ephemeral detached Git worktree workspace creation and cleanup",
+          "language": "javascript"
+        },
+        {
+          "code": "export function auditWorkspaceScope({ worktreeDir, allowedPaths }) {\n  const output = execFileSync(\"git\", [\"status\", \"--porcelain\"], {\n    cwd: worktreeDir,\n    encoding: \"utf8\",\n  });\n  \n  const modifiedFiles = output\n    .split(\"\\n\")\n    .map(line => line.slice(3).trim())\n    .filter(Boolean);\n\n  const violations = modifiedFiles.filter(file => \n    !allowedPaths.some(allowed => file === allowed || file.startsWith(`${allowed}/`))\n  );\n\n  return {\n    inScope: violations.length === 0,\n    modifiedFiles,\n    violations,\n  };\n}",
+          "description": "Scope audit comparing modified repository files against allowed_paths whitelist",
+          "language": "javascript"
+        }
+      ],
+      "codeStructure": "src/\n├── workspace-manager.mjs # Git worktree isolation, backup snapshot, and rollback\n├── review-workflow.mjs   # Scope enforcement, diff extraction, and conflict verification\n└── task-workflow.mjs     # Execution pipeline binding workspace to agent lifecycle",
+      "confidence": 0.95,
+      "considerations": [
+        "Pastikan git worktree dibersihkan (`git worktree prune / remove`) saat task ditolak atau selesai.",
+        "Lakukan snapshot backup untracked files sebelum menerapkan diff ke main repository.",
+        "Gunakan `git diff --check` dan dry-run patch untuk mendeteksi merge conflicts sebelum final accept."
+      ],
+      "keyImplementationPoints": [
+        "Isolasi direktori kerja agen ke dalam detached Git worktree independen.",
+        "Terapkan pengawasan ketat `allowed_paths` untuk mencegah modifikasi file di luar lingkup tugas.",
+        "Sediakan snapshot backup otomatis sebelum modifikasi diterapkan ke repositori utama.",
+        "Sertakan guardrail rollback instan saat verifikasi atau gate gagal."
+      ],
+      "overview": "Pola isolasi lingkungan eksekusi menggunakan ephemeral Git worktree dan audit jangkauan modifikasi (scope guard). Pola ini memastikan perubahan kode agen terisolasi total dari repositori utama hingga lolos seluruh tahap review dan verifikasi.",
+      "purpose": "Mencegah kontaminasi repositori utama oleh proses otomatis/coding agent dan menjamin rollback yang aman jika terjadi kegagalan eksekusi.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/workspace-isolation.md",
+        "01-Knowledge/patterns/backend/git-worktree-management.md"
+      ],
+      "summary": "Pola isolasi workspace menggunakan detached Git worktrees, path whitelist scope enforcement, dan rollback backup guards untuk eksekusi agent yang aman.",
+      "tags": [
+        "backend",
+        "git-worktree",
+        "isolation",
+        "scope-guard",
+        "rollback"
+      ],
+      "title": "Isolated Git Worktree Workspace Lifecycle with Diff Auditing & Rollback Guards"
+    },
+    {
+      "codeSnippets": [
+        {
+          "code": "export function createEventHub({ heartbeatIntervalMs = 15000 } = {}) {\n  const clients = new Set();\n  let heartbeatTimer = null;\n\n  const startHeartbeat = () => {\n    if (heartbeatTimer) return;\n    heartbeatTimer = setInterval(() => {\n      for (const client of clients) {\n        try {\n          client.res.write(`: heartbeat ${new Date().toISOString()}\\n\\n`);\n        } catch {\n          clients.delete(client);\n        }\n      }\n    }, heartbeatIntervalMs);\n    if (heartbeatTimer.unref) heartbeatTimer.unref();\n  };\n\n  const addClient = (req, res) => {\n    res.writeHead(200, {\n      \"Content-Type\": \"text/event-stream\",\n      \"Cache-Control\": \"no-cache, no-transform\",\n      \"Connection\": \"keep-alive\",\n      \"Access-Control-Allow-Origin\": \"*\",\n      \"X-Accel-Buffering\": \"no\",\n    });\n\n    const client = { req, res, connectedAt: new Date().toISOString() };\n    clients.add(client);\n    res.write(`event: connected\\ndata: ${JSON.stringify({ connectedAt: client.connectedAt })}\\n\\n`);\n\n    if (clients.size === 1) startHeartbeat();\n\n    req.on(\"close\", () => {\n      clients.delete(client);\n      if (clients.size === 0 && heartbeatTimer) {\n        clearInterval(heartbeatTimer);\n        heartbeatTimer = null;\n      }\n    });\n\n    return client;\n  };\n\n  const broadcast = (eventType, payload = {}) => {\n    const data = typeof payload === \"string\" ? payload : JSON.stringify(payload);\n    const message = `event: ${eventType}\\ndata: ${data}\\n\\n`;\n    for (const client of clients) {\n      try {\n        client.res.write(message);\n      } catch {\n        clients.delete(client);\n      }\n    }\n  };\n\n  return { addClient, broadcast, getClientCount: () => clients.size };\n}",
+          "description": "Resilient SSE event hub with automatic unref'd heartbeat and client disconnection handling",
+          "language": "javascript"
+        }
+      ],
+      "codeStructure": "src/\n├── api/\n│   ├── events.mjs       # SSE event hub, client tracking, and heartbeat timer\n│   └── router.mjs       # SSE endpoint registration and event broadcasting\n└── orchestrator.mjs     # Lifecycle event emission triggering SSE broadcasts",
+      "confidence": 0.93,
+      "considerations": [
+        "Gunakan `heartbeatTimer.unref()` agar timer SSE tidak menahan event loop Node.js saat proses hendak shutdown.",
+        "Header `X-Accel-Buffering: no` dan `Cache-Control: no-transform` esensial untuk mencegah proxy/reverse-proxy menahan stream buffer.",
+        "Dengarkan event `req.on(\"close\")` untuk segera menghapus client mati dan membersihkan resource memory."
+      ],
+      "keyImplementationPoints": [
+        "Bangun streaming SSE menggunakan Node.js native `http` response tanpa library eksternal.",
+        "Kirim heartbeat berkala (komentar SSE `: heartbeat`) untuk menjaga koneksi TCP tetap hidup melewati NAT/proxy.",
+        "Kelola lifecycle subscriber secara otomatis saat socket terputus (`req.on(\"close\")`).",
+        "Sediakan fungsi broadcast terpadu untuk mendistribusikan event lifecycle orchestrator ke semua client terhubung."
+      ],
+      "overview": "Pola komunikasi asinkron real-time Server-Sent Events (SSE) yang ringan dan zero-dependency, dilengkapi pemeliharaan koneksi via periodic heartbeat dan pengelolaan siklus hidup subscriber yang efisien.",
+      "purpose": "Mengalirkan status kemajuan tugas, log eksekusi, dan event notifikasi secara real-time ke UI/dashboard tanpa overhead koneksi WebSocket bilateral.",
+      "relatedKnowledge": [
+        "01-Knowledge/concepts/backend/realtime-sse.md",
+        "01-Knowledge/patterns/backend/event-streaming.md"
+      ],
+      "summary": "Implementasi Server-Sent Events (SSE) EventHub zero-dependency dengan keepalive heartbeat otomatis, dynamic subscriber management, dan memory leak prevention.",
+      "tags": [
+        "backend",
+        "sse",
+        "realtime",
+        "event-hub",
+        "streaming"
+      ],
+      "title": "Real-time Server-Sent Events (SSE) EventHub with Client Heartbeat Management"
+    }
+  ]
+}
