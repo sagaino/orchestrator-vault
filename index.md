@@ -216,4 +216,10 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 - [[02-Projects/starter-app/tasks/task-021|FE-021]] (Starter App)
 - [[02-Projects/starter-app/tasks/task-022|FE-022]] (Starter App)
 - [[02-Projects/starter-app/tasks/task-023|FE-023]] (Starter App)
+- [[02-Projects/orchestrator-dashboard/tasks/task-020|TASK-020]] (Orchestrator Dashboard)
+- [[02-Projects/orchestrator-dashboard/tasks/task-021|TASK-021]] (Orchestrator Dashboard)
+- [[02-Projects/orchestrator-dashboard/tasks/task-022|TASK-022]] (Orchestrator Dashboard)
+
+## Orchestrator-registered Projects
+- [[02-Projects/test-add-project/project|Test Add Project Project]]: Metadata project, repository, dan Graphify pointer.
 
