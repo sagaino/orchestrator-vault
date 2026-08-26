@@ -9,7 +9,7 @@ graphify_output: "/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json"
 verification_defaults: ["go test ./...", "go vet ./..."]
 tags: ["project", "backend", "golang"]
 created: 2026-08-25
-updated: 2026-08-25
+updated: 2026-08-26
 sources:
   - "[[01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine.md]]"
   - "[[01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md]]"

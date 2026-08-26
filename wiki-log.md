@@ -3117,3 +3117,15 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 - Result before safe fix: WARN; errors: `0`, warnings: `16`.
 - Safe fixes applied: `0`.
 - Content merge, deletion, and contradiction resolution were not automated.
+
+## [2026-08-26] project-onboarding | base-be-golang
+- Action: `PROJECT_UPDATED`; repository: `/Users/sagaino/belajar/base-be-golang`.
+- Graphify: `/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`.
+
+## [2026-08-26] blueprint-registered | backend-golang
+- Blueprint ID: `backend-golang`.
+- Contract: [[01-Knowledge/patterns/backend/project-skeleton-template]].
+- Deterministic Template: `templates/backend-golang/`.
+- Toolchain: `Go 1.22+`, verification defaults: `go test ./..., go vet ./...`.
+

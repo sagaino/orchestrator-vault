@@ -3,7 +3,7 @@ title: Project Registry
 type: registry
 tags: [registry, projects, control-center]
 created: 2026-08-14
-updated: 2026-08-25
+updated: 2026-08-26
 sources: []
 ---
 
