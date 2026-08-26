@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "In-Memory Blob URL Lifecycle & Headless IFrame Hardware Print Bridge"
 type: pattern
 tags: [pattern, frontend, blob-url, printing, pdf, hardware-printer, memory-management]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787132260416-42b894f9
+orchestrator_run: "harvest-1787132260416-42b894f9"
 sources: ["Harvest 1787132260416 42b894f9.json"]
 ---
 

@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Interactive Inline Diff Annotations and Review Revision Modal Pattern"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: task-017-20260819T015532Z-6078715f
+orchestrator_run: "task-017-20260819T015532Z-6078715f"
 sources: ["Task 017 20260819T015532Z 6078715f.json"]
 ---
 

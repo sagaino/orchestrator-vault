@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Route-Aware Session Eviction Interceptor with Interactive Modal Barrier and Atomic Credential Purge"
 type: pattern
 tags: [pattern, frontend, auth, security, axios-interceptor, session-management, error-handling]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787127791371-cc78a949
+orchestrator_run: "harvest-1787127791371-cc78a949"
 sources: ["Harvest 1787127791371 Cc78a949.json"]
 ---
 

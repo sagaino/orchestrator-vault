@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Lifecycle-Aware STOMP WebSocket Controller for Real-Time Event State"
 type: pattern
 tags: [pattern, frontend, websocket, stomp, real-time, state-management, iot]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787132260416-42b894f9
+orchestrator_run: "harvest-1787132260416-42b894f9"
 sources: ["Harvest 1787132260416 42b894f9.json"]
 ---
 

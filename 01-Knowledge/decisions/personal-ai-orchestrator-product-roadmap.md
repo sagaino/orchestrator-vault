@@ -1,10 +1,16 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+orchestrator_run: "legacy-migration:p8-0-provenance-20260822T103839Z-efa8f1a9"
+provenance_schema: 1
 title: Personal AI Orchestrator Product Roadmap
 type: decision
 tags: [personal-ai, orchestrator, dashboard, token-optimization, knowledge-workflow, roadmap]
 created: 2026-08-16
 updated: 2026-08-16
-sources: ["[[AGENTS]]", "[[README]]"]
+sources: ["[[AGENTS]]","[[README]]"]
 ---
 
 # Personal AI Orchestrator Product Roadmap

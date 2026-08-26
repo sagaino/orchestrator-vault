@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Controller-Hook-Store Feature Slicing Architecture"
 type: pattern
 tags: [pattern, frontend, architecture, modularity, zustand, react, feature-sliced]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787107893306-92ee562e
+orchestrator_run: "harvest-1787107893306-92ee562e"
 sources: ["Harvest 1787107893306 92ee562e.json"]
 ---
 

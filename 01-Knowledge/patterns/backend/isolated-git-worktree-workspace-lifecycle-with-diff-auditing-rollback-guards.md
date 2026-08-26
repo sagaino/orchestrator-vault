@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Isolated Git Worktree Workspace Lifecycle with Diff Auditing & Rollback Guards"
 type: pattern
 tags: [pattern, backend, git-worktree, isolation, scope-guard, rollback]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787130041232-c9802673
+orchestrator_run: "harvest-1787130041232-c9802673"
 sources: ["Harvest 1787130041232 C9802673.json"]
 ---
 

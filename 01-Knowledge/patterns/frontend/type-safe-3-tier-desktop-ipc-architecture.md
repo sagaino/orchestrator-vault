@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Type-Safe 3-Tier Desktop IPC Architecture"
 type: pattern
 tags: [pattern, frontend, electron, ipc, typescript, architecture, context-bridge]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787111316881-96cf68d4
+orchestrator_run: "harvest-1787111316881-96cf68d4"
 sources: ["Harvest 1787111316881 96cf68d4.json"]
 ---
 

@@ -1,11 +1,16 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-21"
+owner: "local:sagaino"
+confidence: 0.95
+provenance_schema: 1
 title: "Multi-Tier Hierarchical Error Handling & Contextual Sentry Enrichment Pipeline"
 type: pattern
 tags: [pattern, backend, error-handling, sentry, telemetry, dto-envelope]
 created: 2026-08-19
-updated: 2026-08-19
-orchestrator_run: harvest-1787128418632-596cfbe7
-sources: ["Harvest 1787128418632 596cfbe7.json"]
+updated: 2026-08-25
+orchestrator_run: "task-006-20260825T160519Z-7c3999e7"
+sources: ["Harvest 1787128418632 596cfbe7.json","[[03-Sources/other/orchestrator-runs/task-006-20260825T160519Z-7c3999e7.json]]"]
 ---
 
 # Multi-Tier Hierarchical Error Handling & Contextual Sentry Enrichment Pipeline
@@ -194,3 +199,11 @@ func convertHeaders(headers http.Header) map[string]string {
 ## 7. Source
 
 - Harvest 1787128418632 596cfbe7.json
+
+## Update from TASK-006 — 2026-08-25
+
+<!-- orchestrator-run:task-006-20260825T160519Z-7c3999e7 -->
+Pembaruan pola error handling backend Go: implementasi custom method Is(target error) bool pada struct error non-comparable (berisi map) untuk mendukung errors.Is, serta perlindungan nil-safety pada instance logger di HandleError.ErrorReturn.
+
+- Rationale: Pola hierarki error handling dan logger wrapper untuk repositori base-be-golang sudah ada pada 01-Knowledge/patterns/backend/multi-tier-hierarchical-error-handling-contextual-sentry-enrichment-pipeline.md. Temuan dari TASK-006 (metode Is() kustom untuk non-comparable error struct dan nil-safety pada logger) merupakan penyempurnaan langsung terhadap pattern existing tersebut.
+- Source: [[03-Sources/other/orchestrator-runs/task-006-20260825T160519Z-7c3999e7.json]]

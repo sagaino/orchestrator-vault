@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Multi-Engine Polyglot Persistence Store"
 type: pattern
 tags: [pattern, frontend, local-db, indexeddb, opfs, sharding, offline-storage]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787127791371-cc78a949
+orchestrator_run: "harvest-1787127791371-cc78a949"
 sources: ["Harvest 1787127791371 Cc78a949.json"]
 ---
 

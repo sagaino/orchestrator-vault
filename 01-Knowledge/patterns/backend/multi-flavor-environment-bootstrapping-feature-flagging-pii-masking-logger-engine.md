@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Multi-Flavor Environment Bootstrapping, Feature-Flagging & PII-Masking Logger Engine"
 type: pattern
 tags: [pattern, backend, devops, environment, structured-logging, pii-masking, zerolog]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787128418632-596cfbe7
+orchestrator_run: "harvest-1787128418632-596cfbe7"
 sources: ["Harvest 1787128418632 596cfbe7.json"]
 ---
 

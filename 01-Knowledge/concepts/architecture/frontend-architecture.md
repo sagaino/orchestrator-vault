@@ -1,10 +1,16 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+orchestrator_run: "legacy-migration:p8-0-provenance-20260822T103839Z-efa8f1a9"
+provenance_schema: 1
 title: Frontend Architecture & Engineering Standards
 type: concept
 tags: [topic, frontend, architecture, standards, gallery-fmfu]
 created: 2026-08-12
 updated: 2026-08-14
-sources: ["[[03-Sources/documentation/AGENTS.md]]", "[[03-Sources/documentation/rules-react.md]]", "[[03-Sources/documentation/rules-api.md]]", "[[03-Sources/documentation/rules-workflow.md]]"]
+sources: ["[[03-Sources/documentation/AGENTS.md]]","[[03-Sources/documentation/rules-react.md]]","[[03-Sources/documentation/rules-api.md]]","[[03-Sources/documentation/rules-workflow.md]]"]
 ---
 
 # Topic Hub: Frontend Architecture & Engineering Standards

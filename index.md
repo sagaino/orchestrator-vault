@@ -193,7 +193,7 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 - [[02-Projects/gallery-fmfu/project|Gallery FMFU Project]]: Metadata project, repository, dan Graphify pointer.
 - [[02-Projects/starter-app/project|Starter App Project]]: Metadata project, repository, dan Graphify pointer.
 - [[02-Projects/personal-ai-orchestrator/project|Personal AI Orchestrator Project]]: Metadata control plane, repository, policy `orchestrator-system`, dan Graphify pointer.
-- [[02-Projects/orchestrator-dashboard/project|Orchestrator Dashboard Project]]: Metadata dashboard UI, repository, dan Graphify pointer.
+- [[02-Projects/orchestrator-dashboard/project|Orchestrator Dashboard Project]]: Metadata dashboard UI, Graphify pointer, dan mandatory security/browser lifecycle gates.
 
 ### Task Templates
 
@@ -219,7 +219,41 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 - [[02-Projects/orchestrator-dashboard/tasks/task-020|TASK-020]] (Orchestrator Dashboard)
 - [[02-Projects/orchestrator-dashboard/tasks/task-021|TASK-021]] (Orchestrator Dashboard)
 - [[02-Projects/orchestrator-dashboard/tasks/task-022|TASK-022]] (Orchestrator Dashboard)
+- [[02-Projects/orchestrator-dashboard/tasks/task-023|TASK-023]] (Orchestrator Dashboard)
+- [[02-Projects/orchestrator-dashboard/tasks/task-024|TASK-024]] (Orchestrator Dashboard)
+- [[02-Projects/orchestrator-dashboard/tasks/task-025|TASK-025]] (Orchestrator Dashboard)
+- [[02-Projects/starter-app/tasks/task-024|FE-024]] (Starter App)
+- [[02-Projects/starter-app/tasks/task-025|FE-025]] (Starter App)
+- [[02-Projects/test-add-project/tasks/task-001|TASK-001]] (Test Add Project)
+- [[02-Projects/test-add-project/tasks/task-002|TASK-002]] (Test Add Project)
+- [[02-Projects/test-add-project/tasks/task-003|TASK-003]] (Test Add Project)
+- [[02-Projects/test-add-project/tasks/task-004|TASK-004]] (Test Add Project)
+- [[02-Projects/test-add-project/tasks/task-005|TASK-005]] (Test Add Project)
+- [[02-Projects/test-add-project/tasks/task-006|TASK-006]] (Test Add Project)
 
 ## Orchestrator-registered Projects
 - [[02-Projects/test-add-project/project|Test Add Project Project]]: Metadata project, repository, dan Graphify pointer.
+- [[02-Projects/base-be-golang/project|Base Be Golang Project]]: Metadata project, repository, dan Graphify pointer.
 
+## Archived Projects
+
+- [[03-Sources/other/removed-projects/test-add-project/20260821T040445Z-1ead3756/project|Test Add Project Project Archive]]: Immutable project metadata and task history.
+
+## Orchestrator Harvested Knowledge
+
+- [[01-Knowledge/patterns/backend/functional-router-registry-clean-architecture-bootstrapper|Functional Router Registry & Clean Architecture Bootstrapper]]: Pola registrasi router modular fungsional yang memisahkan kernel server HTTP Gin dari inisialisasi modul bisnis dan adapter.
+- [[01-Knowledge/patterns/backend/cross-cutting-port-facade-context-propagation-pattern|Cross-Cutting Port Facade & Context Propagation Pattern]]: Pola agregasi kapabilitas lintas-sektoral seperti caching, timezone context, error tracing, dan generator ke dalam satu struct Port yang dialirkan ke usecase layer.
+- [[01-Knowledge/patterns/backend/distributed-idempotency-guard-request-pipeline-pattern|Distributed Idempotency Guard & Request Pipeline Pattern]]: Middleware pipeline Gin berbasis Redis lock mutex untuk menjamin idempotensi eksekusi endpoint berisiko tinggi (misal transaksi/pembayaran).
+- [[01-Knowledge/patterns/backend/generic-type-safe-repository-with-atomic-transaction-coordinator|Generic Type-Safe Repository with Atomic Transaction Coordinator]]: Pola repository generik Go berbasis GORM yang dipadukan dengan DBTransaction coordinator untuk propagasi transaksi multi-repository.
+- [[01-Knowledge/patterns/backend/zero-trust-user-context-security-scope-propagation-pattern|Zero-Trust User Context & Security Scope Propagation Pattern]]: Zero-Trust User Context & Security Scope Propagation Pattern yang mengisolasi hub tracing, menyaring header sensitif, dan mempropagasi session identity antar layer.
+- [[01-Knowledge/patterns/backend/fluent-typed-http-request-pipeline-with-dynamic-mime-content-marshalling|Fluent Typed HTTP Request Pipeline with Dynamic MIME Content Marshalling]]: Fluent Typed HTTP Request Pipeline with Dynamic MIME Content Marshalling untuk komunikasi antar-service yang konsisten dan type-safe.
+- [[01-Knowledge/patterns/backend/authenticated-aes-gcm-envelope-encryption-with-scrypt-dynamic-key-derivation|Authenticated AES-GCM Envelope Encryption with Scrypt Dynamic Key Derivation]]: Authenticated AES-GCM Envelope Encryption with Scrypt Dynamic Key Derivation untuk perlindungan data tingkat tinggi dengan proteksi brute-force dan bit-flipping.
+- [[01-Knowledge/patterns/backend/rfc-4226-dynamic-truncation-counter-based-otp-deterministic-reference-engine|RFC 4226 Dynamic-Truncation Counter-based OTP & Deterministic Reference Engine]]: RFC 4226 Dynamic-Truncation Counter-based OTP & Deterministic Reference Engine untuk autentikasi 2FA dan generasi nomor referensi transaksi anti-kolisi.
+- [[01-Knowledge/patterns/backend/dynamic-reflective-orm-engine-sql-ast-clause-builder|Dynamic Reflective ORM Engine & SQL AST Clause Builder]]: Reflective ORM Engine & SQL AST Clause Builder yang mengotomatisasi pemetaan kolom struct, transformasi snake_case, dan pembentukan query parameterized dinamis.
+- [[01-Knowledge/patterns/backend/resilient-redis-distributed-caching-atomicity-gateway-pattern|Resilient Redis Distributed Caching & Atomicity Gateway Pattern]]: Distributed Caching & Atomicity Gateway berbasis Redis RESP3 dengan atomic SetNX lock dan lifecycle TTL management.
+- [[01-Knowledge/patterns/backend/s3-compatible-binary-object-storage-stream-buffer-gateway|S3-Compatible Binary Object Storage & Stream Buffer Gateway]]: S3/MinIO Binary Object Storage Gateway dengan streaming I/O io.Reader, Static V4 Credentials, dan pencegahan socket leak.
+- [[01-Knowledge/patterns/backend/mime-compliant-native-smtp-mailer-transactional-notification-bridge|MIME-Compliant Native SMTP Mailer & Transactional Notification Bridge]]: Native SMTP Mailer & Notification Bridge dengan RFC 2822 MIME 1.0 header builder dan SASL PlainAuth handshake.
+- [[01-Knowledge/patterns/backend/unified-error-normalization-and-localized-envelope-pipeline|unified-error-normalization-and-localized-envelope-pipeline]]: Arsitektur penanganan dan normalisasi error terpadu yang memetakan error database dan domain menjadi respon HTTP standar dengan lokalisasi pesan multi-bahasa dinamis dan pelaporan insiden otomatis.
+- [[01-Knowledge/patterns/backend/declarative-struct-tag-reflection-query-binder-and-validation-matrix|declarative-struct-tag-reflection-query-binder-and-validation-matrix]]: Sistem binding dan validasi permintaan HTTP berbasis refleksi deklaratif yang mengekstrak nilai query, path, dan multipart ke DTO bertipe aman dengan matriks terjemahan pesan kesalahan terpadu.
+- [[01-Knowledge/patterns/backend/context-aware-temporal-virtualization-and-timezone-normalization-engine|context-aware-temporal-virtualization-and-timezone-normalization-engine]]: Mesin virtualisasi waktu berbasis konteks dan utilitas transformasi data yang menormalisasi operasi tanggal/waktu multi-zona serta menyediakan formatting memori reflektif.
+- [[01-Knowledge/patterns/backend/zero-leakage-structured-observability-and-sentry-enrichment-pipeline|zero-leakage-structured-observability-and-sentry-enrichment-pipeline]]: Pipeline observabilitas terstruktur dan telemetri Sentry dengan sanitasi data otomatis, frame-skipping logger, dan bootstrapping multi-lingkungan yang aman.

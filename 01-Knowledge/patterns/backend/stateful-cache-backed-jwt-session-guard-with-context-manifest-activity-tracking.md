@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Stateful Cache-Backed JWT Session Guard with Context Manifest & Activity Tracking"
 type: pattern
 tags: [pattern, backend, authentication, jwt, session-management, redis, security, golang]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787128418632-596cfbe7
+orchestrator_run: "harvest-1787128418632-596cfbe7"
 sources: ["Harvest 1787128418632 596cfbe7.json"]
 ---
 

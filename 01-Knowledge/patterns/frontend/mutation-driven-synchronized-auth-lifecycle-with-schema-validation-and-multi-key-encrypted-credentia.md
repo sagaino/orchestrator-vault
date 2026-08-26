@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Mutation-Driven Synchronized Auth Lifecycle with Schema Validation and Multi-Key Encrypted Credential Dispatch"
 type: pattern
 tags: [pattern, frontend, auth, react-query, mutation, validation, session-lifecycle]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787127791371-cc78a949
+orchestrator_run: "harvest-1787127791371-cc78a949"
 sources: ["Harvest 1787127791371 Cc78a949.json"]
 ---
 

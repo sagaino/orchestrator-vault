@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Interactive Clarification Modal and Re-submission Pattern for AI Task Intake Flow"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-17
 updated: 2026-08-17
-orchestrator_run: task-012-20260817T024732Z-191bb5d8
+orchestrator_run: "task-012-20260817T024732Z-191bb5d8"
 sources: ["Task 012 20260817T024732Z 191bb5d8.json"]
 ---
 

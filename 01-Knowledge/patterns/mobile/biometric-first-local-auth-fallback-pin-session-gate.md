@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Biometric-First Local Auth & Fallback PIN Session Gate"
 type: pattern
 tags: [pattern, mobile, flutter, security, local-auth, biometrics, pin, session-management]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787110568549-448b547b
+orchestrator_run: "harvest-1787110568549-448b547b"
 sources: ["Harvest 1787110568549 448b547b.json"]
 ---
 

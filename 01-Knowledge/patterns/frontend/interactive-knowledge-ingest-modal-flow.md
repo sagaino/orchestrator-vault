@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Interactive Raw Knowledge Ingestion Studio Modal with Multi-Destination Routing and Domain Filtering"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: task-016-20260819T013216Z-8dc91dd0
+orchestrator_run: "task-016-20260819T013216Z-8dc91dd0"
 sources: ["Task 016 20260819T013216Z 8dc91dd0.json"]
 ---
 

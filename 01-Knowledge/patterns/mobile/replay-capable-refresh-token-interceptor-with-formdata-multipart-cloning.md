@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Replay-Capable Refresh Token Interceptor with FormData Multipart Cloning"
 type: pattern
 tags: [pattern, mobile, flutter, jwt, refresh-token, dio, multipart-upload]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787125853633-86cbed7a
+orchestrator_run: "harvest-1787125853633-86cbed7a"
 sources: ["Harvest 1787125853633 86cbed7a.json"]
 ---
 

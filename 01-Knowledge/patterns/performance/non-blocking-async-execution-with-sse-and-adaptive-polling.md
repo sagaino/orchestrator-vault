@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Non-Blocking Async Execution Endpoints with SSE and Adaptive Polling Backoff"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-17
 updated: 2026-08-17
-orchestrator_run: task-001-20260817T023005Z-5213f004
+orchestrator_run: "task-001-20260817T023005Z-5213f004"
 sources: ["Task 001 20260817T023005Z 5213f004.json"]
 ---
 

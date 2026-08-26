@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Automated Codebase Architecture Scanning and Knowledge Harvesting Engine"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: task-008-20260819T020208Z-3871c5f4
+orchestrator_run: "task-008-20260819T020208Z-3871c5f4"
 sources: ["Task 008 20260819T020208Z 3871c5f4.json"]
 ---
 

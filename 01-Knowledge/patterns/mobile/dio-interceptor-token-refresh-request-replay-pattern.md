@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Dio Interceptor Token Refresh & Request Replay Pattern"
 type: pattern
 tags: [pattern, mobile, flutter, dio, network, jwt, interceptor]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787116476503-650c4b2e
+orchestrator_run: "harvest-1787116476503-650c4b2e"
 sources: ["Harvest 1787116476503 650c4b2e.json"]
 ---
 

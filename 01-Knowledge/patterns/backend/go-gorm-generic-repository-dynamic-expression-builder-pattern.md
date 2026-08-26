@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Go GORM Generic Repository & Dynamic Expression Builder Pattern"
 type: pattern
 tags: [pattern, backend, golang, gorm, generic, repository, database, orm]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787109509918-5a621114
+orchestrator_run: "harvest-1787109509918-5a621114"
 sources: ["Harvest 1787109509918 5a621114.json"]
 ---
 

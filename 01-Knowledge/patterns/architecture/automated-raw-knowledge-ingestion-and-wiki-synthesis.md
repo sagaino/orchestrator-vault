@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Automated Multi-Domain Raw Knowledge Ingestion and Structured Wiki Synthesis Engine"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: task-006-20260819T012732Z-3ad58bba
+orchestrator_run: "task-006-20260819T012732Z-3ad58bba"
 sources: ["Task 006 20260819T012732Z 3ad58bba.json"]
 ---
 

@@ -6,7 +6,7 @@ repository: "/Users/sagaino/ciniru/orchestrator-dashboard"
 agent: agy
 graphify: true
 graphify_output: "/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json"
-verification_defaults: ["typecheck", "lint", "build"]
+verification_defaults: ["typecheck", "lint", "build", "test:security", "test:browser"]
 blueprint: frontend-vite
 template_version: 2
 blueprint_policy_version: 3
@@ -14,7 +14,7 @@ template_checksum: "f7fba97b339bd2e06c2ba970a7d0413f105b23501cb1d24c978540de7729
 scaffold_mode: DETERMINISTIC_TEMPLATE
 tags: ["project", "frontend", "react", "vite"]
 created: 2026-08-16
-updated: 2026-08-16
+updated: 2026-08-22
 sources: ["[[01-Knowledge/patterns/frontend/project-skeleton-template]]"]
 ---
 
@@ -30,7 +30,7 @@ Project metadata used by Personal AI Orchestrator. Source code and Graphify outp
 - Coding agent: `agy`
 - Graphify enabled: `true`
 - Graphify output: `/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json`
-- Verification defaults: `typecheck`, `lint`, `build`
+- Verification defaults: `typecheck`, `lint`, `build`, `test:security`, `test:browser`
 - Scaffold mode: `DETERMINISTIC_TEMPLATE`
 - Template version: `2`
 

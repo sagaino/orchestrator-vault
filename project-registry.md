@@ -3,7 +3,7 @@ title: Project Registry
 type: registry
 tags: [registry, projects, control-center]
 created: 2026-08-14
-updated: 2026-08-16
+updated: 2026-08-25
 sources: []
 ---
 
@@ -11,12 +11,14 @@ sources: []
 
 The registry resolves an Obsidian task's `project` value to the real repository. Obsidian is the control center; it is not the coding agent's working directory.
 
-| project_id | project page | repository | agent | graphify | graphify output |
-|---|---|---|---|---|---|
+| project_id | project page | repository | agent | graphify | graphify output | relationships |
+| --- | --- | --- | --- | --- | --- | --- |
 | `gallery-fmfu` | [[02-Projects/gallery-fmfu/project]] | `/Users/sagaino/ciniru/gallery-fmfu` | `agy` | `true` | `/Users/sagaino/ciniru/gallery-fmfu/graphify-out/graph.json` |
 | `starter-app` | [[02-Projects/starter-app/project]] | `/Users/sagaino/ciniru/starter-app` | `agy` | `true` | `/Users/sagaino/ciniru/starter-app/graphify-out/graph.json` |
 | `personal-ai-orchestrator` | [[02-Projects/personal-ai-orchestrator/project]] | `/Users/sagaino/Documents/personal-ai-orchestrator` | `agy` | `true` | `/Users/sagaino/Documents/personal-ai-orchestrator/graphify-out/graph.json` |
-| `orchestrator-dashboard` | [[02-Projects/orchestrator-dashboard/project]] | `/Users/sagaino/ciniru/orchestrator-dashboard` | `agy` | `true` | `/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json` |
+| `orchestrator-dashboard` | [[02-Projects/orchestrator-dashboard/project]] | `/Users/sagaino/ciniru/orchestrator-dashboard` | `agy` | `true` | `/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json` | `[{"type":"CONSUMES_API","targetProjectId":"personal-ai-orchestrator","contractPaths":[],"verification":[]}]` |
+| `test-add-project` | [[02-Projects/test-add-project/project]] | `/Users/sagaino/ciniru/test-add-project` | `agy` | `true` | `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json` |
+| `base-be-golang` | [[02-Projects/base-be-golang/project]] | `/Users/sagaino/belajar/base-be-golang` | `agy` | `true` | `/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json` | `[]` |
 
 ## Registry Rules
 

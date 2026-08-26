@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Structured Inline Code Comments and Targeted Revision Formatting for Agent Review Cycles"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: task-007-20260819T015030Z-3fb07f02
+orchestrator_run: "task-007-20260819T015030Z-3fb07f02"
 sources: ["Task 007 20260819T015030Z 3fb07f02.json"]
 ---
 

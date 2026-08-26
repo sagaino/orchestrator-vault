@@ -1,4 +1,10 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+orchestrator_run: "legacy-migration:p8-0-provenance-20260822T103839Z-efa8f1a9"
+provenance_schema: 1
 title: Axios Client & Services
 type: concept
 tags: [entity, axios, services, http]

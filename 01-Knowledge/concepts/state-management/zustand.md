@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Zustand Feature State Management"
 type: concept
 tags: [concept, orchestrator-promotion]
 created: 2026-08-14
 updated: 2026-08-14
-orchestrator_run: fe-016-20260814T160123Z-3d0077e9
+orchestrator_run: "fe-016-20260814T160123Z-3d0077e9"
 sources: ["Fe 016 20260814T160123Z 3d0077e9.json"]
 ---
 

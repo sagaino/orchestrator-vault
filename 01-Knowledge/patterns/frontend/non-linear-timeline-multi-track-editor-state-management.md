@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Non-Linear Timeline & Multi-Track Editor State Management"
 type: pattern
 tags: [pattern, frontend, state-management, zustand, video-editor, timeline, react]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787111041173-fb05651c
+orchestrator_run: "harvest-1787111041173-fb05651c"
 sources: ["Harvest 1787111041173 Fb05651c.json"]
 ---
 

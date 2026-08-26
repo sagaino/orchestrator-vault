@@ -4,8 +4,13 @@ type: candidate
 tags: [knowledge-candidate, template]
 created: 2026-08-14
 updated: 2026-08-14
+provenance_schema: 1
+orchestrator_run: null
 classification: NEW | UPDATE | PROJECT_ONLY | IGNORE
-confidence: low
+confidence: 0.0
+owner: knowledge-curator
+review_by: 2099-12-31
+supersession: ACTIVE
 project: null
 sources: []
 ---

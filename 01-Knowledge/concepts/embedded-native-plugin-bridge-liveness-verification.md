@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Embedded Native Plugin Bridge & Liveness Verification"
 type: concept
 tags: [concept, orchestrator-promotion]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787116045805-ce1291de
+orchestrator_run: "harvest-1787116045805-ce1291de"
 sources: ["Harvest 1787116045805 Ce1291de.json"]
 ---
 

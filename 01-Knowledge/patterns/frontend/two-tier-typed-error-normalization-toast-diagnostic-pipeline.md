@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "two-tier-typed-error-normalization-toast-diagnostic-pipeline"
 type: pattern
 tags: [pattern, frontend, error-handling, http-client, toast, validation, axios]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787132260416-42b894f9
+orchestrator_run: "harvest-1787132260416-42b894f9"
 sources: ["Harvest 1787132260416 42b894f9.json"]
 ---
 

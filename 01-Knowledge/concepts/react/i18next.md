@@ -1,10 +1,16 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+orchestrator_run: "legacy-migration:p8-0-provenance-20260822T103839Z-efa8f1a9"
+provenance_schema: 1
 title: i18next Localization
 type: concept
 tags: [entity, i18n, localization, i18next]
 created: 2026-08-12
 updated: 2026-08-14
-sources: ["[[03-Sources/documentation/AGENTS.md]]", "[[03-Sources/documentation/rules-react.md]]"]
+sources: ["[[03-Sources/documentation/AGENTS.md]]","[[03-Sources/documentation/rules-react.md]]"]
 ---
 
 # i18next Localization

@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Authenticated Blob Stream & Lifecycle-Managed Media Loader"
 type: pattern
 tags: [pattern, frontend, media, blob, memory-management, file-download, react]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787112018130-d8cc3a8b
+orchestrator_run: "harvest-1787112018130-d8cc3a8b"
 sources: ["Harvest 1787112018130 D8cc3a8b.json"]
 ---
 

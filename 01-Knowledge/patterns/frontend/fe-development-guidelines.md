@@ -1,4 +1,10 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+orchestrator_run: "legacy-migration:p8-0-provenance-20260822T103839Z-efa8f1a9"
+provenance_schema: 1
 title: FE Development Guidelines
 type: pattern
 tags:
@@ -8,7 +14,7 @@ tags:
   - standards
 created: 2026-08-12
 updated: 2026-08-14
-sources:
+sources: ["[[03-Sources/documentation/AGENTS.md]]","[[03-Sources/documentation/rules-react.md]]","[[03-Sources/documentation/rules-api.md]]","[[03-Sources/documentation/rules-workflow.md]]"]
   - "[[03-Sources/documentation/AGENTS.md]]"
   - "[[03-Sources/documentation/rules-react.md]]"
   - "[[03-Sources/documentation/rules-api.md]]"

@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Agent Context Token Optimization and Error Tail Sanitization"
 type: pattern
 tags: [pattern, orchestrator-promotion]
 created: 2026-08-17
 updated: 2026-08-17
-orchestrator_run: task-002-20260817T023357Z-ebc176c5
+orchestrator_run: "task-002-20260817T023357Z-ebc176c5"
 sources: ["Task 002 20260817T023357Z Ebc176c5.json"]
 ---
 

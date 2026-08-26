@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "action": "PROJECT_UNREGISTERED_AND_ARCHIVED",
+  "removedAt": "2026-08-21T04:04:45.065Z",
+  "removedBy": "dashboard-user",
+  "project": {
+    "id": "test-add-project",
+    "title": "Test Add Project",
+    "repository": "/Users/sagaino/ciniru/test-add-project",
+    "graphifyOutput": "/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json"
+  },
+  "archive": {
+    "sourcePath": "02-Projects/test-add-project",
+    "path": "03-Sources/other/removed-projects/test-add-project/20260821T040445Z-1ead3756",
+    "inventory": [
+      {
+        "path": "project.md",
+        "size": 970,
+        "sha256": "82bb5655e1fc52a7f842bd7c81a25a434dbf680831f2a0cf3b6d9bf287c8eee7"
+      }
+    ],
+    "wikilinkRewrite": {
+      "from": "02-Projects/test-add-project/",
+      "to": "03-Sources/other/removed-projects/test-add-project/20260821T040445Z-1ead3756/",
+      "mutablePagesUpdated": 2
+    }
+  },
+  "preservation": {
+    "repository": true,
+    "graphify": true,
+    "globalKnowledge": true,
+    "knowledgeCandidates": true,
+    "immutableRunSources": true
+  }
+}

@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Hierarchical RBAC & Dynamic Module Authorization Guard Pattern"
 type: pattern
 tags: [pattern, frontend, rbac, security, authorization, routing, react-router]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787111639165-e1d30e37
+orchestrator_run: "harvest-1787111639165-e1d30e37"
 sources: ["Harvest 1787111639165 E1d30e37.json"]
 ---
 

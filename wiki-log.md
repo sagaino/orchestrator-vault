@@ -2185,3 +2185,935 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 ## [2026-08-20] task-completion | Tambah Tombol dan Contoh Modal Dialog pada LoginForm
 - run_id: fe-023-20260820T041442Z-23aa0285 | task-completion
 - Task dan run selesai dengan human approval.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, lint, build`.
+- Registered by: `user`; blueprint: `frontend-vite`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T030239Z-f993edb5`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-removal | dummy-test-proj
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/tmp/dummy`.
+- Archive: `03-Sources/other/removed-projects/dummy-test-proj/20260821T030407Z-27f278c1`; files preserved: `1`.
+- Removed by: `test`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-removal | dummy-test-proj-2
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/tmp/dummy-test-proj-2`.
+- Archive: `03-Sources/other/removed-projects/dummy-test-proj-2/20260821T030436Z-44afa5a7`; files preserved: `1`.
+- Removed by: `test`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-archive-purge | dummy-test-proj-2
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `test`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/dummy-test-proj-2/20260821T030436Z-b4807a6d`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T030557Z-d2d53f71`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T030648Z-5039890e`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T030858Z-553da785`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-archive-purge | test-add-project
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `4`; files: `8`.
+- Purged by: `dashboard-user`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/test-add-project/20260821T030858Z-9e8395f2`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T030956Z-0dddc0b4`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T031159Z-69c360c3`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T032726Z-1f043966`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-archive-purge | test-add-project
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `3`; files: `6`.
+- Purged by: `dashboard-user`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/test-add-project/20260821T032856Z-233865aa`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+
+## [2026-08-21] task-intake | TASK-020
+- Created `02-Projects/orchestrator-dashboard/tasks/task-020.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T033145Z-269b0f27`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-archive-purge | test-add-project
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `dashboard-user`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/test-add-project/20260821T033152Z-063e50e0`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+## [2026-08-21] knowledge-sync | Refactor penutupan AddProjectModal tanpa delay setTimeout
+- run_id: task-020-20260821T033025Z-d841467d | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-020.md.
+
+## [2026-08-21] task-completion | Refactor penutupan AddProjectModal tanpa delay setTimeout
+- run_id: task-020-20260821T033025Z-d841467d | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | TASK-021
+- Created `02-Projects/orchestrator-dashboard/tasks/task-021.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+## [2026-08-21] knowledge-sync | Audit and Refactor Delay Usage to Native Async/Await API Flows
+- run_id: task-021-20260821T033718Z-91d80ee3 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-021.md.
+
+## [2026-08-21] task-completion | Audit and Refactor Delay Usage to Native Async/Await API Flows
+- run_id: task-021-20260821T033718Z-91d80ee3 | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | TASK-022
+- Created `02-Projects/orchestrator-dashboard/tasks/task-022.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+## [2026-08-21] knowledge-sync | Hapus setTimeout dan Tutup Dialog Langsung Setelah Proses Async Await di KnowledgeIngestModal
+- run_id: task-022-20260821T034906Z-9d09f718 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-022.md.
+
+## [2026-08-21] task-completion | Hapus setTimeout dan Tutup Dialog Langsung Setelah Proses Async Await di KnowledgeIngestModal
+- run_id: task-022-20260821T034906Z-9d09f718 | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | TASK-023
+- Created `02-Projects/orchestrator-dashboard/tasks/task-023.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+## [2026-08-21] knowledge-sync | Fix Toast Layering to Render Above Modal Dialogs
+- run_id: task-023-20260821T040245Z-d3522fce | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-023.md.
+
+## [2026-08-21] task-completion | Fix Toast Layering to Render Above Modal Dialogs
+- run_id: task-023-20260821T040245Z-d3522fce | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-21] project-removal | test-add-project
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-add-project`.
+- Archive: `03-Sources/other/removed-projects/test-add-project/20260821T040445Z-1ead3756`; files preserved: `1`.
+- Removed by: `dashboard-user`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-21] project-onboarding | test-add-project
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-add-project`.
+- Graphify: `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json`; verification defaults: `typecheck, build`.
+- Registered by: `user`.
+
+
+## [2026-08-21] task-intake | TASK-024
+- Created `02-Projects/orchestrator-dashboard/tasks/task-024.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+
+## [2026-08-21] task-request-changes | TASK-024
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `user`; feedback: apakah karena pemanggilan toast setelah setAcceptModalOpen menjadi false makanya toast tidak muncul?.
+
+## [2026-08-21] knowledge-sync | Fix Toast Notification on Task Accept
+- run_id: task-024-20260821T040932Z-378dfdc9 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-024.md.
+
+## [2026-08-21] task-completion | Fix Toast Notification on Task Accept
+- run_id: task-024-20260821T040932Z-378dfdc9 | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | TASK-025
+- Created `02-Projects/orchestrator-dashboard/tasks/task-025.md` from orchestrator conversational intake for project `orchestrator-dashboard`.
+- Requested by `user`; execution queued.
+
+## [2026-08-21] knowledge-sync | Hapus Karakter Plus Duplikat pada Tombol Add Project Sidebar
+- run_id: task-025-20260821T043059Z-a321cd66 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-025.md.
+
+## [2026-08-21] task-completion | Hapus Karakter Plus Duplikat pada Tombol Add Project Sidebar
+- run_id: task-025-20260821T043059Z-a321cd66 | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | FE-024
+- Created `02-Projects/starter-app/tasks/task-024.md` from orchestrator conversational intake for project `starter-app`.
+- Requested by `user`; execution not requested.
+
+## [2026-08-21] knowledge-sync | Tambahkan komponen AiOsPilotBadge mandiri untuk pilot AI OS
+- run_id: fe-024-20260821T181422Z-8996074e | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-024.md.
+
+## [2026-08-21] task-completion | Tambahkan komponen AiOsPilotBadge mandiri untuk pilot AI OS
+- run_id: fe-024-20260821T181422Z-8996074e | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | FE-025
+- Created `02-Projects/starter-app/tasks/task-025.md` from orchestrator conversational intake for project `starter-app`.
+- Requested by `user`; execution not requested.
+
+
+## [2026-08-21] task-intake | TASK-001
+- Created `02-Projects/test-add-project/tasks/task-001.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `user`; execution not requested.
+
+## [2026-08-21] knowledge-sync | Tambahkan Indikator Visual AI OS Pilot Ready pada ProjectReady Page
+- run_id: task-001-20260821T182637Z-85874c74 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-001.md.
+
+## [2026-08-21] task-completion | Tambahkan Indikator Visual AI OS Pilot Ready pada ProjectReady Page
+- run_id: task-001-20260821T182637Z-85874c74 | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-21] task-intake | TASK-002
+- Created `02-Projects/test-add-project/tasks/task-002.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `user`; execution not requested.
+
+## [2026-08-22] project-update | Orchestrator Dashboard Phase 3.3 gates
+- Added `test:security` and deterministic `test:browser` to the project's mandatory verification defaults.
+- Browser failure artifacts retain screenshots, video, trace, and error context under the dashboard test-results directory.
+
+
+## [2026-08-21] task-intake | TASK-003
+- Created `02-Projects/test-add-project/tasks/task-003.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `user`; execution not requested.
+
+## [2026-08-21] knowledge-sync | Dokumentasi Subsection AI OS Explicit Approval Lifecycle di README.md
+- run_id: task-003-20260821T192858Z-f53e742b | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-003.md.
+
+## [2026-08-21] task-completion | Dokumentasi Subsection AI OS Explicit Approval Lifecycle di README.md
+- run_id: task-003-20260821T192858Z-f53e742b | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-22] phase-acceptance | Phase 7 — Visual QA Completion
+- P7.0–P7.5 human-accepted: versioned visual evidence, multi-viewport capture, deterministic comparison and layout diagnostics, accessibility evidence, visual feedback revision linkage, and human-gated Visual QA certification.
+- Backend implementation commits: `b561cc5`, `2e5ad15`, `b08679a`, `7865300`, `833b2c0`, `801a5d1`.
+- Dashboard implementation commits: `d0b5281`, `b8e6659`, `c7813f3`, `a4ccfa3`.
+- Acceptance commits: `c01b15b`, `3d97071`, `e356f20`, `43bc6ba`, `fc16e79`, `d778f7d`.
+- Verification: backend full suite and dashboard typecheck/lint/build/security/browser gates passed.
+- Contract: `PHASE_7_VISUAL_QA_CONTRACT.md`; roadmap next step: Phase 8, starting at P8.0 Knowledge Provenance and Quality Contract.
+
+## [2026-08-22] phase-acceptance | Phases 4–6 — Production Hardening, Efficiency, and Guarded Release
+- Phase 4 human-accepted and production-certified: threat model, disaster recovery, policy/capability enforcement, reliability injection, operations governance, and production readiness.
+- Phase 5 human-accepted through P5.4: reproducible token benchmark, deterministic routing, bounded context retrieval, signal cleanup, and efficiency certification.
+- Phase 6 human-accepted through P6.5: release compatibility, candidate builder, external supervisor/queue drain, health and rollback drills, operations UI, and guarded self-update certification.
+- Backend implementation commits: `63a0235`, `88d43e9`, `ae793cb`, `fe6a7b7`, `997c194`, `b396c47`, `4254078`, `2036cff`, `1900114`, `9ec60d5`, `70bc19f`, `0dfd8c0`, `d71fa48`, `8586163`, `0e1e8d7`, `d92399b`, `21f9484`, `5775a31`.
+- Contracts: `PHASE_4_PRODUCTION_HARDENING.md`, `PHASE_5_TO_V1_EXECUTION_PLAN.md`, and `PHASE_6_RELEASE_CONTRACT.md`.
+
+## [2026-08-22] phase-acceptance | P8.0 — Knowledge Provenance and Quality Contract
+- P8.0 human-accepted: global knowledge now has an explicit provenance contract covering schema version, source links, orchestrator run, confidence, owner, review date, and supersession state; project-only knowledge keeps its task-scoped fast path.
+- New Wiki pages receive complete provenance metadata. Legacy pages remain explicit migration warnings and are not rewritten automatically.
+- Verification: backend full suite and smoke passed; default Vault health reports 0 errors and 231 legacy provenance warnings.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; roadmap next step: P8.1 Duplicate, Merge, and Staleness Workflow.
+
+## [2026-08-22] phase-implementation | P8.1 — Duplicate, Merge, and Staleness Workflow
+- P8.1 implemented pending human acceptance: deterministic exact/near-duplicate candidates, contradiction flags, review-by staleness queue, explicit merge preview, checksum-guarded confirmation, source retention as `SUPERSEDED`, and reversible index updates.
+- CLI/API actions: maintenance report, duplicate queue, stale queue, merge preview, confirmed apply, and guarded revert. Knowledge Center now exposes the review queue and merge preview flow.
+- Verification: backend full suite and smoke passed; dashboard typecheck/lint/build passed; `test/knowledge-maintenance.mjs` passed.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; acceptance remains a separate human gate.
+
+## [2026-08-22] phase-acceptance | P8.1 — Duplicate, Merge, and Staleness Workflow
+- P8.1 human-accepted: deterministic duplicate candidates, stale review queue, explicit checksum-guarded merge preview/apply, source retention, immutable audit artifact, and reversible index rollback.
+- Verification evidence remains green: backend full suite/smoke/API tests, P8.1 maintenance test, dashboard verification suite, and browser tests.
+- No knowledge content was merged during acceptance; Vault remains protected by the explicit human-confirmed merge workflow.
+- Roadmap next step: P8.2 Alert Ownership and Runbooks.
+
+## [2026-08-22] phase-implementation | P8.2 — Alert Ownership and Runbooks
+- P8.2 implemented pending human acceptance: durable alert ownership, owner role, snooze expiry, deduplication window, bounded runbook steps, and explicit evidence-backed resolution history.
+- Operations API and UI now expose acknowledge, snooze, runbook, and resolution evidence actions; acknowledgement, snooze, and resolution never override readiness admission.
+- Verification: operations governance/API suites, dedicated alert unit/API tests, backend gates, and dashboard verification are required evidence for acceptance.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; acceptance remains a separate human gate.
+
+## [2026-08-22] phase-acceptance | P8.2 — Alert Ownership and Runbooks
+- P8.2 human-accepted: durable alert ownership, owner role, snooze expiry, deduplication window, bounded runbook steps, and explicit evidence-backed resolution history.
+- Verification evidence remains green: backend full suite/smoke, operations governance/API tests, dedicated alert unit/API tests, dashboard verification, and browser tests.
+- Runtime alert state was not changed during acceptance; acknowledgement and resolution remain explicit operator actions.
+- Roadmap next step: P8.3 Backup Rotation and Recovery Review.
+
+## [2026-08-22] phase-implementation | P8.3 — Backup Rotation and Recovery Review
+- P8.3 implemented pending human acceptance: independent backup-target status, launchd-compatible schedule preview/install artifact, registered-backup verification, rotation preview, and durable recovery-drill status/overdue alert.
+- Schedule installation requires explicit confirmation but only writes a reviewable plist/JSON artifact; it does not run `launchctl`. Rotation is preview-only and never permanently deletes data. Restore and promotion remain separate operator actions.
+- Verification: `test/backup-operations.test.mjs`, `test/backup-operations-api.test.mjs`, disaster-recovery/operations governance/API regression suites, and dashboard verification/browser gates passed.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; acceptance remains a separate human gate. Roadmap next step after acceptance: P8.4 Soak and Capacity Harness.
+
+## [2026-08-22] phase-acceptance | P8.3 — Backup Rotation and Recovery Review
+- P8.3 human-accepted: independent-target status, launchd-compatible schedule artifact, explicit install confirmation, preview-only rotation, repeatable registered-backup verification, and overdue recovery-drill alert are certified.
+- Safety evidence: schedule never activates `launchctl`; rotation never permanently deletes; restore and promotion remain separate operator actions; stale/invalid backup admission behavior remains unchanged.
+- Verification evidence: backend full suite/smoke, P8.3 unit/API tests, disaster-recovery/operations regressions, dashboard verification, and browser tests passed.
+- Roadmap next step: P8.4 Soak and Capacity Harness.
+
+## [2026-08-22] phase-implementation | P8.4 — Soak and Capacity Harness
+- P8.4 implemented pending human acceptance: isolated virtual-time soak runner, bounded synthetic queue workload, deterministic restart points, authenticated API/SSE load, artifact-growth caps, Operations alert collection, and machine-readable invariant evidence.
+- Safety boundary: synthetic jobs are admitted but never executed; provider invocation, automatic approval, restore, and permanent delete remain disabled. Default execution uses an isolated temporary fixture; durable evidence requires an explicit `--soak-root`.
+- Verification: `test/soak-capacity-harness.test.mjs`, CLI smoke invocation, and existing backend regression gates passed.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; acceptance remains a separate human gate. Roadmap next step after acceptance: P8.5 Operations Certification.
+
+## [2026-08-22] phase-acceptance | P8.4 — Soak and Capacity Harness
+- P8.4 human-accepted: deterministic virtual 24-hour and 72-hour soak runs passed with bounded synthetic workload, restart reconstruction, API/SSE load, artifact-growth caps, alert collection, and invariant evidence.
+- Safety evidence: no provider invocation, automatic approval, duplicate admission, lost persisted state, unbounded output, or unrecoverable runtime state was observed.
+- Verification evidence: backend full suite/smoke, dedicated soak harness test, CLI soak runs, and prior dashboard gates passed.
+- Roadmap next step: P8.5 Operations Certification.
+
+## [2026-08-22] phase-implementation | P8.5 — Operations Certification
+- P8.5 implemented pending human acceptance: certification bundle/checksum, 72-hour soak gate, RPO backup verification, RTO recovery-drill gate, alert owner/action gate, knowledge/audit integrity checks, and resource-capacity trend gate.
+- Successful automated checks produce `CERTIFICATION_READY` but retain `humanGate.confirmed=false`; failed checks produce `CONDITIONAL` with named blockers. No acknowledgement, repair, restore promotion, or runtime activation is performed automatically.
+- Verification: `test/operations-certification.test.mjs` passed; backend regression and smoke gates are required before acceptance.
+- Contract: `PHASE_8_KNOWLEDGE_CONTRACT.md`; acceptance remains a separate human gate. This is the final planned Phase 8 packet.
+
+## [2026-08-22] phase-acceptance | P8.5 — Operations Certification
+- P8.5 human-accepted: the final Operations Certification bundle verifies 72-hour soak evidence, RPO backup integrity, RTO recovery drill, alert ownership/action, knowledge integrity, audit integrity, and resource-capacity trend.
+- Human gate behavior remains explicit: certification evidence can become `CERTIFICATION_READY`, but the bundle never self-confirms production approval or activates runtime changes.
+- Verification evidence: backend full suite/smoke and dedicated P8.5 certification test passed.
+- Phase 8 complete through P8.5. Next roadmap area: Phase 9 v1.0 GA Certification.
+
+## [2026-08-22] phase-implementation | P9.0 — Release Manifest and Installation Contract
+- P9.0 implemented pending human acceptance: versioned release manifest, supported macOS/Node contract, backend/dashboard lockfile checksums, absolute data roots, dependency install policy, data-preserving uninstall behavior, and external quarantine rollback steps.
+- CLI verification is fail-closed on checksum drift, unsupported host, missing lockfile, non-absolute roots, backup roots nested under source data, or missing launcher.
+- Verification: test/release-manifest.test.mjs passed; full backend and smoke gates are required for acceptance.
+- Contract: PHASE_9_GA_CONTRACT.md; roadmap next step: P9.1 Migration and Upgrade Matrix.
+
+## [2026-08-22] phase-implementation | P9.1 — Migration and Upgrade Matrix
+- P9.1 implemented pending human acceptance: versioned and repeatable migration state machine with durable checkpoint, verified disaster-recovery backup prerequisite, fail-closed incompatible-schema rejection, interrupted/failed rollback evidence, and replay protection.
+- Matrix evidence covers clean install, Phase 4 → v1.0, restore-then-upgrade while preserving recovery quarantine, future schema rejection, interrupted migration, failed-step rollback, and repeatable replay.
+- CLI: `migration-matrix` writes `runs/runtime/migration-matrix/p9.1-report.json` and a checksum; production activation and migration remain human-gated.
+- Verification: `test/migration-upgrade.test.mjs` passed; full backend and smoke gates are required before acceptance.
+- Contract: PHASE_9_GA_CONTRACT.md; roadmap next step after acceptance: P9.2 Final Pilot Cohort.
+
+## [2026-08-22] phase-acceptance | P9.0 — Release Manifest and Installation Contract
+- P9.0 human-accepted: the versioned release manifest, supported host and Node contract, lockfile checksums, absolute data roots, data-preserving uninstall behavior, and external quarantine rollback steps were reviewed and accepted.
+- Verification evidence: `test/release-manifest.test.mjs`, full backend suite, and smoke test passed. Production release activation remains separately gated.
+
+## [2026-08-22] phase-acceptance | P9.1 — Migration and Upgrade Matrix
+- P9.1 human-accepted: the clean-install, Phase 4 → v1.0, restore-then-upgrade, incompatible schema, interrupted migration, failed rollback, and repeatable replay cases all passed.
+- Safety evidence: verified backup is required before data-changing migration; recovery quarantine remains execution-blocked; incompatible and failed/interrupted migrations remain fail-closed; no production migration or release activation was performed.
+- Verification evidence: `test/migration-upgrade.test.mjs`, full backend suite, smoke test, and checksummed `runs/runtime/migration-matrix/p9.1-report.json` passed.
+- Phase 9 is complete through P9.1. Roadmap next step: P9.2 Final Pilot Cohort.
+
+## [2026-08-22] phase-implementation | P9.2 — Final Pilot Cohort
+- P9.2 implemented pending human acceptance: isolated cohort harness with 10 bounded task manifests across 3 clean registered projects (`pilot-web`, `pilot-api`, `pilot-mobile`).
+- Coverage includes code, UI, executor restart recovery, request-changes followed by acceptance, explicit rejection, failed-apply rollback, knowledge CREATE, and knowledge UPDATE.
+- Exit checks passed: all accepted paths authorized, 0 duplicate invocation, 0 secret findings, 0 unrecoverable rejected/failed mutation, and complete evidence for every applied run. Cohort produced 8 applied runs and 2 safe rejected/rollback outcomes.
+- CLI: `pilot-cohort` writes `runs/runtime/pilot-cohort/p9.2-report.json` and a checksum; human gate remains `confirmed=false` and no production mutation/provider invocation occurs.
+- Verification: `test/final-pilot-cohort.test.mjs` and the full backend/smoke gates are required evidence for acceptance.
+- Contract: PHASE_9_GA_CONTRACT.md; roadmap next step after acceptance: P9.3 Operator Documentation and Recovery Rehearsal.
+
+## [2026-08-22] phase-acceptance | P9.2 — Final Pilot Cohort
+- P9.2 human-accepted: the isolated final cohort passed with 10 bounded tasks across 3 clean registered projects, including code, UI, recovery, request-changes, rejection, rollback, knowledge CREATE, and knowledge UPDATE.
+- Safety evidence: 100% of applied paths were authorized; duplicate invocation count was 0; secret findings were 0; rejected/failed paths were unapplied or rollback-verified; every applied run had explicit human approval and complete evidence.
+- Verification evidence: `test/final-pilot-cohort.test.mjs`, full backend suite, smoke test, and checksummed `runs/runtime/pilot-cohort/p9.2-report.json` passed.
+- Phase 9 is complete through P9.2. Roadmap next step: P9.3 Operator Documentation and Recovery Rehearsal.
+
+## [2026-08-22] phase-implementation | P9.3 — Operator Documentation and Recovery Rehearsal
+- P9.3 implemented pending human acceptance: `P9_3_OPERATOR_RUNBOOK.md` documents UI-first install, start/stop, task lifecycle, review/request-changes/accept/reject, guarded update/rollback, alerts, backup, restore, and emergency recovery.
+- The isolated rehearsal takes and verifies an external quiescent backup, restores to a new clean target, reconstructs project/task/audit state, and confirms `RECOVERY_QUARANTINE` remains execution-blocked until explicit promotion.
+- CLI: `recovery-rehearsal` writes `runs/runtime/recovery-rehearsal/p9.3-report.json` and a checksum; promotion is never performed automatically.
+- Verification: `test/operator-recovery-rehearsal.test.mjs` passed; full backend and smoke gates are required before acceptance.
+- Contract: PHASE_9_GA_CONTRACT.md; roadmap next step after acceptance: P9.4 Final Threat Model and v1.0 Certificate.
+
+## [2026-08-22] phase-acceptance | P9.3 — Operator Documentation and Recovery Rehearsal
+- P9.3 human-accepted: the UI-first operator runbook and clean-target recovery rehearsal were reviewed and accepted.
+- Evidence: install/start-stop, task lifecycle, review, update, alerts, backup, restore, rollback, and emergency recovery procedures are documented; the rehearsal verified backup integrity, state reconstruction, and `RECOVERY_MODE_BLOCKED` quarantine behavior.
+- Safety boundary remains active: no recovery-target promotion, production mutation, or automatic release activation was performed.
+- Verification evidence: `test/operator-recovery-rehearsal.test.mjs`, full backend suite, smoke test, and checksummed `runs/runtime/recovery-rehearsal/p9.3-report.json` passed.
+- Phase 9 is complete through P9.3. Roadmap next step: P9.4 Final Threat Model and v1.0 Certificate.
+
+## [2026-08-22] phase-implementation | P9.4 — Final Threat Model and v1.0 Certificate
+- P9.4 implemented pending human acceptance: final local-first threat model, residual-risk register, 11-gate rerun matrix, source/audit/release provenance anchoring, documentation checks, and checksummed v1.0 certificate.
+- Required gates: adversarial, reliability, recovery, operations, browser, benchmark, self-update, visual QA, soak, install, and migration. Gate output is redacted and records status, exit code, duration, and command.
+- Safety boundary: no residual CRITICAL/HIGH risk is accepted; the remaining MEDIUM runtime-growth risk has owner, control, expiry, and strong-review acceptance. Certificate remains `humanGate.approved=false` and does not assign v1.0.0 or activate production.
+- CLI: `final-certification` writes `runs/runtime/certifications/v1.0-final-certificate.json`; `final-certification-verify` verifies its checksum.
+- Verification: `test/final-v1-certification.test.mjs` passed; full gate rerun and clean-repository evidence are required before acceptance.
+- Contract: PHASE_9_GA_CONTRACT.md; roadmap next step after acceptance: v1.0 GA decision.
+
+## [2026-08-22] phase-acceptance | P9.4 — Final Threat Model and v1.0 Certificate
+- P9.4 human-accepted: the final threat model, residual-risk review, 11-gate rerun matrix, clean-repository check, audit-head anchor, release provenance, documentation presence, and bundle checksums were reviewed and accepted.
+- Final certificate status remains `CERTIFIED_HUMAN_GATE_REQUIRED` with `humanGate.approved=false`; phase acceptance does not assign v1.0.0, promote a recovery target, or activate production.
+- Latest certificate: `runs/runtime/certifications/v1.0-final-certificate.json`; checksum `7d988e22c2657fc5bacba0a3ff51bbb3c4abbd88b3cc78defa244568157c2abc`.
+- Verification evidence: all 11 P9.4 gates passed and `final-certification-verify` returned valid.
+- Phase 9 v1.0 GA certification roadmap is complete. Future work requiring multi-user, cloud, public access, unattended agents, mobile sync, or a plugin marketplace requires a separately approved v2 scope and threat model.
+
+## [2026-08-22] ga-remediation | Evidence and Live Readiness
+- GA Remediation 1 replaces the synthetic P9.2 cohort with a balanced selection of 10 persisted, human-approved real runs across at least 3 projects. Real request-changes, recovery/reconciliation, and rejection-without-mutation histories are required.
+- Selected run manifests and recovery-rehearsal artifacts are now copied into durable checksummed evidence bundles; reports no longer rely on deleted temporary paths.
+- Final certification now rejects injected production gate evidence, runs the 25-round reliability gate, requires Operations status READY, verifies both backend and dashboard provenance/cleanliness/version alignment, expires after seven days, and requires separate identified certificate acceptance.
+- The operator runbook now matches the safe product boundary: dashboard is for inspection/preparation; CLI and the external supervisor retain authority for host lifecycle, restore, promotion, and release activation.
+- Backend and dashboard release metadata are aligned to 1.0.0. A fresh certificate, exact commit/tag, and production activation remain separate gates after verification.
+- A reproducible release-artifact builder now archives both clean Git commits and records component checksums, versions, commit IDs, and dependency-lock inventory.
+
+## [2026-08-22] ga-acceptance | GA Remediation 1 — v1.0.0
+- Human acceptance `GA-REMEDIATION-1` recorded in final certificate by `human:GA-REMEDIATION-1`; certificate status is `CERTIFIED` and all machine, evidence, provenance, expiry, and human gates verify successfully.
+- Certificate ID: `v1-final-20260822T084231354Z-013f9fcf`; accepted certificate checksum: `c8691adf64105bd69daf16249ab488ecf3a85cccaa38ccb75d21ded0ec3abda3`.
+- Exact GA tags created: backend `v1.0.0` at `3ff2b54927034955b61e424d5b5dc193cd7c996c`; dashboard `v1.0.0` at `18c3a8793fa3fe38e416e14e64a921e1981099cd`.
+- Production activation was not performed. Deployment/activation remains a separate explicit operator action.
+
+## [2026-08-22] hotfix-implementation | AI OS v1.0.1 — Authenticated Task Intake
+- v1.0.1 implemented pending human acceptance after a live task request failed because the capability sandbox removed `HOME` and subsequently could not access the authenticated macOS Keychain session.
+- Resolution: preserve allowlisted `HOME`; route planner/retrospective/knowledge stages through the agent profile; correct writable-root policy and macOS canonical paths; require `agy --sandbox` for authenticated provider invocations; retain environment filtering, deadlines, output caps, network profiles, and read/write denial for `.ssh`, `.aws`, `.gnupg`, `.kube`, and `.docker`.
+- Live evidence: a sandboxed authenticated `agy` invocation succeeded, and the exact reported `test-add-project` request produced a valid structured draft without mutating the project or creating a task.
+- Release safety: accepted `v1.0.0` tags/certificate remain unchanged. v1.0.1 requires fresh machine certification and explicit human acceptance before tagging; production activation remains separate.
+
+## [2026-08-22] hotfix-certification | AI OS v1.0.1
+- Fresh v1.0.1 machine certification reached `CERTIFIED_HUMAN_GATE_REQUIRED`; all 11 adversarial, reliability, recovery, operations, browser, benchmark, self-update, visual-QA, soak, install, and migration gates passed with non-injected evidence.
+- Provenance: backend commit `7a3ad0ea22e6b6b5c8b1478eede24211026cf2c6`; dashboard commit `007d7e0f4161872f5092cece95a26ae6defb4be0`; both package versions are `1.0.1` and both repositories were clean at certification time.
+- Certificate: `runs/runtime/certifications/v1.0.1-final-certificate.json`; checksum `f2a1bee6cb951cdbbde1ab69573dc3a355e8df7a375709b77248b4d9e5e6fddf`.
+- Runtime was restarted cleanly after certification. Human acceptance and creation of `v1.0.1` tags remain pending; production activation remains separate.
+
+
+## [2026-08-22] task-intake | TASK-004
+- Created `02-Projects/test-add-project/tasks/task-004.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `local:sagaino`; execution not requested.
+
+## [2026-08-22] hotfix-implementation | AI OS v1.0.2 — Browser Verification Isolation
+- v1.0.2 implemented pending human acceptance after TASK-004 passed typecheck/build but Playwright could not bind its local server because the verification sandbox denied loopback networking; generated Playwright metadata and screenshots were then misclassified as out-of-scope source changes.
+- Resolution: browser verification may bind/connect only on local loopback while external traffic remains denied; `test-results`, `playwright-report`, and `blob-report` are excluded from source snapshots, including persisted older baselines; environment-only failures do not consume AI repair attempts.
+- Live regression evidence: the exact TASK-004 Playwright test passed inside its isolated worktree, the sandbox permitted `127.0.0.1` but returned `EPERM` for an external IP, and the normalized TASK-004 delta contains only `src/pages/Login/index.tsx`.
+- Full backend and dashboard verification passed. Fresh release certification, runtime restart, and explicit human acceptance remain required; the original failed TASK-004 evidence is preserved and can be retried as a new run after deployment.
+
+## [2026-08-22] hotfix-certification | AI OS v1.0.2
+- Fresh v1.0.2 machine certification reached `CERTIFIED_HUMAN_GATE_REQUIRED`; all 11 adversarial, reliability, recovery, operations, browser, benchmark, self-update, visual-QA, soak, install, and migration gates passed with non-injected evidence.
+- Provenance: backend commit `3667925e507f522cf9b49e56c24db562437f9aa6`; dashboard commit `6debc29bda1566a675a20d97fb427197b358b48b`; both package versions are `1.0.2` and both repositories were clean at certification time.
+- Certificate: `runs/runtime/certifications/v1.0.2-final-certificate.json`; checksum `38cff4975ceca66f66134d267953b4bb73d9b0b408c0c30375d7dbcfee9ccebc`.
+- Human acceptance and creation of `v1.0.2` tags remain pending; production activation remains separate.
+
+## [2026-08-22] hotfix-implementation | AI OS v1.0.3 — Safe Retry and Empty Visual Evidence
+- v1.0.3 implemented pending human acceptance after the historical TASK-004 run remained blocked by its pre-hotfix persisted scope audit and the run inspector reported a normal missing visual-certification record as HTTP 404.
+- Resolution: recognize the known loopback/Playwright-artifact failure as safe infrastructure retry when the agent's source changes are within allowed paths; keep real source/scope failures force-gated; return `data: null` for absent visual certification while rejecting tampered records.
+- Regression evidence: retry classification and visual-certification tests passed; the original failed run remains immutable and is eligible for a safe retry after activation.
+
+## [2026-08-22] hotfix-certification | AI OS v1.0.3
+- Fresh v1.0.3 machine certification reached `CERTIFIED_HUMAN_GATE_REQUIRED`; all 11 adversarial, reliability, recovery, operations, browser, benchmark, self-update, visual-QA, soak, install, and migration gates passed with non-injected evidence.
+- Provenance: backend commit `02fdd5c8d8884a2d1f10ec3be30348ed9813c5b2`; dashboard commit `ca14d1a4b03a14f5dfa59a1ffcd9d57a00d8656e`; both package versions are `1.0.3` and both repositories were clean at certification time.
+- Certificate: `runs/runtime/certifications/v1.0.3-final-certificate.json`; checksum `8d54b5b5f2d629802b9d4dbe71d1017e6a89a978a32f13ca14ef308f72e2531f`.
+- Human acceptance and creation of `v1.0.3` tags remain pending; production activation remains separate.
+
+## [2026-08-22] hotfix-implementation | AI OS v1.0.4 — Post-Apply Browser Verification
+- v1.0.4 implemented pending human acceptance after TASK-004's initial browser verification passed but Accept & Sync Wiki failed during post-apply Playwright verification because loopback permission was not propagated to the apply path.
+- Resolution: post-apply verification now uses the frozen script name to grant loopback-only browser access; ordinary checks remain no-network; the rolled-back failed run can be safely retried without `--force`.
+- Regression evidence: post-apply verification policy tests passed and the project repository is clean after rollback.
+
+## [2026-08-22] hotfix-certification | AI OS v1.0.4
+- Fresh v1.0.4 machine certification reached `CERTIFIED_HUMAN_GATE_REQUIRED`; all 11 adversarial, reliability, recovery, operations, browser, benchmark, self-update, visual-QA, soak, install, and migration gates passed with non-injected evidence.
+- Provenance: backend commit `94f3d976f9557a4fc69d1951929e60a9563b69dc`; dashboard commit `79a324b5fa1916f60d14468b6d770a3f115ed1d8`; both package versions are `1.0.4` and both repositories were clean at certification time.
+- Certificate: `runs/runtime/certifications/v1.0.4-final-certificate.json`; checksum `d4dd1e9c3544ccf3787897dd9a32dba29c06e5e5ee0e6cb2a7c5b94487279f3b`.
+- Human acceptance and creation of `v1.0.4` tags remain pending; production activation remains separate.
+
+
+## [2026-08-22] task-retry | TASK-004
+- Preserved failed run `task-004-20260822T092552Z-fe6608d7` and queued a replacement job.
+- Requested by `local:sagaino`; safe infrastructure retry: `true`.
+
+
+## [2026-08-22] task-retry | TASK-004
+- Preserved failed run `task-004-20260822T094734Z-8a9e1d10` and queued a replacement job.
+- Requested by `local:sagaino`; safe infrastructure retry: `true`.
+
+## [2026-08-22] knowledge-sync | Tambahkan title 'Login test dengan AI OS' di tengah Card pada halaman Login
+- run_id: task-004-20260822T100035Z-db52b935 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-004.md.
+
+## [2026-08-22] task-completion | Tambahkan title 'Login test dengan AI OS' di tengah Card pada halaman Login
+- run_id: task-004-20260822T100035Z-db52b935 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-22] runtime-remediation | Daemon tetap hidup saat cleanup worktree
+- Incident: setelah Accept TASK-004, cleanup worktree berbarengan dengan Operations Readiness scan dan backend daemon berhenti; dashboard kemudian menerima 502 dari seluruh endpoint.
+- Remediation commit: `ff9b45fb18da67e4ca3d4a7eaac5c8fd29a8475a` — scanner menangani race `ENOENT/ENOTDIR` dan worker pool mencatat readiness error tanpa mematikan daemon.
+- Verification: `npm test` PASS, browser gate PASS (5 tests), health/proxy smoke PASS setelah polling 20 detik.
+- Re-certified machine evidence: `runs/runtime/certifications/v1.0.4-final-certificate.json`; checksum `b071070958bf4e1aa42bd26eaeb7c7685b61463cc2918dd8197ca34883fba7f6`.
+- Human acceptance untuk certificate tetap terpisah dan belum dilakukan.
+
+
+## [2026-08-22] task-intake | TASK-005
+- Created `02-Projects/test-add-project/tasks/task-005.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `local:sagaino`; execution not requested.
+
+## [2026-08-22] knowledge-sync | Ubah Background Color Card Menjadi Biru pada ProjectReadyPage
+- run_id: task-005-20260822T101800Z-cedbefbf | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-005.md.
+
+## [2026-08-22] task-completion | Ubah Background Color Card Menjadi Biru pada ProjectReadyPage
+- run_id: task-005-20260822T101800Z-cedbefbf | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-08-22] task-intake | TASK-006
+- Created `02-Projects/test-add-project/tasks/task-006.md` from orchestrator conversational intake for project `test-add-project`.
+- Requested by `local:sagaino`; execution not requested.
+
+## [2026-08-22] knowledge-sync | Ubah Background Color Card di Halaman Login Menjadi Biru Muda
+- run_id: task-006-20260822T102301Z-867800c3 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-006.md.
+
+## [2026-08-22] task-completion | Ubah Background Color Card di Halaman Login Menjadi Biru Muda
+- run_id: task-006-20260822T102301Z-867800c3 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-22] knowledge-maintenance | P8.0 provenance migration and button styling
+- Corrected the provenance scope classifier so `02-Projects/` documents are `PROJECT_ONLY`; they no longer generate global P8.0 warnings.
+- Created and applied migration plan `p8-0-provenance-20260822T103839Z-efa8f1a9` for 161 `01-Knowledge/` pages (824 metadata fields; 644 inferred defaults) with checksum-guarded rollback.
+- Audit artifact: `03-Sources/other/knowledge-decisions/p8-0-provenance-20260822T103839Z-efa8f1a9.json`; rollback remains available with `knowledge-provenance-rollback p8-0-provenance-20260822T103839Z-efa8f1a9 --confirm`.
+- Disaster-recovery backup: `/Users/sagaino/Documents/personal-ai-orchestrator-backups/p8-0-provenance-20260822/dr-20260822T103832Z-131f7a10` (READY, 1,839 files).
+- Verification: Knowledge health `errors=0, warnings=0`; P8.1 maintenance `staleReviewItems=0`, `duplicateCandidates=0`.
+- Dashboard button consistency: outline actions now use the same slate action background as the other dark-mode controls.
+- Implementation commits: backend `fc95c612f2fec534c29473f4cfae10315f0ab561`; dashboard `4a613265ed3c48c57a0f6c67703048b2fc22cf31`.
+- Release artifact refreshed for v1.0.4: checksum `882fd3a746e336ef83bc90c98315bf66ba5a63b02e2993fd3fbac16670c052d6`.
+- Final certification refreshed: `runs/runtime/certifications/v1.0.4-final-certificate.json`, checksum `5a0337df66eb98bb7909e9eae08691d90749a733251c8565bff17a2d567a5c4f`; all required gates PASS, human gate remains separate.
+
+## [2026-08-22] review-remediation | AI OS operational clarity and guarded provenance workflow
+- Queue Drain now separates historical ledger totals from actual pending work (`jobs`, `runs`, `invocations`) and reports `READY`, `PENDING_WORK`, or `STOP_DAEMON_REQUIRED`; backup evidence now falls back to completed/created timestamps when verification records omit `backedUpAt`.
+- Knowledge Center now exposes P8.0 provenance migration as an explicit preview → confirmation → checksum-guarded apply → rollback workflow; no silent content rewrite is introduced. API coverage verifies confirmation gating and exact rollback.
+- Documentation corrected: the Phase 5–v1.0 plan now reflects implementation status, and the P8.0 contract documents the migration CLI/API/UI path.
+- Verification: backend `npm test` PASS; dashboard typecheck, lint, build, and browser gate (5 tests) PASS; final certification required gates PASS with status `CERTIFIED_HUMAN_GATE_REQUIRED`.
+- Implementation commits: backend `a25d8e4449aef6bb9477e008a30f34f784e50386`; dashboard `da85a174f9b1514aec557f4a62305f1a70c68161`.
+- Release artifact v1.0.4 checksum `0aad5628954a3731c7a3894decd18a9bf2897083397b11cfa4d969623715c2be`; final certificate checksum `3e7b737ab2db3a8de71daddfb6b5b524988ebefabbcf247aa7488f5a25c38265`.
+
+## [2026-08-22] human-acceptance | AI OS v1.0.4
+- Final certificate `runs/runtime/certifications/v1.0.4-final-certificate.json` accepted by `local:sagaino` at `2026-08-22T11:07:11.815Z`.
+- Certificate status is now `CERTIFIED`; checksum `981e04885f93f8675f924c0562798c15c9ed968910ec9fbb176ea854e37b1dae`.
+- This acceptance assigns the release certificate only. Production activation remains a separate explicit external-supervisor operation.
+
+## [2026-08-22] review-remediation | Backup freshness, graceful restart, and browser evidence
+- Backup readiness now exposes a non-blocking `OPS_BACKUP_SCHEDULE` reminder for missing/inactive schedule artifacts and a freshness warning during the final 25% of the RPO window. Admission remains allowed until a critical backup blocker occurs; the readiness CLI exits nonzero only when admission is closed.
+- `./start.sh stop` now sends graceful termination, waits for drain, and uses `SIGKILL` only as a bounded fallback. The daemon records `SHUTDOWN_DRAINED`/`SHUTDOWN_DRAIN_TIMEOUT` and exposes restart reconciliation status/counts in `/api/daemon/status` and Operations.
+- Dashboard browser evidence now covers Knowledge health/maintenance/provenance preview → apply → rollback and Operations backup reminder/restart reconciliation. Browser gate: 7/7 passed.
+- Acceptance documentation synchronized: `P9_4_THREAT_MODEL.md`, `PHASE_5_TO_V1_EXECUTION_PLAN.md`, `PHASE_9_GA_CONTRACT.md`, `AI_OS_MVP_SCOPE.md`, `V1_0_4_HOTFIX.md`, and `PHASE_4_DR_RUNBOOK.md` now distinguish the accepted v1.0.4 certificate from post-certificate changes that require re-certification. Production activation remains separate.
+- Implementation commits: backend `93a4ff8`, `2c58a855064addca4e0ab682b3e864dbd9cafb08`, and `5c4bc96363675e447ded3f5e730ef154f837bb80`; dashboard `4d9dd56a598aa9025611b5783a3b139b3cdbef41`.
+- Release artifact checksum: `5dcc2bc40c30ff8511b6ce844ad535f33d18b24b9f7e1bfdc6b4f275dfc21852`; manifest checksum: `112b01ac12fe9e359dfd574d34654e228d62b42b6899b9d8722573530170f2b9`.
+- Fresh certificate is `CERTIFIED_HUMAN_GATE_REQUIRED` with all gates PASS; checksum `d094dc3291610e7927c64868f27e743d1e45d7c82d39b45f32147fed2e73d332`. Human acceptance is required again because source changed after the previously accepted certificate.
+
+## [2026-08-23] knowledge-sync | Inspect starter-app
+- run_id: fe-026-20260823T092015Z-4c0bf290 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-23] task-completion | Inspect starter-app
+- run_id: fe-026-20260823T092015Z-4c0bf290 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-23] knowledge-sync | Record test-add-project write-enabled pilot
+- run_id: task-007-20260823T094233Z-586953f1 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-007.md.
+
+## [2026-08-23] task-completion | Record test-add-project write-enabled pilot
+- run_id: task-007-20260823T094233Z-586953f1 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-23] knowledge-sync | Create v2-existing-live-test.ts
+- run_id: task-008-20260823T102925Z-d27f7741 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-23] task-completion | Create v2-existing-live-test.ts
+- run_id: task-008-20260823T102925Z-d27f7741 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-23] knowledge-sync | Verify orchestrator-dashboard baseline and client contract compatibility
+- run_id: task-026-20260823T134351Z-3a37f11a | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-026.md.
+
+## [2026-08-23] task-completion | Verify orchestrator-dashboard baseline and client contract compatibility
+- run_id: task-026-20260823T134351Z-3a37f11a | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-23] knowledge-sync | Verify personal-ai-orchestrator backend test suite and route stability
+- run_id: task-009-20260823T152008Z-07f3266f | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/personal-ai-orchestrator/tasks/TASK-009.md.
+
+## [2026-08-23] task-completion | Verify personal-ai-orchestrator backend test suite and route stability
+- run_id: task-009-20260823T152008Z-07f3266f | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Refactor Operations Feature Module Structure
+- run_id: task-029-20260824T025414Z-8b7441cf | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-029.md.
+
+## [2026-08-24] task-completion | Refactor Operations Feature Module Structure
+- run_id: task-029-20260824T025414Z-8b7441cf | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Refactor Objectives Feature Module Structure
+- run_id: task-028-20260824T025414Z-9ba11b3f | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-028.md.
+
+## [2026-08-24] task-completion | Refactor Objectives Feature Module Structure
+- run_id: task-028-20260824T025414Z-9ba11b3f | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Refactor Decisions Feature Module Structure
+- run_id: task-027-20260824T025414Z-dea28975 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-027.md.
+
+## [2026-08-24] task-completion | Refactor Decisions Feature Module Structure
+- run_id: task-027-20260824T025414Z-dea28975 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Refactor Skills Feature Module Structure
+- run_id: task-030-20260824T032141Z-3363685b | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-030.md.
+
+## [2026-08-24] task-completion | Refactor Skills Feature Module Structure
+- run_id: task-030-20260824T032141Z-3363685b | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Verify Full Quality Gates and Integration
+- run_id: task-031-20260824T032542Z-d39160bd | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-24] task-completion | Verify Full Quality Gates and Integration
+- run_id: task-031-20260824T032542Z-d39160bd | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Sesuaikan padding halaman Skills
+- run_id: task-032-20260824T052820Z-45d84183 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-032.md.
+
+## [2026-08-24] task-completion | Sesuaikan padding halaman Skills
+- run_id: task-032-20260824T052820Z-45d84183 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Update login page background color
+- run_id: task-009-20260824T091605Z-c53b467a | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/test-add-project/tasks/TASK-009.md.
+
+## [2026-08-24] task-completion | Update login page background color
+- run_id: task-009-20260824T091605Z-c53b467a | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Set Objective visual & E2E evidence dropdown default to closed
+- run_id: task-035-20260824T170749Z-45777b05 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-035.md.
+
+## [2026-08-24] task-completion | Set Objective visual & E2E evidence dropdown default to closed
+- run_id: task-035-20260824T170749Z-45777b05 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Verify Objectives page build and visual evidence toggle behavior
+- run_id: task-036-20260824T171038Z-8638d1a7 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-24] task-completion | Verify Objectives page build and visual evidence toggle behavior
+- run_id: task-036-20260824T171038Z-8638d1a7 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Enable auto collapse/expand on header click for Objective visual & E2E evidence
+- run_id: task-037-20260824T183233Z-03e8ac89 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-037.md.
+
+## [2026-08-24] task-completion | Enable auto collapse/expand on header click for Objective visual & E2E evidence
+- run_id: task-037-20260824T183233Z-03e8ac89 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Configure collapsible dropdowns for Objective page sections
+- run_id: task-038-20260824T185711Z-3cb60809 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-038.md.
+
+## [2026-08-24] task-completion | Configure collapsible dropdowns for Objective page sections
+- run_id: task-038-20260824T185711Z-3cb60809 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-24] knowledge-sync | Set Dynamic Initial Tab in Objectives Feature
+- run_id: task-039-20260824T191108Z-09024f09 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/orchestrator-dashboard/tasks/TASK-039.md.
+
+## [2026-08-24] task-completion | Set Dynamic Initial Tab in Objectives Feature
+- run_id: task-039-20260824T191108Z-09024f09 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] project-onboarding | base-be-golang
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/belajar/base-be-golang`.
+- Graphify: `/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`.
+
+## [2026-08-25] project-onboarding | base-be-golang
+- Action: `PROJECT_UPDATED`; repository: `/Users/sagaino/belajar/base-be-golang`.
+- Graphify: `/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`.
+
+## [2026-08-25] knowledge-sync | Implement GET /health endpoint, Gin route, and unit tests
+- run_id: task-001-20260825T143349Z-d9cc22fb | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-001.md.
+
+## [2026-08-25] task-completion | Implement GET /health endpoint, Gin route, and unit tests
+- run_id: task-001-20260825T143349Z-d9cc22fb | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Sort default list objectives response descending by recency
+- run_id: task-010-20260825T150341Z-4f077681 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/personal-ai-orchestrator/tasks/TASK-010.md.
+
+## [2026-08-25] task-completion | Sort default list objectives response descending by recency
+- run_id: task-010-20260825T150341Z-4f077681 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Implement /products API endpoints and logic
+- run_id: task-002-20260825T152906Z-79b4739c | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-002.md.
+
+## [2026-08-25] task-completion | Implement /products API endpoints and logic
+- run_id: task-002-20260825T152906Z-79b4739c | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Add unit and integration tests for /products
+- run_id: task-003-20260825T154323Z-b3e5e496 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-003.md.
+
+## [2026-08-25] task-completion | Add unit and integration tests for /products
+- run_id: task-003-20260825T154323Z-b3e5e496 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Verify project test suite and static analysis
+- run_id: task-004-20260825T155450Z-824e7b66 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-25] task-completion | Verify project test suite and static analysis
+- run_id: task-004-20260825T155450Z-824e7b66 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Fix nil pointer dereference in error handler and logger
+- run_id: task-006-20260825T160519Z-7c3999e7 | knowledge-sync
+- Knowledge page diperbarui: 01-Knowledge/patterns/backend/multi-tier-hierarchical-error-handling-contextual-sentry-enrichment-pipeline.md.
+
+## [2026-08-25] task-completion | Fix nil pointer dereference in error handler and logger
+- run_id: task-006-20260825T160519Z-7c3999e7 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Fix Product ID UUID scanning in entity and repository
+- run_id: task-005-20260825T161000Z-aa091f1d | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-005.md.
+
+## [2026-08-25] task-completion | Fix Product ID UUID scanning in entity and repository
+- run_id: task-005-20260825T161000Z-aa091f1d | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Verify project build, test suite, and static checks
+- run_id: task-007-20260825T161408Z-afe6a3f2 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-25] task-completion | Verify project build, test suite, and static checks
+- run_id: task-007-20260825T161408Z-afe6a3f2 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] query & update | Link Golang Clean Architecture Patterns to base-be-golang
+- Updated `02-Projects/base-be-golang/project.md` with explicit architecture patterns:
+  - `[[01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine.md]]`
+  - `[[01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md]]`
+  - `[[01-Knowledge/patterns/backend/declarative-route-registration-context-enriching-guard-pipeline.md]]`
+  - `[[01-Knowledge/patterns/backend/go-gorm-generic-repository-dynamic-expression-builder-pattern.md]]`
+
+## [2026-08-25] knowledge-sync | Implement Contact Domain Entity, Model, and Repository
+- run_id: task-008-20260825T164510Z-032d074a | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-008.md.
+
+## [2026-08-25] task-completion | Implement Contact Domain Entity, Model, and Repository
+- run_id: task-008-20260825T164510Z-032d074a | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Implement Contact Usecase Logic
+- run_id: task-009-20260825T164946Z-6dfcd597 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-009.md.
+
+## [2026-08-25] task-completion | Implement Contact Usecase Logic
+- run_id: task-009-20260825T164946Z-6dfcd597 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Implement Contact Controller, DTOs, and Route Registration
+- run_id: task-010-20260825T165341Z-032e7c53 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-010.md.
+
+## [2026-08-25] task-completion | Implement Contact Controller, DTOs, and Route Registration
+- run_id: task-010-20260825T165341Z-032e7c53 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Implement Unit and Handler Tests for Contact CRUD
+- run_id: task-011-20260825T165909Z-4d5a3871 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/base-be-golang/tasks/TASK-011.md.
+
+## [2026-08-25] task-completion | Implement Unit and Handler Tests for Contact CRUD
+- run_id: task-011-20260825T165909Z-4d5a3871 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-25] knowledge-sync | Run Project Verification Suite
+- run_id: task-012-20260825T170201Z-bb8e96cc | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-25] task-completion | Run Project Verification Suite
+- run_id: task-012-20260825T170201Z-bb8e96cc | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] harvest | Functional Router Registry & Clean Architecture Bootstrapper
+- harvest: 01-Knowledge/patterns/backend/functional-router-registry-clean-architecture-bootstrapper.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.95`.
+- Target: [[01-Knowledge/patterns/backend/functional-router-registry-clean-architecture-bootstrapper]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Cross-Cutting Port Facade & Context Propagation Pattern
+- harvest: 01-Knowledge/patterns/backend/cross-cutting-port-facade-context-propagation-pattern.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.94`.
+- Target: [[01-Knowledge/patterns/backend/cross-cutting-port-facade-context-propagation-pattern]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Distributed Idempotency Guard & Request Pipeline Pattern
+- harvest: 01-Knowledge/patterns/backend/distributed-idempotency-guard-request-pipeline-pattern.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.92`.
+- Target: [[01-Knowledge/patterns/backend/distributed-idempotency-guard-request-pipeline-pattern]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Generic Type-Safe Repository with Atomic Transaction Coordinator
+- harvest: 01-Knowledge/patterns/backend/generic-type-safe-repository-with-atomic-transaction-coordinator.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.93`.
+- Target: [[01-Knowledge/patterns/backend/generic-type-safe-repository-with-atomic-transaction-coordinator]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Zero-Trust User Context & Security Scope Propagation Pattern
+- harvest: 01-Knowledge/patterns/backend/zero-trust-user-context-security-scope-propagation-pattern.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.95`.
+- Target: [[01-Knowledge/patterns/backend/zero-trust-user-context-security-scope-propagation-pattern]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Fluent Typed HTTP Request Pipeline with Dynamic MIME Content Marshalling
+- harvest: 01-Knowledge/patterns/backend/fluent-typed-http-request-pipeline-with-dynamic-mime-content-marshalling.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.94`.
+- Target: [[01-Knowledge/patterns/backend/fluent-typed-http-request-pipeline-with-dynamic-mime-content-marshalling]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Authenticated AES-GCM Envelope Encryption with Scrypt Dynamic Key Derivation
+- harvest: 01-Knowledge/patterns/backend/authenticated-aes-gcm-envelope-encryption-with-scrypt-dynamic-key-derivation.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.96`.
+- Target: [[01-Knowledge/patterns/backend/authenticated-aes-gcm-envelope-encryption-with-scrypt-dynamic-key-derivation]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | RFC 4226 Dynamic-Truncation Counter-based OTP & Deterministic Reference Engine
+- harvest: 01-Knowledge/patterns/backend/rfc-4226-dynamic-truncation-counter-based-otp-deterministic-reference-engine.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.93`.
+- Target: [[01-Knowledge/patterns/backend/rfc-4226-dynamic-truncation-counter-based-otp-deterministic-reference-engine]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Dynamic Reflective ORM Engine & SQL AST Clause Builder
+- harvest: 01-Knowledge/patterns/backend/dynamic-reflective-orm-engine-sql-ast-clause-builder.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.93`.
+- Target: [[01-Knowledge/patterns/backend/dynamic-reflective-orm-engine-sql-ast-clause-builder]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | Resilient Redis Distributed Caching & Atomicity Gateway Pattern
+- harvest: 01-Knowledge/patterns/backend/resilient-redis-distributed-caching-atomicity-gateway-pattern.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.92`.
+- Target: [[01-Knowledge/patterns/backend/resilient-redis-distributed-caching-atomicity-gateway-pattern]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | S3-Compatible Binary Object Storage & Stream Buffer Gateway
+- harvest: 01-Knowledge/patterns/backend/s3-compatible-binary-object-storage-stream-buffer-gateway.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.94`.
+- Target: [[01-Knowledge/patterns/backend/s3-compatible-binary-object-storage-stream-buffer-gateway]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | MIME-Compliant Native SMTP Mailer & Transactional Notification Bridge
+- harvest: 01-Knowledge/patterns/backend/mime-compliant-native-smtp-mailer-transactional-notification-bridge.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.91`.
+- Target: [[01-Knowledge/patterns/backend/mime-compliant-native-smtp-mailer-transactional-notification-bridge]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | unified-error-normalization-and-localized-envelope-pipeline
+- harvest: 01-Knowledge/patterns/backend/unified-error-normalization-and-localized-envelope-pipeline.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.95`.
+- Target: [[01-Knowledge/patterns/backend/unified-error-normalization-and-localized-envelope-pipeline]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | declarative-struct-tag-reflection-query-binder-and-validation-matrix
+- harvest: 01-Knowledge/patterns/backend/declarative-struct-tag-reflection-query-binder-and-validation-matrix.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.94`.
+- Target: [[01-Knowledge/patterns/backend/declarative-struct-tag-reflection-query-binder-and-validation-matrix]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | context-aware-temporal-virtualization-and-timezone-normalization-engine
+- harvest: 01-Knowledge/patterns/backend/context-aware-temporal-virtualization-and-timezone-normalization-engine.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.92`.
+- Target: [[01-Knowledge/patterns/backend/context-aware-temporal-virtualization-and-timezone-normalization-engine]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] harvest | zero-leakage-structured-observability-and-sentry-enrichment-pipeline
+- harvest: 01-Knowledge/patterns/backend/zero-leakage-structured-observability-and-sentry-enrichment-pipeline.md
+- Domain: `backend`, Type: `pattern`, Destination: `WIKI`, Confidence: `0.94`.
+- Target: [[01-Knowledge/patterns/backend/zero-leakage-structured-observability-and-sentry-enrichment-pipeline]].
+- Repository: `/Users/sagaino/belajar/base-be-golang`.
+- Source: [[03-Sources/other/orchestrator-runs/harvest-1787715147310-7bd85203.json]].
+
+## [2026-08-26] lint | Knowledge Quality
+- Checked by: `local:sagaino`.
+- Result before safe fix: WARN; errors: `0`, warnings: `16`.
+- Safe fixes applied: `0`.
+- Content merge, deletion, and contradiction resolution were not automated.

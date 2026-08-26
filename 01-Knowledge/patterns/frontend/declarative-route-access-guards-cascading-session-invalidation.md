@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "Declarative Route Access Guards & Cascading Session Invalidation"
 type: pattern
 tags: [pattern, frontend, routing, guards, react-router, auth-flow, security]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787127443075-f8fd0716
+orchestrator_run: "harvest-1787127443075-f8fd0716"
 sources: ["Harvest 1787127443075 F8fd0716.json"]
 ---
 

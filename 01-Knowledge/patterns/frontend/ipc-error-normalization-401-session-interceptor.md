@@ -1,10 +1,15 @@
 ---
+supersession: "ACTIVE"
+review_by: "2027-02-18"
+owner: "knowledge-curator"
+confidence: 0.5
+provenance_schema: 1
 title: "IPC Error Normalization & 401 Session Interceptor"
 type: pattern
 tags: [pattern, frontend, error-handling, authentication, ipc, session-management, toast]
 created: 2026-08-19
 updated: 2026-08-19
-orchestrator_run: harvest-1787109583565-5ff8f29f
+orchestrator_run: "harvest-1787109583565-5ff8f29f"
 sources: ["Harvest 1787109583565 5ff8f29f.json"]
 ---
 

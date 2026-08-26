@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "action": "KNOWLEDGE_PROVENANCE_MIGRATION",
+  "status": "PREVIEW",
+  "planId": "p8-0-provenance-20260822T114750Z-66567e9f",
+  "createdAt": "2026-08-22T11:47:50.696Z",
+  "scope": "01-Knowledge",
+  "reviewDays": 180,
+  "files": [],
+  "summary": {
+    "candidateCount": 0,
+    "changedFieldCount": 0,
+    "inferredFieldCount": 0
+  },
+  "confirmation": {
+    "required": true,
+    "phrase": "MIGRATE_PROVENANCE",
+    "expectedStatus": "PREVIEW"
+  },
+  "guardrail": "Preview tidak mengubah halaman. Apply memeriksa checksum sebelum menulis dan rollback memulihkan snapshot yang sama."
+}
