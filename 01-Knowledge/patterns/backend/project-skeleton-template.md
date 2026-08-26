@@ -56,24 +56,13 @@ Section ini adalah kontrak authoritative untuk Personal AI Orchestrator saat men
 │       └── api.go                    # Composition root & AutoMigrate
 ├── internal/
 │   ├── adapter/
-│   │   └── controller/               # HTTP Gin Controllers
-│   │       ├── product.go
-│   │       ├── product_test.go
-│   │       ├── contact.go
-│   │       └── contact_test.go
+│   │   └── controller/               # HTTP Gin Controllers (e.g. order.go, order_test.go)
 │   ├── constant/                     # System constants (datetime, errors, etc.)
 │   └── core/
 │       ├── domain/                   # Pure domain entities
-│       │   ├── base.go
-│       │   ├── product.go
-│       │   └── contact.go
+│       │   └── base.go               # BaseEntity (UUID, timestamps)
 │       └── usecase/                  # Business logic & DTO interfaces
-│           ├── product/
-│           │   ├── dto.go
-│           │   └── product.go
-│           └── contact/
-│               ├── dto.go
-│               └── usecase.go
+│           └── <module>/             # e.g. order/ (dto.go, usecase.go, usecase_test.go)
 ├── pkg/                              # Core technical packages & infrastructure
 │   ├── db/
 │   ├── health/
@@ -113,9 +102,151 @@ shared/payload/response.go
 go.mod
 ```
 
-## 7. Related Knowledge
+---
+
+## 5. Canonical Implementation Blueprint (Pola Standar Pembuatan Modul/API Baru)
+
+Setiap pembuatan modul API baru oleh AI OS wajib mengikuti 4 langkah terstruktur berikut:
+
+### 1. Domain Entity (`internal/core/domain/<entity>.go`)
+```go
+package domain
+
+type Order struct {
+	BaseEntity
+	CustomerName string  `gorm:"column:customer_name;type:varchar(255);not null;default:''" json:"customer_name"`
+	TotalAmount  float64 `gorm:"column:total_amount;type:decimal(10,2);not null;default:0" json:"total_amount"`
+	Status       string  `gorm:"column:status;type:varchar(50);not null;default:'PENDING'" json:"status"`
+}
+```
+
+### 2. Usecase DTO & Repository Interface (`internal/core/usecase/<module>/dto.go`)
+```go
+package order
+
+import (
+	"context"
+	"<module-name>/internal/core/domain"
+)
+
+type CreateOrderRequest struct {
+	CustomerName string  `json:"customer_name" validate:"required"`
+	TotalAmount  float64 `json:"total_amount" validate:"required,min=1"`
+}
+
+type OrderRepository interface {
+	Store(ctx context.Context, data domain.Order) (domain.Order, error)
+	FindAll(ctx context.Context) ([]domain.Order, error)
+	FindOneByID(ctx context.Context, id interface{}) (domain.Order, error)
+}
+
+type Usecase interface {
+	Create(ctx context.Context, req CreateOrderRequest) (domain.Order, error)
+	GetAll(ctx context.Context) ([]domain.Order, error)
+}
+```
+
+### 3. Usecase Business Logic (`internal/core/usecase/<module>/usecase.go`)
+```go
+package order
+
+import (
+	"context"
+	"<module-name>/internal/core/domain"
+	"<module-name>/pkg/db"
+	"<module-name>/shared/base"
+)
+
+type orderUsecase struct {
+	base.Port
+	repo OrderRepository
+}
+
+func NewUsecase(port base.Port) Usecase {
+	return &orderUsecase{
+		Port: port,
+		repo: db.NewRepository[domain.Order](port.DB()),
+	}
+}
+
+func (u *orderUsecase) Create(ctx context.Context, req CreateOrderRequest) (domain.Order, error) {
+	data := domain.Order{
+		CustomerName: req.CustomerName,
+		TotalAmount:  req.TotalAmount,
+		Status:       "PENDING",
+	}
+	return u.repo.Store(ctx, data)
+}
+
+func (u *orderUsecase) GetAll(ctx context.Context) ([]domain.Order, error) {
+	return u.repo.FindAll(ctx)
+}
+```
+
+### 4. Adapter HTTP Controller (`internal/adapter/controller/<entity>.go`)
+```go
+package controller
+
+import (
+	"net/http"
+	"github.com/gin-gonic/gin"
+	orderUc "<module-name>/internal/core/usecase/order"
+	"<module-name>/shared/base"
+	"<module-name>/shared/payload"
+	"gorm.io/gorm"
+)
+
+type OrderController struct {
+	base.BaseController
+	uc orderUc.Usecase
+}
+
+func NewOrderController(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) *OrderController {
+	return &OrderController{
+		BaseController: ctrl,
+		uc:             orderUc.NewUsecase(port),
+	}
+}
+
+func (ctrl *OrderController) Route(r *gin.RouterGroup) {
+	g := r.Group("/orders")
+	g.POST("", ctrl.Create)
+	g.GET("", ctrl.GetAll)
+}
+
+func (ctrl *OrderController) Create(c *gin.Context) {
+	var req orderUc.CreateOrderRequest
+	if errs := ctrl.Enigma.BindAndValidate(c, &req); len(errs) > 0 {
+		c.JSON(http.StatusBadRequest, payload.DefaultInvalidInputFormResponse(errs))
+		return
+	}
+	result, err := ctrl.uc.Create(c.Request.Context(), req)
+	ctrl.Mapper.NewResponse(c, payload.NewSuccessResponse(result, "OrderCreated"), err)
+}
+
+func (ctrl *OrderController) GetAll(c *gin.Context) {
+	result, err := ctrl.uc.GetAll(c.Request.Context())
+	ctrl.Mapper.NewResponse(c, payload.NewSuccessResponse(result, "OrdersRetrieved"), err)
+}
+```
+
+### 5. Composition Root & AutoMigrate (`cmd/api/api.go`)
+```go
+// 1. Daftarkan Controller ke Engine Gin
+start.Register(func(dbConn *gorm.DB, port base.Port, ctrl base.BaseController) api.Router {
+	return controller.NewOrderController(dbConn, port, ctrl)
+})
+
+// 2. Daftarkan Entity ke GORM AutoMigrate
+start.DB().AutoMigrate(&domain.Order{})
+```
+
+---
+
+## 6. Related Knowledge
 
 - [[01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine.md]]
 - [[01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md]]
 - [[01-Knowledge/patterns/backend/declarative-route-registration-context-enriching-guard-pipeline.md]]
 - [[01-Knowledge/patterns/backend/go-gorm-generic-repository-dynamic-expression-builder-pattern.md]]
+

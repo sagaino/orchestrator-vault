@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "action": "PROJECT_UNREGISTERED_AND_ARCHIVED",
+  "removedAt": "2026-08-26T04:04:58.386Z",
+  "removedBy": "test",
+  "project": {
+    "id": "test-be-service",
+    "title": "Test Be Service",
+    "repository": "/tmp/test-be-service",
+    "graphifyOutput": "/tmp/test-be-service/graphify-out/graph.json"
+  },
+  "archive": {
+    "sourcePath": "02-Projects/test-be-service",
+    "path": "03-Sources/other/removed-projects/test-be-service/20260826T040458Z-8ad8a779",
+    "inventory": [
+      {
+        "path": "project.md",
+        "size": 1233,
+        "sha256": "460ff0764f9e267cc78f9488033a73c3c3afb990d2f117052ae69aa13fe6b3c3"
+      }
+    ],
+    "wikilinkRewrite": {
+      "from": "02-Projects/test-be-service/",
+      "to": "03-Sources/other/removed-projects/test-be-service/20260826T040458Z-8ad8a779/",
+      "mutablePagesUpdated": 2
+    }
+  },
+  "preservation": {
+    "repository": true,
+    "graphify": true,
+    "globalKnowledge": true,
+    "knowledgeCandidates": true,
+    "immutableRunSources": true
+  }
+}

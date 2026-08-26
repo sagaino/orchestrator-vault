@@ -3129,3 +3129,12 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 - Deterministic Template: `templates/backend-golang/`.
 - Toolchain: `Go 1.22+`, verification defaults: `go test ./..., go vet ./...`.
 
+## [2026-08-26] project-onboarding | test-be-service
+- Action: `PROJECT_REGISTERED`; repository: `/tmp/test-be-service`.
+- Graphify: `/tmp/test-be-service/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`; blueprint: `backend-golang`.
+
+## [2026-08-26] project-removal | test-be-service
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/tmp/test-be-service`.
+- Archive: `03-Sources/other/removed-projects/test-be-service/20260826T040458Z-8ad8a779`; files preserved: `1`.
+- Removed by: `test`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
