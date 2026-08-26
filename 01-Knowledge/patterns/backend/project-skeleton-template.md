@@ -243,10 +243,29 @@ start.DB().AutoMigrate(&domain.Order{})
 
 ---
 
-## 6. Related Knowledge
+## 6. Anti-Patterns & Aturan Larangan Struktur (Strict Architecture Guard)
+
+AI OS dilarang keras melanggar batasan-batasan arsitektur berikut:
+
+1. ❌ **Dilarang membuat folder per-feature di root `internal/`**:
+   - TIDAK BOLEH membuat `internal/category/`, `internal/order/`, `internal/product/`, dll.
+   - SEMUA feature WAJIB dipecah ke 3 layer baku: `internal/core/domain/`, `internal/core/usecase/<module>/`, dan `internal/adapter/controller/`.
+2. ❌ **Dilarang membuat folder ad-hoc**:
+   - TIDAK BOLEH membuat `internal/models/`, `internal/routes/`, `internal/services/`, atau `internal/domain/` di luar struktur `core/` dan `adapter/`.
+3. ❌ **Dilarang membuat entity tanpa `BaseEntity`**:
+   - SEMUA domain entity wajib meng-embed `BaseEntity` dari `internal/core/domain/base.go` untuk menjamin keseragaman UUID string ID dan auto timestamps.
+4. ❌ **Dilarang mengabaikan Generic Repository**:
+   - Gunakan `db.NewRepository[domain.<Entity>](port.DB())` dari `pkg/db` alih-alih membuat boilerplate query manual.
+5. ❌ **Dilarang mengubah format Response**:
+   - Gunakan selalu `shared/payload/response.go` dengan format baku `{ "code": 200, "message": "OK", "result": ... }`.
+
+---
+
+## 7. Related Knowledge
 
 - [[01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine.md]]
 - [[01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md]]
 - [[01-Knowledge/patterns/backend/declarative-route-registration-context-enriching-guard-pipeline.md]]
 - [[01-Knowledge/patterns/backend/go-gorm-generic-repository-dynamic-expression-builder-pattern.md]]
+
 

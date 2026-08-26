@@ -19,6 +19,7 @@ The registry resolves an Obsidian task's `project` value to the real repository.
 | `orchestrator-dashboard` | [[02-Projects/orchestrator-dashboard/project]] | `/Users/sagaino/ciniru/orchestrator-dashboard` | `agy` | `true` | `/Users/sagaino/ciniru/orchestrator-dashboard/graphify-out/graph.json` | `[{"type":"CONSUMES_API","targetProjectId":"personal-ai-orchestrator","contractPaths":[],"verification":[]}]` |
 | `test-add-project` | [[02-Projects/test-add-project/project]] | `/Users/sagaino/ciniru/test-add-project` | `agy` | `true` | `/Users/sagaino/ciniru/test-add-project/graphify-out/graph.json` |
 | `base-be-golang` | [[02-Projects/base-be-golang/project]] | `/Users/sagaino/belajar/base-be-golang` | `agy` | `true` | `/Users/sagaino/belajar/base-be-golang/graphify-out/graph.json` | `[]` |
+| `be-golang-app` | [[02-Projects/be-golang-app/project]] | `/Users/sagaino/ciniru/be-golang-app` | `agy` | `true` | `/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json` | `[]` |
 
 ## Registry Rules
 

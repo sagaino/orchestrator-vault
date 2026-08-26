@@ -3138,3 +3138,66 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 - Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/tmp/test-be-service`.
 - Archive: `03-Sources/other/removed-projects/test-be-service/20260826T040458Z-8ad8a779`; files preserved: `1`.
 - Removed by: `test`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-26] project-onboarding | be-test-template
+- Action: `PROJECT_REGISTERED`; repository: `/tmp/be-test-template`.
+- Graphify: `/tmp/be-test-template/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`; blueprint: `backend-golang`.
+
+## [2026-08-26] project-removal | be-test-template
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/tmp/be-test-template`.
+- Archive: `03-Sources/other/removed-projects/be-test-template/20260826T042135Z-40c8903c`; files preserved: `1`.
+- Removed by: `test`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-26] project-onboarding | test-be-template
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/test-be-template`.
+- Graphify: `/Users/sagaino/ciniru/test-be-template/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`; blueprint: `backend-golang`.
+
+## [2026-08-26] project-archive-purge | be-test-template
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `local:sagaino`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/be-test-template/20260826T042400Z-84141d16`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-26] project-archive-purge | test-be-service
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `local:sagaino`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/test-be-service/20260826T042411Z-f59a9a28`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-26] project-removal | test-be-template
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/test-be-template`.
+- Archive: `03-Sources/other/removed-projects/test-be-template/20260826T043026Z-42ca51d4`; files preserved: `1`.
+- Removed by: `local:sagaino`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-26] project-archive-purge | test-be-template
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `local:sagaino`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/test-be-template/20260826T043037Z-52c1f6aa`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-26] project-onboarding | be-golang-app
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/be-golang-app`.
+- Graphify: `/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`; blueprint: `backend-golang`.
+
+## [2026-08-26] project-removal | be-golang-app
+- Action: `PROJECT_UNREGISTERED_AND_ARCHIVED`; repository preserved: `/Users/sagaino/ciniru/be-golang-app`.
+- Archive: `03-Sources/other/removed-projects/be-golang-app/20260826T043459Z-808b2493`; files preserved: `1`.
+- Removed by: `local:sagaino`; global knowledge, Candidates, run sources, source code, and Graphify were not deleted.
+
+## [2026-08-26] project-archive-purge | be-golang-app
+- Action: `PROJECT_ARCHIVE_PURGED_FROM_VAULT`; archive versions: `1`; files: `2`.
+- Purged by: `local:sagaino`; repository, Graphify, global knowledge, Candidates, and run history were not deleted.
+- Quarantine audit: `purged-project-archives/be-golang-app/20260826T043503Z-eceeaeaa`; the archive is no longer part of the Obsidian Vault.
+
+## [2026-08-26] project-onboarding | be-golang-app
+- Action: `PROJECT_REGISTERED`; repository: `/Users/sagaino/ciniru/be-golang-app`.
+- Graphify: `/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json`; verification defaults: `go test ./..., go vet ./...`.
+- Registered by: `user`; blueprint: `backend-golang`.
+
+## [2026-08-26] knowledge-sync | Implement Product Category Management API
+- run_id: task-001-20260826T043954Z-66a120cf | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-001.md.
+
+## [2026-08-26] task-completion | Implement Product Category Management API
+- run_id: task-001-20260826T043954Z-66a120cf | task-completion
+- Task dan run selesai dengan human approval.

@@ -235,11 +235,11 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 ## Orchestrator-registered Projects
 - [[02-Projects/test-add-project/project|Test Add Project Project]]: Metadata project, repository, dan Graphify pointer.
 - [[02-Projects/base-be-golang/project|Base Be Golang Project]]: Metadata project, repository, dan Graphify pointer.
+- [[02-Projects/be-golang-app/project|Be Golang App Project]]: Metadata project, repository, dan Graphify pointer.
 
 ## Archived Projects
 
 - [[03-Sources/other/removed-projects/test-add-project/20260821T040445Z-1ead3756/project|Test Add Project Project Archive]]: Immutable project metadata and task history.
-- [[03-Sources/other/removed-projects/test-be-service/20260826T040458Z-8ad8a779/project|Test Be Service Project Archive]]: Immutable project metadata and task history.
 
 ## Orchestrator Harvested Knowledge
 
