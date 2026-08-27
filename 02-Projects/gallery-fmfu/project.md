@@ -7,6 +7,7 @@ agent: agy
 graphify: true
 graphify_output: /Users/sagaino/ciniru/gallery-fmfu/graphify-out/graph.json
 tags: [project, frontend]
+verification_defaults: [typecheck, build]
 created: 2026-08-12
 updated: 2026-08-14
 sources: []
