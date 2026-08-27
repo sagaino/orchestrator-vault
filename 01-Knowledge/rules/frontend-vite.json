@@ -1,0 +1,35 @@
+{
+  "ruleId": "frontend-vite",
+  "name": "Frontend Vite React TypeScript Enterprise Rules & Guardrails",
+  "version": 2,
+  "toolchain": "node",
+  "allowedPathPatterns": [
+    "src/pages/**",
+    "src/services/**",
+    "src/config/**",
+    "src/hooks/**",
+    "src/types/**",
+    "src/components/**",
+    "src/routes/**",
+    "src/lib/**",
+    "src/App.tsx",
+    "src/main.tsx"
+  ],
+  "forbiddenPathPatterns": [
+    "src/components/ui/**"
+  ],
+  "verificationDefaults": [
+    "npm run typecheck",
+    "npm run lint",
+    "npm run build"
+  ],
+  "architectureConstraints": [
+    "Gunakan TypeScript strict mode dengan zero type errors",
+    "Komponen UI Shadcn di src/components/ui/ adalah vendor output dan dilarang diedit manual",
+    "Struktur modul fitur wajib mengikuti: src/pages/<FeatureName>/ (index.tsx, components/, hooks/, types/, schema/)",
+    "API calls diletakkan di src/services/<featureName>.ts menggunakan endpoint dari src/config/constant/endpoint.ts",
+    "Data fetching dan mutation wajib menggunakan TanStack React Query v5 di folder hooks/ per fitur",
+    "Validasi form wajib menggunakan Zod schema dan React Hook Form dengan @hookform/resolvers/zod",
+    "Gunakan SweetAlert2 atau AlertDialog untuk konfirmasi aksi destruktif (delete/cancel/reject)"
+  ]
+}

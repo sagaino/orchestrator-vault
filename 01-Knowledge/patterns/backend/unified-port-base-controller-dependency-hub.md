@@ -1,16 +1,16 @@
 ---
-supersession: "ACTIVE"
-review_by: "2027-02-18"
-owner: "knowledge-curator"
-confidence: 0.5
+supersession: ACTIVE
+review_by: 2027-02-22
+owner: "local:sagaino"
+confidence: 0.92
 provenance_schema: 1
 title: "Unified Port & Base Controller Dependency Hub"
 type: pattern
 tags: [pattern, backend, golang, dependency-injection, ports-and-adapters, cross-cutting-concerns]
 created: 2026-08-19
-updated: 2026-08-19
-orchestrator_run: "harvest-1787128418632-596cfbe7"
-sources: ["Harvest 1787128418632 596cfbe7.json"]
+updated: 2026-08-26
+orchestrator_run: task-007-20260826T085100Z-102b7d58
+sources: ["Harvest 1787128418632 596cfbe7.json", "[[03-Sources/other/orchestrator-runs/task-007-20260826T085100Z-102b7d58.json]]"]
 ---
 
 # Unified Port & Base Controller Dependency Hub
@@ -155,3 +155,11 @@ func (ctrl ProductController) Create(c *gin.Context) {
 ## 7. Source
 
 - Harvest 1787128418632 596cfbe7.json
+
+## Update from TASK-007 — 2026-08-26
+
+<!-- orchestrator-run:task-007-20260826T085100Z-102b7d58 -->
+Defensive nil-guarding and safe default fallback in Go controller constructors consuming aggregated dependency port structs (base.Port) to prevent nil pointer panics during test instantiations.
+
+- Rationale: Task TASK-007 mengimplementasikan HTTP controller dan route wiring pada arsitektur Modular Clean Go. Saat verifikasi unit test instansiasi, ditemukan runtime panic akibat pemanggilan dereference langsung pada field port.Env yang belum diinisialisasi (nil). Pola ini memperbarui knowledge 'Unified Port & Base Controller Dependency Hub' dengan menambahkan best practice defensive nil-guarding dan default fallback pada constructor yang mengonsumsi aggregated port dependencies.
+- Source: [[03-Sources/other/orchestrator-runs/task-007-20260826T085100Z-102b7d58.json]]

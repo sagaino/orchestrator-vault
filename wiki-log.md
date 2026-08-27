@@ -3201,3 +3201,67 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 ## [2026-08-26] task-completion | Implement Product Category Management API
 - run_id: task-001-20260826T043954Z-66a120cf | task-completion
 - Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Implement Product Category API
+- run_id: task-002-20260826T051133Z-7f5390e5 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-002.md.
+
+## [2026-08-26] task-completion | Implement Product Category API
+- run_id: task-002-20260826T051133Z-7f5390e5 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Verify Category API Test Suite and Project Quality
+- run_id: task-003-20260826T051620Z-df792ad7 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-26] task-completion | Verify Category API Test Suite and Project Quality
+- run_id: task-003-20260826T051620Z-df792ad7 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Implement Product API Feature
+- run_id: task-004-20260826T060304Z-2d66af0d | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-004.md.
+
+## [2026-08-26] task-completion | Implement Product API Feature
+- run_id: task-004-20260826T060304Z-2d66af0d | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Verify Product API and Test Suite
+- run_id: task-005-20260826T060559Z-7f0730a2 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-26] task-completion | Verify Product API and Test Suite
+- run_id: task-005-20260826T060559Z-7f0730a2 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Implement Domain Models and Use Cases for Auth and User Management
+- run_id: task-006-20260826T084556Z-1fa1187c | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-006.md.
+
+## [2026-08-26] task-completion | Implement Domain Models and Use Cases for Auth and User Management
+- run_id: task-006-20260826T084556Z-1fa1187c | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Implement HTTP Controllers, Auth Middleware, and Wire API Routes
+- run_id: task-007-20260826T085100Z-102b7d58 | knowledge-sync
+- Knowledge page diperbarui: 01-Knowledge/patterns/backend/unified-port-base-controller-dependency-hub.md.
+
+## [2026-08-26] task-completion | Implement HTTP Controllers, Auth Middleware, and Wire API Routes
+- run_id: task-007-20260826T085100Z-102b7d58 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Verify Full Test Suite and Code Quality
+- run_id: task-008-20260826T090247Z-b8964b60 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-26] task-completion | Verify Full Test Suite and Code Quality
+- run_id: task-008-20260826T090247Z-b8964b60 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-26] knowledge-sync | Update JWT token expiration to 3 minutes
+- run_id: task-009-20260826T092230Z-45e98c26 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-009.md.
+
+## [2026-08-26] task-completion | Update JWT token expiration to 3 minutes
+- run_id: task-009-20260826T092230Z-45e98c26 | task-completion
+- Task dan run selesai dengan human approval.
