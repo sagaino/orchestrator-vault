@@ -3,7 +3,7 @@ title: "Hapus section phone number pada login dan sesuaikan form autentikasi BIB
 type: task
 task_id: GFM-004
 project: gallery-fmfu
-status: REVIEW
+status: DONE
 tags: [task, gallery-fmfu, orchestrator-intake]
 created: 2026-08-27
 updated: 2026-08-27
@@ -58,15 +58,18 @@ Node node-1 memenuhi seluruh acceptance criteria yang disetujui pada plan plan-o
 
 ## Knowledge Decision
 
-Belum ditentukan oleh retrospective orchestrator.
+- Classification: `PROJECT_ONLY`
+- Destination: `PROJECT`
+- Source: [[03-Sources/other/orchestrator-runs/gfm-004-20260827T041907Z-1e76d0ad.json]]
+
 
 ## Error Log
 
 Tidak ada error log saat pembuatan task.
 
 ## Log Perubahan
-
 🚀 [VERIFIED_BY_LLM_WIKI_SCHEMA]
+
 - [2026-08-27] Task dibuat melalui orchestrator task intake oleh `orchestrator`.
 
 ---
@@ -79,3 +82,12 @@ Tidak ada error log saat pembuatan task.
 - [2026-08-27T04:19:07.362Z] Human `local:sagaino` memberi approval execution melalui `start-task`: `BACKLOG → READY`.
 - [2026-08-27T04:19:07.661Z] Run `gfm-004-20260827T041907Z-1e76d0ad` melakukan atomic claim: `READY → IN_PROGRESS`.
 - [2026-08-27T04:20:32.690Z] Run `gfm-004-20260827T041907Z-1e76d0ad`: coding agent, verification, dan Graphify selesai; menunggu human review.
+
+## Knowledge Retrospective
+
+<!-- orchestrator-run:gfm-004-20260827T041907Z-1e76d0ad -->
+- Classification: `PROJECT_ONLY`
+- Summary: Penyesuaian form login dan schema validasi autentikasi agar hanya menerima dan memproses nomor BIB tanpa input nomor telepon pada aplikasi gallery-fmfu.
+- Rationale: Task GFM-004 merupakan penyesuaian kebutuhan bisnis spesifik proyek (penghapusan field nomor telepon pada form login dan validasi BIB-only). Tidak ada pola arsitektural atau komponen baru yang perlu dipromosikan ke tingkat global LLM Wiki.
+- Source: [[03-Sources/other/orchestrator-runs/gfm-004-20260827T041907Z-1e76d0ad.json]]
+- [2026-08-27T04:24:58.698Z] Run `gfm-004-20260827T041907Z-1e76d0ad`: human approval, verification, dan knowledge decision lengkap; task ditutup sebagai DONE.

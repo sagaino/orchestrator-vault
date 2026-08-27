@@ -3265,3 +3265,19 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 ## [2026-08-26] task-completion | Update JWT token expiration to 3 minutes
 - run_id: task-009-20260826T092230Z-45e98c26 | task-completion
 - Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Hapus section phone number pada login dan sesuaikan form autentikasi BIB
+- run_id: gfm-004-20260827T041907Z-1e76d0ad | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/gallery-fmfu/tasks/task-004.md.
+
+## [2026-08-27] task-completion | Hapus section phone number pada login dan sesuaikan form autentikasi BIB
+- run_id: gfm-004-20260827T041907Z-1e76d0ad | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Verifikasi typecheck, lint, dan build proyek frontend
+- run_id: gfm-005-20260827T042506Z-c478c13f | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-27] task-completion | Verifikasi typecheck, lint, dan build proyek frontend
+- run_id: gfm-005-20260827T042506Z-c478c13f | task-completion
+- Task dan run selesai dengan human approval.
