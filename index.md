@@ -209,6 +209,9 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 - [[01-Knowledge/_templates/backend-pattern-template|Backend Pattern Template]]
 - [[01-Knowledge/_templates/devops-pattern-template|DevOps & Infrastructure Pattern Template]]
 - [[01-Knowledge/_templates/mobile-pattern-template|Mobile Pattern Template]]
+- [[01-Knowledge/skills/frontend-vite|Frontend Vite React TypeScript Enterprise Skill]]
+- [[01-Knowledge/skills/go-modular-clean|Go Modular Clean Architecture Skill]]
+- [[01-Knowledge/decisions/decision-feedback-starter-app|Operator Constraints for starter-app]]
 
 ## Orchestrator-created Tasks
 
@@ -259,3 +262,10 @@ Catalog utama untuk global knowledge, project registry, dan sistem arsitektur LL
 - [[01-Knowledge/patterns/backend/declarative-struct-tag-reflection-query-binder-and-validation-matrix|declarative-struct-tag-reflection-query-binder-and-validation-matrix]]: Sistem binding dan validasi permintaan HTTP berbasis refleksi deklaratif yang mengekstrak nilai query, path, dan multipart ke DTO bertipe aman dengan matriks terjemahan pesan kesalahan terpadu.
 - [[01-Knowledge/patterns/backend/context-aware-temporal-virtualization-and-timezone-normalization-engine|context-aware-temporal-virtualization-and-timezone-normalization-engine]]: Mesin virtualisasi waktu berbasis konteks dan utilitas transformasi data yang menormalisasi operasi tanggal/waktu multi-zona serta menyediakan formatting memori reflektif.
 - [[01-Knowledge/patterns/backend/zero-leakage-structured-observability-and-sentry-enrichment-pipeline|zero-leakage-structured-observability-and-sentry-enrichment-pipeline]]: Pipeline observabilitas terstruktur dan telemetri Sentry dengan sanitasi data otomatis, frame-skipping logger, dan bootstrapping multi-lingkungan yang aman.
+
+## Orchestrator Knowledge Promotions
+
+- [[01-Knowledge/patterns/backend/redis-backed-refresh-token-rotation-with-sliding-expiration|Redis-Backed Refresh Token Rotation with Sliding Expiration Pattern]]: Clean Architecture pattern for Refresh Token Rotation (RTR) and sliding expiration using Redis session snapshots, ensuring single-use token invalidation and credential revocation.
+- [[01-Knowledge/decisions/decision-feedback-starter-app|Operator Constraint for starter-app]]: komponen src/components/UserProfileBadge.tsx tidak di pasang di src/pages/Dashboard/index.tsx
+- [[01-Knowledge/decisions/decision-feedback-starter-app|Operator Constraint for starter-app]]
+- [[01-Knowledge/decisions/decision-feedback-starter-app|Operator Constraint for starter-app]]

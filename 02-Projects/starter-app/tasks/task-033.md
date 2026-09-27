@@ -1,0 +1,89 @@
+---
+title: "Integrasikan UserProfileBadge ke halaman Dashboard"
+type: task
+task_id: FE-033
+project: starter-app
+status: DONE
+tags: [task, starter-app, orchestrator-intake]
+created: 2026-09-02
+updated: 2026-09-02
+dependencies: ["FE-032"]
+verification: ["typecheck", "build"]
+allowed_paths: ["src/pages/Dashboard/index.tsx"]
+requires_changes: true
+risk: LOW
+complexity: LOW
+sources: []
+objective_id: "obj-20260902044816-a87d8707"
+plan_id: "plan-obj-20260902044816-a87d8707-r1"
+orchestration_id: "orch-obj-20260902044816-a87d8707"
+node_id: "node-2"
+master_task: "obj-20260902044816-a87d8707"
+orchestration_managed: true
+orchestration_dependencies: ["starter-app:FE-032"]
+role: "FRONTEND"
+node_type: "IMPLEMENTATION"
+write_conflict_group: null
+context_from: ["node-1"]
+skill_assignments: ["frontend-vite@1.0.0#bde6d8aa3f18070d43d2124d250edec6622d08e3cb03e4a17eb60979c39bce21"]
+---
+
+# Integrasikan UserProfileBadge ke halaman Dashboard
+
+## Permintaan User
+
+Tolong buatkan komponen baru UserProfileBadge di file src/components/UserProfileBadge.tsx yang menampilkan avatar user, nama akun "Admin AI OS", dan status badge "Online" menggunakan komponen Shadcn UI. Gunakan komponen UserProfileBadge ini di bagian atas halaman src/pages/Dashboard/index.tsx.
+
+Orchestration node: node-2
+
+## Tujuan
+
+Mengimpor dan menempatkan komponen UserProfileBadge di bagian atas halaman src/pages/Dashboard/index.tsx.
+
+## Scope
+
+- `src/pages/Dashboard/index.tsx`
+
+## Hasil Yang Diharapkan
+
+Node node-2 memenuhi seluruh acceptance criteria yang disetujui pada plan plan-obj-20260902044816-a87d8707-r1.
+
+## Acceptance Criteria
+
+1. Komponen UserProfileBadge diimpor dan ditampilkan pada bagian atas layout di src/pages/Dashboard/index.tsx.
+2. Struktur halaman Dashboard tetap rapi dan konsisten dengan komponen profil baru.
+3. Lolos verifikasi typecheck dan build.
+4. Hanya file dalam `allowed_paths` yang berubah akibat task ini.
+5. Verification `typecheck` dan `build` berhasil.
+
+## Knowledge Decision
+
+- Classification: `PROJECT_ONLY`
+- Destination: `PROJECT`
+- Source: [[03-Sources/other/orchestrator-runs/fe-033-20260902T045059Z-da59ff0e.json]]
+
+
+## Error Log
+
+Tidak ada error log saat pembuatan task.
+
+## Log Perubahan
+🚀 [VERIFIED_BY_LLM_WIKI_SCHEMA]
+
+- [2026-09-02] Task dibuat melalui orchestrator task intake oleh `orchestrator`.
+
+---
+
+## Orchestrator Run Log
+- [2026-09-02T04:50:59.321Z] Human `local:sagaino` memberi approval execution melalui `start-task`: `BACKLOG → READY`.
+- [2026-09-02T04:50:59.594Z] Run `fe-033-20260902T045059Z-da59ff0e` melakukan atomic claim: `READY → IN_PROGRESS`.
+- [2026-09-02T04:51:56.015Z] Run `fe-033-20260902T045059Z-da59ff0e`: coding agent, verification, dan Graphify selesai; menunggu human review.
+
+## Knowledge Retrospective
+
+<!-- orchestrator-run:fe-033-20260902T045059Z-da59ff0e -->
+- Classification: `PROJECT_ONLY`
+- Summary: FE-033 melakukan modifikasi murni internal komponen/halaman/konfigurasi project (starter-app). Diklasifikasikan secara deterministik sebagai PROJECT_ONLY.
+- Rationale: Perubahan cakupan file berada di dalam lapisan presentasi/konfigurasi/pengujian internal project tanpa abstraksi generic yang reusable untuk global knowledge vault.
+- Source: [[03-Sources/other/orchestrator-runs/fe-033-20260902T045059Z-da59ff0e.json]]
+- [2026-09-02T04:52:42.454Z] Run `fe-033-20260902T045059Z-da59ff0e`: human approval, verification, dan knowledge decision lengkap; task ditutup sebagai DONE.

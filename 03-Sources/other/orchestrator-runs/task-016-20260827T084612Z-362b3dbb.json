@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-27T08:49:39.981Z",
+  "runId": "task-016-20260827T084612Z-362b3dbb",
+  "task": {
+    "id": "TASK-016",
+    "title": "Implement Refresh Token Rotation in Auth Usecase and DTOs",
+    "path": "02-Projects/be-golang-app/tasks/TASK-016.md",
+    "project": "be-golang-app",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "internal/core/usecase/auth/**"
+    ],
+    "requiresChanges": true,
+    "risk": "MEDIUM",
+    "complexity": "MEDIUM",
+    "role": "BACKEND",
+    "orchestrationManaged": true,
+    "objectiveId": "obj-20260827084531-0e8e7f51",
+    "orchestrationId": "orch-obj-20260827084531-0e8e7f51",
+    "nodeId": "subtask-1-auth-usecase",
+    "acceptanceCriteria": [
+      "Update LoginResponse in internal/core/usecase/auth/dto.go to include RefreshToken string json:refreshToken",
+      "Define RefreshTokenRequest and RefreshTokenResponse structs in internal/core/usecase/auth/dto.go",
+      "Implement RefreshToken(ctx context.Context, req RefreshTokenRequest) in internal/core/usecase/auth/usecase.go with Redis lookup, key deletion, new token generation, and 7-day sliding TTL",
+      "Update Login and Logout flows in internal/core/usecase/auth/usecase.go to persist and clear refresh:token:[REDACTED] and session:user:<userId> keys in Redis",
+      "Add comprehensive unit tests for RTR, invalid/expired token rejection, and logout in internal/core/usecase/auth/usecase_test.go",
+      "Hanya file dalam `allowed_paths` yang berubah akibat task ini.",
+      "Verification `go test ./...` dan `go vet ./...` berhasil."
+    ],
+    "skills": [
+      {
+        "skillId": "go-modular-clean",
+        "version": "1.0.0",
+        "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+      }
+    ],
+    "sources": []
+  },
+  "project": {
+    "id": "be-golang-app",
+    "repository": "/Users/sagaino/ciniru/be-golang-app",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json",
+    "nodes": 813,
+    "links": 1873,
+    "builtAtCommit": "7adab30c33c9630902688812b35a1bc0847bec7f"
+  },
+  "verification": [
+    {
+      "command": "go test ./...",
+      "exitCode": 0
+    },
+    {
+      "command": "go vet ./...",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "b4b5f2ae-b84c-45a5-b5b2-ee01e78e7ad6",
+    "status": "SUCCESS",
+    "response": "Implementasi Refresh Token Rotation (RTR) dengan Sliding Expiration berbasis Redis pada modul Auth Usecase dan DTO telah selesai dilaksanakan sesuai spesifikasi.\n\n### Ringkasan Perubahan\n\n1. [`dto.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go):\n   - Menambahkan field `RefreshToken string `json:\"refreshToken\"` ke struct [`LoginResponse`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L29-L34).\n   - Menambahkan struct [`RefreshTokenRequest`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L36-L38) (`RefreshToken string `json:\"refreshToken\" binding:\"required\"`).\n   - Menambahkan struct [`RefreshTokenResponse`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L40-L44) (`AccessToken`, `RefreshToken`, `TokenType`).\n   - Menambahkan field `RefreshToken string `json:\"refreshToken,omitempty\"` pada [`UserSessionSnapshot`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L46-L53) dan [`LogoutRequest`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L70-L73).\n\n2. [`usecase.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase.go):\n   - Menambahkan method `RefreshToken(ctx context.Context, req RefreshTokenRequest) (*RefreshTokenResponse, error)` pada interface [`SessionUsecase`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase.go#L29-L34) dan implementasinya pada struct [`usecase`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase.go#L36-L43).\n   - Menambahkan helper `getRefreshTokenTTL()` dengan default 7 hari dan fallback konfigurasi environment `REFRESH_TOKEN_TTL_DAYS`.\n   - Memperbarui `Login` untuk men-generate `RefreshToken` unik dan menyimpannya di Redis dengan key `refresh:token:[REDACTED] beserta session snapshot `session:user:<userId>`.\n   - Mengimplementasikan alur Refresh Token Rotation (RTR): validasi token, penghapusan refresh token lama di Redis, pembuatan token pair baru, penyimpanan refresh token baru dengan TTL 7 hari sliding, pembaruan user session, dan pengembalian [`RefreshTokenResponse`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go#L40-L44).\n   - Memperbarui `Logout` untuk membaca session aktif dan menghapus key `session:user:<userId>` serta key `refresh:token:[REDACTED] terkait dari Redis.\n\n3. [`usecase_test.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase_test.go):\n   - Menambahkan unit test login dengan verifikasi pembuatan dan penyimpanan `RefreshToken` di Redis.\n   - Menambahkan unit test pembacaan TTL custom dari `REFRESH_TOKEN_TTL_DAYS`.\n   - Menambahkan unit test Refresh Token Rotation (RTR) sukses yang memastikan token lama terhapus, token baru aktif, dan session user ter-sliding.\n   - Menambahkan table-driven unit test penolakan refresh token invalid/expired/corrupted/kosong (401 Unauthorized via `localerror.AccessControlError`).\n   - Menambahkan unit test error handling untuk kegagalan cache dan token service.\n   - Menambahkan unit test `Logout` yang memastikan pembersihan ganda key session dan key refresh token di Redis.\n\n---\n\n### File Berubah\n- [`internal/core/usecase/auth/dto.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/dto.go)\n- [`internal/core/usecase/auth/usecase.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase.go)\n- [`internal/core/usecase/auth/usecase_test.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-016-20260827t084612z-362b3dbb/internal/core/usecase/auth/usecase_test.go)\n\n---\n\n### Verifikasi Yang Disarankan\n1. `go test ./...`\n2. `go vet ./...`\n\n---\n\n### Retrospective Knowledge\n- **Classification**: `PROJECT_ONLY`\n- **Rationale**: Pola Refresh Token Rotation (RTR) dengan Redis sliding expiration dan token-session linkage pada 3-layer Clean Architecture merupakan implementasi spesifik fitur autentikasi pada project `be-golang-app`. Pola arsitektur clean dan localerror general sudah tercakup dalam blueprint standard modular clean.\n",
+    "duration_seconds": 147.364147,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 258623,
+      "output_tokens": 46927,
+      "thinking_tokens": 28844,
+      "cache_read_tokens": 2458729,
+      "total_tokens": 305550
+    }
+  },
+  "telemetry": {
+    "schemaVersion": 1,
+    "records": [
+      {
+        "schemaVersion": 1,
+        "recordId": "8e0761b5798008fdff09f930",
+        "source": "explicit",
+        "stage": "IMPLEMENTATION",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash-high",
+        "effort": "high",
+        "status": "SUCCESS",
+        "conversationId": "b4b5f2ae-b84c-45a5-b5b2-ee01e78e7ad6",
+        "durationSeconds": 147.364,
+        "usage": {
+          "inputTokens": 258623,
+          "outputTokens": 46927,
+          "thinkingTokens": 28844,
+          "cacheReadTokens": 2458729,
+          "totalTokens": 305550,
+          "contextTokens": 2717352
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T08:48:50.834Z",
+        "metadata": {
+          "runId": "task-016-20260827T084612Z-362b3dbb",
+          "taskId": "TASK-016",
+          "projectId": "be-golang-app",
+          "role": "BACKEND",
+          "roleResponsibility": "Memusatkan perhatian pada kontrak service, business logic, error handling, dan boundary API yang relevan.",
+          "skillRouting": [
+            {
+              "skillId": "go-modular-clean",
+              "version": "1.0.0",
+              "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+            }
+          ],
+          "agentLifetime": "RUN_SCOPED",
+          "temporarySubAgent": true
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "8b37a65967aa780e84aa4f4a",
+        "source": "explicit",
+        "stage": "RETROSPECTIVE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "3e07c139-8655-419c-a91b-623315fc3aa7",
+        "durationSeconds": 23.483,
+        "usage": {
+          "inputTokens": 86410,
+          "outputTokens": 2870,
+          "thinkingTokens": 1883,
+          "cacheReadTokens": 204031,
+          "totalTokens": 89280,
+          "contextTokens": 290441
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T08:49:28.675Z",
+        "metadata": {
+          "runId": "task-016-20260827T084612Z-362b3dbb",
+          "taskId": "TASK-016",
+          "projectId": "be-golang-app"
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "4e92d64a612ff9a81dee6936",
+        "source": "explicit",
+        "stage": "RETROSPECTIVE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "b2b07982-d683-4d63-aa6e-c0bff898f56c",
+        "durationSeconds": 12.299,
+        "usage": {
+          "inputTokens": 53879,
+          "outputTokens": 1373,
+          "thinkingTokens": 650,
+          "cacheReadTokens": 110178,
+          "totalTokens": 55252,
+          "contextTokens": 164057
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T08:49:34.622Z",
+        "metadata": {
+          "runId": "task-016-20260827T084612Z-362b3dbb",
+          "taskId": "TASK-016",
+          "projectId": "be-golang-app"
+        }
+      }
+    ],
+    "summary": {
+      "calls": 3,
+      "measuredCalls": 3,
+      "unmeasuredCalls": 0,
+      "durationSeconds": 183.146,
+      "usage": {
+        "inputTokens": 398912,
+        "outputTokens": 51170,
+        "thinkingTokens": 31377,
+        "cacheReadTokens": 2772938,
+        "totalTokens": 450082,
+        "contextTokens": 3171850
+      },
+      "usageCoveragePercent": 100,
+      "byStage": {
+        "IMPLEMENTATION": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 147.364,
+          "usage": {
+            "inputTokens": 258623,
+            "outputTokens": 46927,
+            "thinkingTokens": 28844,
+            "cacheReadTokens": 2458729,
+            "totalTokens": 305550,
+            "contextTokens": 2717352
+          }
+        },
+        "RETROSPECTIVE": {
+          "calls": 2,
+          "measuredCalls": 2,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 35.782,
+          "usage": {
+            "inputTokens": 140289,
+            "outputTokens": 4243,
+            "thinkingTokens": 2533,
+            "cacheReadTokens": 314209,
+            "totalTokens": 144532,
+            "contextTokens": 454498
+          }
+        }
+      }
+    },
+    "budget": {
+      "mode": "WARNING_ONLY",
+      "thresholdTokens": 250000,
+      "enabled": true,
+      "exceeded": true,
+      "warnings": [
+        {
+          "id": "TOKEN_WARNING_THRESHOLD",
+          "severity": "WARNING",
+          "thresholdTokens": 250000,
+          "observedTokens": 450082,
+          "message": "Penggunaan AI mencapai 450082 token dan melewati warning threshold 250000."
+        }
+      ],
+      "guardrail": "Telemetry tidak menghentikan task atau mengubah approval state."
+    },
+    "updatedAt": "2026-08-27T08:49:34.629Z"
+  },
+  "proposal": {
+    "classification": "NEW",
+    "confidence": 0.95,
+    "title": "Redis-Backed Refresh Token Rotation with Sliding Expiration Pattern",
+    "type": "pattern",
+    "targetPath": "01-Knowledge/patterns/backend/redis-backed-refresh-token-rotation-with-sliding-expiration.md",
+    "summary": "Clean Architecture pattern for Refresh Token Rotation (RTR) and sliding expiration using Redis session snapshots, ensuring single-use token invalidation and credential revocation.",
+    "rationale": "Reusable cross-project backend authentication pattern for Golang/Redis clean architecture, preventing token replay attacks via atomic deletion upon exchange and extending session lifespan dynamically.",
+    "considerations": [
+      "Immediate Invalidation: Old refresh token key must be deleted from Redis upon verification before issuing new token pair to prevent replay attacks.",
+      "Sliding Expiration: Refresh token TTL (e.g., 7 days) is renewed on every rotation cycle while keeping session state synchronized.",
+      "Atomic Logout Revocation: Logout must clear both user session key (session:user:<userId>) and active refresh token (refresh:token:[REDACTED]",
+      "Error Normalization: Expired, missing, or malformed refresh tokens should consistently map to 401 Unauthorized / AccessControlError."
+    ],
+    "relatedKnowledge": [
+      "01-Knowledge/patterns/backend/stateful-cache-backed-jwt-session-guard-with-context-manifest-activity-tracking.md",
+      "01-Knowledge/patterns/backend/modular-jwt-auth-middleware-with-redis-stateful-session-activity-tracking.md",
+      "01-Knowledge/patterns/mobile/dio-interceptor-token-refresh-request-replay-pattern.md"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-27T08:49:39.964Z",
+    "approvedBy": "local:sagaino",
+    "classification": "NEW",
+    "destination": "WIKI",
+    "targetPath": "01-Knowledge/patterns/backend/redis-backed-refresh-token-rotation-with-sliding-expiration.md",
+    "routing": {
+      "classification": "NEW",
+      "destination": "WIKI",
+      "targetPath": "01-Knowledge/patterns/backend/redis-backed-refresh-token-rotation-with-sliding-expiration.md",
+      "automatic": true,
+      "reason": "NEW knowledge memenuhi auto-promotion gate dengan confidence 0.95.",
+      "checks": {
+        "confidence": 0.95,
+        "minimumConfidence": 0.9,
+        "confidencePassed": true,
+        "targetValid": true,
+        "proposalComplete": true,
+        "verified": true,
+        "sourceAvailable": true,
+        "wikiDuplicate": null,
+        "candidateDuplicate": null,
+        "similarKnowledge": []
+      }
+    }
+  }
+}

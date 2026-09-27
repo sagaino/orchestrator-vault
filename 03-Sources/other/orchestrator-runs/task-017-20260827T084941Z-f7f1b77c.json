@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-27T08:55:46.876Z",
+  "runId": "task-017-20260827T084941Z-f7f1b77c",
+  "task": {
+    "id": "TASK-017",
+    "title": "Add Refresh Token HTTP Handler and Route Registration",
+    "path": "02-Projects/be-golang-app/tasks/TASK-017.md",
+    "project": "be-golang-app",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "internal/adapter/controller/auth.go",
+      "internal/adapter/controller/auth_test.go",
+      "cmd/api/api.go"
+    ],
+    "requiresChanges": true,
+    "risk": "LOW",
+    "complexity": "LOW",
+    "role": "BACKEND",
+    "orchestrationManaged": true,
+    "objectiveId": "obj-20260827084531-0e8e7f51",
+    "orchestrationId": "orch-obj-20260827084531-0e8e7f51",
+    "nodeId": "subtask-2-auth-controller",
+    "acceptanceCriteria": [
+      "Add RefreshToken handler in internal/adapter/controller/auth.go using shared/payload.Response and pkg/localerror",
+      "Update Logout handler in internal/adapter/controller/auth.go to invalidate refresh token if provided",
+      "Register public endpoint POST /api/v1/auth/refresh in cmd/api/api.go or internal/adapter/controller/auth.go",
+      "Add controller unit tests in internal/adapter/controller/auth_test.go",
+      "Hanya file dalam `allowed_paths` yang berubah akibat task ini.",
+      "Verification `go test ./...` dan `go vet ./...` berhasil."
+    ],
+    "skills": [
+      {
+        "skillId": "go-modular-clean",
+        "version": "1.0.0",
+        "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+      }
+    ],
+    "sources": []
+  },
+  "project": {
+    "id": "be-golang-app",
+    "repository": "/Users/sagaino/ciniru/be-golang-app",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json",
+    "nodes": 830,
+    "links": 1938,
+    "builtAtCommit": "0c2d8b7bd3ab4f6aea89fb74c1fb1c1dbbbb530a"
+  },
+  "verification": [
+    {
+      "command": "go test ./...",
+      "exitCode": 0
+    },
+    {
+      "command": "go vet ./...",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "ba631822-3cc7-4002-94fd-803e42b0124f",
+    "status": "SUCCESS",
+    "response": "### Laporan Implementasi Perubahan\n\nImplementasi HTTP handler untuk **Refresh Token Rotation (RTR)** dan pembaruan handler **Logout** pada layer controller telah selesai dilakukan sesuai spesifikasi 3-Layer Modular Clean Architecture dan kontrak eksekusi.\n\n---\n\n### File Yang Berubah\n1. [`internal/adapter/controller/auth.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-017-20260827t084941z-f7f1b77c/internal/adapter/controller/auth.go)\n   - Menambahkan method handler `RefreshToken(c *gin.Context)` dengan standardisasi error handling menggunakan [`pkg/localerror`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-017-20260827t084941z-f7f1b77c/pkg/localerror/util.go) (`localerror.AccessControlError` -> HTTP 401, `localerror.InvalidData` -> HTTP 400, internal error -> HTTP 500) serta response format menggunakan [`shared/payload.Response`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-017-20260827t084941z-f7f1b77c/shared/payload/response.go).\n   - Memperbarui method handler `Logout(c *gin.Context)` agar dapat membaca `refreshToken` (dari JSON body [`authUsecase.LogoutRequest`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-017-20260827t084941z-f7f1b77c/internal/core/usecase/auth/dto.go#L70-L73), query parameter, atau header `X-Refresh-Token`) dan menginvalidasi refresh token tersebut dari cache Redis jika disediakan.\n   - Mendaftarkan route publik `POST /refresh` pada method `Route(router *gin.RouterGroup)` dan helper `RegisterAuthRoutes`.\n\n2. [`internal/adapter/controller/auth_test.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-017-20260827t084941z-f7f1b77c/internal/adapter/controller/auth_test.go)\n   - Memperbarui `mockAuthUsecase` dengan field `refreshTokenFn` dan implementasi method `RefreshToken`.\n   - Menambahkan suite unit test menyeluruh:\n     - `TestAuthController_RefreshToken_Success` (HTTP 200 OK dengan token baru)\n     - `TestAuthController_RefreshToken_ValidationError_EmptyBody` (HTTP 400 Bad Request)\n     - `TestAuthController_RefreshToken_InvalidJSON` (HTTP 400 Bad Request)\n     - `TestAuthController_RefreshToken_Unauthorized_AccessControlError` (HTTP 401 Unauthorized)\n     - `TestAuthController_RefreshToken_InvalidData` (HTTP 400 Bad Request)\n     - `TestAuthController_RefreshToken_InternalError` (HTTP 500 Internal Server Error)\n     - `TestAuthController_RefreshToken_ServiceNotAvailable` (HTTP 500 Internal Server Error)\n     - `TestAuthController_RegisterAuthRoutes_RefreshToken_Success` (HTTP 200 OK via `RegisterAuthRoutes`)\n     - `TestAuthController_Logout_WithRefreshToken_InBody` (verifikasi invalidasi refresh token via body)\n     - `TestAuthController_Logout_WithRefreshToken_InQuery` (verifikasi invalidasi refresh token via query param)\n     - `TestAuthController_Logout_WithRefreshToken_InHeader` (verifikasi invalidasi refresh token via HTTP header)\n     - `TestAuthController_Logout_WithRefreshToken_FallbackCache` (verifikasi invalidasi refresh token pada fallback cache mode)\n\n---\n\n### Verifikasi Yang Disarankan\n- `go test ./...`\n- `go vet ./...`\n\n---\n\n### Retrospective Knowledge\n- **Klasifikasi**: `PROJECT_ONLY`\n- **Rasional**: Implementasi handler `RefreshToken` dan parsing refresh token pada `Logout` mengikuti pola standar Clean Architecture dan konvensi spesifik repositori `be-golang-app` tanpa memerlukan perubahan pola global baru.\n",
+    "duration_seconds": 111.366772,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 188960,
+      "output_tokens": 35425,
+      "thinking_tokens": 21975,
+      "cache_read_tokens": 1735098,
+      "total_tokens": 224385
+    }
+  },
+  "telemetry": {
+    "schemaVersion": 1,
+    "records": [
+      {
+        "schemaVersion": 1,
+        "recordId": "19883a9d8d4f2dec19c10628",
+        "source": "explicit",
+        "stage": "IMPLEMENTATION",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash-high",
+        "effort": "high",
+        "status": "SUCCESS",
+        "conversationId": "ba631822-3cc7-4002-94fd-803e42b0124f",
+        "durationSeconds": 111.367,
+        "usage": {
+          "inputTokens": 188960,
+          "outputTokens": 35425,
+          "thinkingTokens": 21975,
+          "cacheReadTokens": 1735098,
+          "totalTokens": 224385,
+          "contextTokens": 1924058
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T08:51:44.256Z",
+        "metadata": {
+          "runId": "task-017-20260827T084941Z-f7f1b77c",
+          "taskId": "TASK-017",
+          "projectId": "be-golang-app",
+          "role": "BACKEND",
+          "roleResponsibility": "Memusatkan perhatian pada kontrak service, business logic, error handling, dan boundary API yang relevan.",
+          "skillRouting": [
+            {
+              "skillId": "go-modular-clean",
+              "version": "1.0.0",
+              "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+            }
+          ],
+          "agentLifetime": "RUN_SCOPED",
+          "temporarySubAgent": true
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "654dff31c1d9832e09c892b5",
+        "source": "explicit",
+        "stage": "RETROSPECTIVE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "48ff8339-4d58-4fc8-a70b-e3a4d4f88cf1",
+        "durationSeconds": 6.933,
+        "usage": {
+          "inputTokens": 46442,
+          "outputTokens": 649,
+          "thinkingTokens": 0,
+          "cacheReadTokens": 73437,
+          "totalTokens": 47091,
+          "contextTokens": 119879
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T08:52:04.646Z",
+        "metadata": {
+          "runId": "task-017-20260827T084941Z-f7f1b77c",
+          "taskId": "TASK-017",
+          "projectId": "be-golang-app"
+        }
+      }
+    ],
+    "summary": {
+      "calls": 2,
+      "measuredCalls": 2,
+      "unmeasuredCalls": 0,
+      "durationSeconds": 118.3,
+      "usage": {
+        "inputTokens": 235402,
+        "outputTokens": 36074,
+        "thinkingTokens": 21975,
+        "cacheReadTokens": 1808535,
+        "totalTokens": 271476,
+        "contextTokens": 2043937
+      },
+      "usageCoveragePercent": 100,
+      "byStage": {
+        "IMPLEMENTATION": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 111.367,
+          "usage": {
+            "inputTokens": 188960,
+            "outputTokens": 35425,
+            "thinkingTokens": 21975,
+            "cacheReadTokens": 1735098,
+            "totalTokens": 224385,
+            "contextTokens": 1924058
+          }
+        },
+        "RETROSPECTIVE": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 6.933,
+          "usage": {
+            "inputTokens": 46442,
+            "outputTokens": 649,
+            "thinkingTokens": 0,
+            "cacheReadTokens": 73437,
+            "totalTokens": 47091,
+            "contextTokens": 119879
+          }
+        }
+      }
+    },
+    "budget": {
+      "mode": "WARNING_ONLY",
+      "thresholdTokens": 250000,
+      "enabled": true,
+      "exceeded": true,
+      "warnings": [
+        {
+          "id": "TOKEN_WARNING_THRESHOLD",
+          "severity": "WARNING",
+          "thresholdTokens": 250000,
+          "observedTokens": 271476,
+          "message": "Penggunaan AI mencapai 271476 token dan melewati warning threshold 250000."
+        }
+      ],
+      "guardrail": "Telemetry tidak menghentikan task atau mengubah approval state."
+    },
+    "updatedAt": "2026-08-27T08:52:04.652Z"
+  },
+  "proposal": {
+    "classification": "PROJECT_ONLY",
+    "confidence": 0.95,
+    "title": "Refresh Token HTTP Handler and Route Registration in Gin Controller",
+    "type": "pattern",
+    "targetPath": null,
+    "summary": "Implementasi handler Gin RefreshToken dan Logout dengan invalidasi refresh token serta registrasi endpoint POST /api/v1/auth/refresh pada be-golang-app.",
+    "rationale": "Perubahan pada TASK-017 adalah implementasi controller HTTP handler (RefreshToken dan penyesuaian Logout) serta registrasi route di Gin untuk endpoint refresh token. Ini merupakan implementasi spesifik controller layer untuk kebutuhan fitur Refresh Token Rotation di project be-golang-app tanpa memperkenalkan konsep atau pattern baru di luar pattern arsitektur backend yang sudah terdokumentasi di Wiki.",
+    "considerations": [
+      "Implementasi Refresh Token handler dan route registration mengikuti arsitektur modular yang sudah terdefinisi di project be-golang-app (3-Layer Modular Clean Architecture dan Gin HTTP handler).",
+      "Pola routing Gin, JWT middleware, dan error envelope response di Go sudah tercakup dalam knowledge base existing ([[01-Knowledge/patterns/backend/modular-jwt-auth-middleware-with-redis-stateful-session-activity-tracking]] dan [[01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine]]).",
+      "Tidak ada abstraksi baru atau pola reusable lintas-project yang unik di luar variasi implementasi endpoint spesifik aplikasi ini."
+    ],
+    "relatedKnowledge": [
+      "01-Knowledge/patterns/backend/modular-jwt-auth-middleware-with-redis-stateful-session-activity-tracking",
+      "01-Knowledge/patterns/backend/modular-clean-skeleton-composition-root-engine",
+      "01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-27T08:55:46.859Z",
+    "approvedBy": "local:sagaino",
+    "classification": "PROJECT_ONLY",
+    "destination": "PROJECT",
+    "targetPath": null,
+    "routing": {
+      "classification": "PROJECT_ONLY",
+      "destination": "PROJECT",
+      "targetPath": null,
+      "automatic": true,
+      "reason": "Knowledge hanya berlaku untuk project.",
+      "checks": {
+        "classification": "PROJECT_ONLY"
+      }
+    }
+  }
+}

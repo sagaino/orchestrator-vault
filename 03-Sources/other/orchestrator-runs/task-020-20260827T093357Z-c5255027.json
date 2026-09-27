@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "immutable": true,
+  "capturedAt": "2026-08-27T09:38:16.897Z",
+  "runId": "task-020-20260827T093357Z-c5255027",
+  "task": {
+    "id": "TASK-020",
+    "title": "Standardize User Controller Responses",
+    "path": "02-Projects/be-golang-app/tasks/TASK-020.md",
+    "project": "be-golang-app",
+    "status": "REVIEW",
+    "allowedPaths": [
+      "internal/adapter/controller/user.go",
+      "internal/adapter/controller/user_test.go"
+    ],
+    "requiresChanges": true,
+    "risk": "LOW",
+    "complexity": "LOW",
+    "role": "BACKEND",
+    "orchestrationManaged": true,
+    "objectiveId": "obj-20260827091620-a6ef6370",
+    "orchestrationId": "orch-obj-20260827091620-a6ef6370",
+    "nodeId": "node-refactor-user",
+    "acceptanceCriteria": [
+      "Use payload.DefaultErrorInvalidDataWithMessage for validation and bad request errors.",
+      "Use payload.NewSuccessResponse for GetProfile response.",
+      "User tests pass with go test ./...",
+      "Hanya file dalam `allowed_paths` yang berubah akibat task ini.",
+      "Verification `go test ./...` dan `go vet ./...` berhasil."
+    ],
+    "skills": [
+      {
+        "skillId": "go-modular-clean",
+        "version": "1.0.0",
+        "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+      }
+    ],
+    "sources": []
+  },
+  "project": {
+    "id": "be-golang-app",
+    "repository": "/Users/sagaino/ciniru/be-golang-app",
+    "agent": "agy",
+    "graphify": true
+  },
+  "graph": {
+    "exists": true,
+    "path": "/Users/sagaino/ciniru/be-golang-app/graphify-out/graph.json",
+    "nodes": 844,
+    "links": 2010,
+    "builtAtCommit": "25e3f8f459b67abe798068d8fc92ee30d7d1d0f7"
+  },
+  "verification": [
+    {
+      "command": "go test ./...",
+      "exitCode": 0
+    },
+    {
+      "command": "go vet ./...",
+      "exitCode": 0
+    }
+  ],
+  "agentResult": {
+    "conversation_id": "82b16d4b-6a6f-4eef-a192-eac44a9e4c77",
+    "status": "SUCCESS",
+    "response": "### Ringkasan Perubahan\n\nPerubahan telah diimplementasikan pada file controller dan unit test dalam cakupan `allowed_paths`:\n\n1. [`internal/adapter/controller/user.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user.go#L140-L161):\n   - Merefaktor method [`GetProfile`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user.go#L117-L161) untuk menggunakan helper [`payload.DefaultErrorInvalidDataWithMessage`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/shared/payload/response.go#L36-L42) saat menangani error validasi / invalid data (`localerror.IsInvalidData`).\n   - Menggunakan helper [`payload.NewSuccessResponse`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/shared/payload/response.go#L104-L110) untuk format response sukses endpoint profile (`HTTP 200 OK`).\n\n2. [`internal/adapter/controller/user_test.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user_test.go#L149-L184):\n   - Menambahkan unit test [`TestUserController_GetProfile_InvalidData`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user_test.go#L149-L184) untuk memverifikasi respons `HTTP 400 Bad Request` dan format [`payload.ErrorResponse`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/shared/payload/response.go#L11-L17) saat usecase mengembalikan error `localerror.InvalidData`.\n\n---\n\n### File Berubah\n- [`internal/adapter/controller/user.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user.go)\n- [`internal/adapter/controller/user_test.go`](file:///Users/sagaino/Documents/personal-ai-orchestrator/runs/workspaces/be-golang-app/task-020-20260827t093357z-c5255027/internal/adapter/controller/user_test.go)\n\n---\n\n### Verifikasi yang Disarankan\n- `go test ./...`\n- `go vet ./...`\n\n---\n\n### Retrospective Knowledge\n- **Classification**: `IGNORE` (Refactoring standar response helper adalah task konsistensi internal project `be-golang-app` dan tidak memperkenalkan konsep arsitektur global baru).\n",
+    "duration_seconds": 92.86288,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 145351,
+      "output_tokens": 22266,
+      "thinking_tokens": 17693,
+      "cache_read_tokens": 1379699,
+      "total_tokens": 167617
+    }
+  },
+  "telemetry": {
+    "schemaVersion": 1,
+    "records": [
+      {
+        "schemaVersion": 1,
+        "recordId": "d66330425fc3aac165d03006",
+        "source": "explicit",
+        "stage": "IMPLEMENTATION",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash-high",
+        "effort": "high",
+        "status": "SUCCESS",
+        "conversationId": "82b16d4b-6a6f-4eef-a192-eac44a9e4c77",
+        "durationSeconds": 92.863,
+        "usage": {
+          "inputTokens": 145351,
+          "outputTokens": 22266,
+          "thinkingTokens": 17693,
+          "cacheReadTokens": 1379699,
+          "totalTokens": 167617,
+          "contextTokens": 1525050
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T09:35:38.740Z",
+        "metadata": {
+          "runId": "task-020-20260827T093357Z-c5255027",
+          "taskId": "TASK-020",
+          "projectId": "be-golang-app",
+          "role": "BACKEND",
+          "roleResponsibility": "Memusatkan perhatian pada kontrak service, business logic, error handling, dan boundary API yang relevan.",
+          "skillRouting": [
+            {
+              "skillId": "go-modular-clean",
+              "version": "1.0.0",
+              "checksum": "5d6aed0a38849b74f08f3f85e4044d7d619cb8b6261a332bc5cf322cc60cdffa"
+            }
+          ],
+          "agentLifetime": "RUN_SCOPED",
+          "temporarySubAgent": true
+        }
+      },
+      {
+        "schemaVersion": 1,
+        "recordId": "6809b8b946eff084da10073a",
+        "source": "explicit",
+        "stage": "RETROSPECTIVE",
+        "provider": "ANTIGRAVITY",
+        "model": "gemini-3.7-flash",
+        "effort": "low",
+        "status": "SUCCESS",
+        "conversationId": "600a1088-c0c9-4228-9637-c637bd2c249f",
+        "durationSeconds": 6.899,
+        "usage": {
+          "inputTokens": 63272,
+          "outputTokens": 517,
+          "thinkingTokens": 0,
+          "cacheReadTokens": 53049,
+          "totalTokens": 63789,
+          "contextTokens": 116321
+        },
+        "measured": true,
+        "recordedAt": "2026-08-27T09:35:59.070Z",
+        "metadata": {
+          "runId": "task-020-20260827T093357Z-c5255027",
+          "taskId": "TASK-020",
+          "projectId": "be-golang-app"
+        }
+      }
+    ],
+    "summary": {
+      "calls": 2,
+      "measuredCalls": 2,
+      "unmeasuredCalls": 0,
+      "durationSeconds": 99.762,
+      "usage": {
+        "inputTokens": 208623,
+        "outputTokens": 22783,
+        "thinkingTokens": 17693,
+        "cacheReadTokens": 1432748,
+        "totalTokens": 231406,
+        "contextTokens": 1641371
+      },
+      "usageCoveragePercent": 100,
+      "byStage": {
+        "IMPLEMENTATION": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 92.863,
+          "usage": {
+            "inputTokens": 145351,
+            "outputTokens": 22266,
+            "thinkingTokens": 17693,
+            "cacheReadTokens": 1379699,
+            "totalTokens": 167617,
+            "contextTokens": 1525050
+          }
+        },
+        "RETROSPECTIVE": {
+          "calls": 1,
+          "measuredCalls": 1,
+          "unmeasuredCalls": 0,
+          "durationSeconds": 6.899,
+          "usage": {
+            "inputTokens": 63272,
+            "outputTokens": 517,
+            "thinkingTokens": 0,
+            "cacheReadTokens": 53049,
+            "totalTokens": 63789,
+            "contextTokens": 116321
+          }
+        }
+      }
+    },
+    "budget": {
+      "mode": "WARNING_ONLY",
+      "thresholdTokens": 250000,
+      "enabled": true,
+      "exceeded": false,
+      "warnings": [],
+      "guardrail": "Telemetry tidak menghentikan task atau mengubah approval state."
+    },
+    "updatedAt": "2026-08-27T09:35:59.077Z"
+  },
+  "proposal": {
+    "classification": "PROJECT_ONLY",
+    "confidence": 0.95,
+    "title": "Standardize User Controller Responses (TASK-020)",
+    "type": "pattern",
+    "targetPath": "02-Projects/be-golang-app/tasks/TASK-020.md",
+    "summary": "Standardisasi pemanggilan helper fungsi response (payload.DefaultErrorInvalidDataWithMessage dan payload.NewSuccessResponse) pada user controller GetProfile di be-golang-app.",
+    "rationale": "Task TASK-020 melakukan standardisasi internal controller response di be-golang-app menggunakan helper shared/payload/response.go. Perubahan ini bersifat spesifik pada codebase project dan pola global respons envelope sudah tercatat pada knowledge base.",
+    "considerations": [
+      "Perubahan hanya berupa internal refactoring pemanggilan helper functions payload di level controller (user.go & user_test.go).",
+      "Tidak ada pola arsitektural baru yang reusable di luar konvensi be-golang-app.",
+      "Pola envelope response dan error mapping di Go sudah terdokumentasi di global knowledge Structured Domain Error Hierarchy."
+    ],
+    "relatedKnowledge": [
+      "01-Knowledge/patterns/backend/structured-domain-error-hierarchy-i18n-response-mapping-pattern.md"
+    ]
+  },
+  "approval": {
+    "approvedAt": "2026-08-27T09:38:16.879Z",
+    "approvedBy": "local:sagaino",
+    "classification": "PROJECT_ONLY",
+    "destination": "PROJECT",
+    "targetPath": null,
+    "routing": {
+      "classification": "PROJECT_ONLY",
+      "destination": "PROJECT",
+      "targetPath": null,
+      "automatic": true,
+      "reason": "Knowledge hanya berlaku untuk project.",
+      "checks": {
+        "classification": "PROJECT_ONLY"
+      }
+    }
+  }
+}

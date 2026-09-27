@@ -1,4 +1,10 @@
 ---
+provenance_schema: 1
+orchestrator_run: "manual-curation:p8-0-skills-20260827"
+owner: "knowledge-curator"
+confidence: 0.95
+review_by: "2027-02-27"
+supersession: "ACTIVE"
 title: "Go Modular Clean Architecture Skill"
 type: pattern
 tags: ["skill", "backend", "golang", "clean-architecture", "gin", "gorm", "redis"]

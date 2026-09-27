@@ -3281,3 +3281,218 @@ Append-only record of operations (`ingest`, `query`, `lint`, `task-execution`, a
 ## [2026-08-27] task-completion | Verifikasi typecheck, lint, dan build proyek frontend
 - run_id: gfm-005-20260827T042506Z-c478c13f | task-completion
 - Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Implement JWT Authentication Middleware and Route Protection
+- run_id: task-010-20260827T045120Z-fdbc000d | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-010.md.
+
+## [2026-08-27] task-completion | Implement JWT Authentication Middleware and Route Protection
+- run_id: task-010-20260827T045120Z-fdbc000d | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Verify Project Verification and Test Suite
+- run_id: task-011-20260827T045543Z-35e9cd6c | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-27] task-completion | Verify Project Verification and Test Suite
+- run_id: task-011-20260827T045543Z-35e9cd6c | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Implement Redis Session in Auth Usecase
+- run_id: task-012-20260827T080142Z-77f2d7fa | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-012.md.
+
+## [2026-08-27] task-completion | Implement Redis Session in Auth Usecase
+- run_id: task-012-20260827T080142Z-77f2d7fa | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Implement Auth Middleware Session Validation and Logout Endpoint
+- run_id: task-013-20260827T080549Z-96fe5437 | knowledge-sync
+- Knowledge page diperbarui: 01-Knowledge/patterns/backend/modular-jwt-auth-middleware-with-redis-stateful-session-activity-tracking.md.
+
+## [2026-08-27] task-completion | Implement Auth Middleware Session Validation and Logout Endpoint
+- run_id: task-013-20260827T080549Z-96fe5437 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Add Unit Tests for Redis Session Management and Middleware
+- run_id: task-014-20260827T080907Z-618ab2c0 | knowledge-sync
+- Knowledge page diperbarui: 01-Knowledge/patterns/backend/modular-jwt-auth-middleware-with-redis-stateful-session-activity-tracking.md.
+
+## [2026-08-27] task-completion | Add Unit Tests for Redis Session Management and Middleware
+- run_id: task-014-20260827T080907Z-618ab2c0 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Full Verification Suite
+- run_id: task-015-20260827T081553Z-58f3fd6e | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-27] task-completion | Full Verification Suite
+- run_id: task-015-20260827T081553Z-58f3fd6e | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Implement Refresh Token Rotation in Auth Usecase and DTOs
+- run_id: task-016-20260827T084612Z-362b3dbb | knowledge-sync
+- Knowledge page dibuat: 01-Knowledge/patterns/backend/redis-backed-refresh-token-rotation-with-sliding-expiration.md.
+
+## [2026-08-27] task-completion | Implement Refresh Token Rotation in Auth Usecase and DTOs
+- run_id: task-016-20260827T084612Z-362b3dbb | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Add Refresh Token HTTP Handler and Route Registration
+- run_id: task-017-20260827T084941Z-f7f1b77c | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-017.md.
+
+## [2026-08-27] task-completion | Add Refresh Token HTTP Handler and Route Registration
+- run_id: task-017-20260827T084941Z-f7f1b77c | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Verify Project Test Suite and Static Analysis
+- run_id: task-018-20260827T085549Z-22ac7b94 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-27] task-completion | Verify Project Test Suite and Static Analysis
+- run_id: task-018-20260827T085549Z-22ac7b94 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Standardize Auth Controller Responses
+- run_id: task-019-20260827T091711Z-d8901c15 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-019.md.
+
+## [2026-08-27] task-completion | Standardize Auth Controller Responses
+- run_id: task-019-20260827T091711Z-d8901c15 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Standardize Product and Category Controller Responses
+- run_id: task-021-20260827T093136Z-464d9e49 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-021.md.
+
+## [2026-08-27] task-completion | Standardize Product and Category Controller Responses
+- run_id: task-021-20260827T093136Z-464d9e49 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Standardize User Controller Responses
+- run_id: task-020-20260827T093357Z-c5255027 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/be-golang-app/tasks/TASK-020.md.
+
+## [2026-08-27] task-completion | Standardize User Controller Responses
+- run_id: task-020-20260827T093357Z-c5255027 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-27] knowledge-sync | Verify Entire Project Test Suite
+- run_id: task-022-20260827T093819Z-4c5e4757 | knowledge-sync
+- Knowledge decision IGNORE; tidak ada Wiki page yang dibuat.
+
+## [2026-08-27] task-completion | Verify Entire Project Test Suite
+- run_id: task-022-20260827T093819Z-4c5e4757 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-08-31] lint | Knowledge Quality
+- Checked by: `local:sagaino`.
+- Result before safe fix: WARN; errors: `0`, warnings: `4`.
+- Safe fixes applied: `2`.
+- Content merge, deletion, and contradiction resolution were not automated.
+
+
+## [2026-08-31] task-request-changes | FE-027
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: jangan membuat folder baru di dalam folder features tapi di sesuaikan dengan sudah ada yang ada di src/pages/login.
+
+
+## [2026-08-31] task-request-changes | FE-027
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: Tolong integrasikan StatusBadge ke dalam file src/pages/Login/components/LoginForm.tsx..
+
+
+## [2026-08-31] task-request-changes | FE-029
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: gunakan badge di dalam src/pages/Login/components/LoginForm.tsx. letakkan di pojok kanan atas di dalam card nya.
+
+## [2026-08-31] knowledge-sync | Create status badge component in Login page
+- run_id: fe-029-20260831T061009Z-16395451 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-029.md.
+
+## [2026-08-31] task-completion | Create status badge component in Login page
+- run_id: fe-029-20260831T061009Z-16395451 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-01] knowledge-sync | Update media endpoints and post-media service functions
+- run_id: gfm-006-20260901T034819Z-fa8c104f | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/gallery-fmfu/tasks/task-006.md.
+
+## [2026-09-01] task-completion | Update media endpoints and post-media service functions
+- run_id: gfm-006-20260901T034819Z-fa8c104f | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-09-01] task-request-changes | GFM-007
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: saya mau mengganti dari pada menggunakan BIB gunakan name, untuk name bisa di cek dari local storage user.
+
+
+## [2026-09-01] task-request-changes | GFM-008
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: untuk isi dari ALLOWED_USERS tetap Alice Putri jangan di buat huruf kecil semua tapi ketika ALLOWED_USERS di gunakan baru di lower case.
+
+## [2026-09-01] knowledge-sync | Conditionally Set Media Endpoints in endpoint.ts
+- run_id: gfm-008-20260901T040805Z-df76042c | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/gallery-fmfu/tasks/task-008.md.
+
+## [2026-09-01] task-completion | Conditionally Set Media Endpoints in endpoint.ts
+- run_id: gfm-008-20260901T040805Z-df76042c | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-02] knowledge-sync | Buat komponen UserProfileBadge
+- run_id: fe-032-20260902T044913Z-c6002786 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-032.md.
+
+## [2026-09-02] task-completion | Buat komponen UserProfileBadge
+- run_id: fe-032-20260902T044913Z-c6002786 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-02] knowledge-sync | Integrasikan UserProfileBadge ke halaman Dashboard
+- run_id: fe-033-20260902T045059Z-da59ff0e | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-033.md.
+
+## [2026-09-02] task-completion | Integrasikan UserProfileBadge ke halaman Dashboard
+- run_id: fe-033-20260902T045059Z-da59ff0e | task-completion
+- Task dan run selesai dengan human approval.
+
+
+## [2026-09-02] task-request-changes | FE-034
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: Wajib gunakan varian badge "outline" dan tambahkan animasi titik hijau (animate-pulse) untuk status online. Jangan gunakan warna badge solid..
+
+
+## [2026-09-02] task-request-changes | FE-034
+- Revision iteration `1` selesai dan kembali ke REVIEW.
+- Requested by `local:sagaino`; feedback: Wajib gunakan varian badge "outline" dan tambahkan animasi titik hijau (animate-pulse) untuk status online. Jangan gunakan warna solid..
+
+## [2026-09-02] knowledge-sync | Create UserProfileBadge Component
+- run_id: fe-034-20260902T050850Z-99eb716b | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-034.md.
+
+## [2026-09-02] task-completion | Create UserProfileBadge Component
+- run_id: fe-034-20260902T050850Z-99eb716b | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-02] knowledge-sync | Integrate UserProfileBadge into Dashboard Page
+- run_id: fe-035-20260902T051443Z-5c64df81 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-035.md.
+
+## [2026-09-02] task-completion | Integrate UserProfileBadge into Dashboard Page
+- run_id: fe-035-20260902T051443Z-5c64df81 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-02] knowledge-sync | Add UserProfileBadge to UploadImg page header
+- run_id: fe-036-20260902T052309Z-14914141 | knowledge-sync
+- Knowledge dicatat sebagai PROJECT_ONLY pada 02-Projects/starter-app/tasks/task-036.md.
+
+## [2026-09-02] task-completion | Add UserProfileBadge to UploadImg page header
+- run_id: fe-036-20260902T052309Z-14914141 | task-completion
+- Task dan run selesai dengan human approval.
+
+## [2026-09-02] lint | Knowledge Quality
+- Checked by: `user`.
+- Result before safe fix: FAIL; errors: `3`, warnings: `1`.
+- Safe fixes applied: `1`.
+- Content merge, deletion, and contradiction resolution were not automated.
